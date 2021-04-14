@@ -13,5 +13,6 @@ namespace GroupBy.Data.Models
         // klucz
         public Resolution AppointingResolution { get; set; }
         public Resolution DismissingResolution { get; set; }
+        public Group RelatedGroup { get; set; }
     }
 }

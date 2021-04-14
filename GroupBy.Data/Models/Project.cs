@@ -22,5 +22,6 @@ namespace GroupBy.Data.Models
         public bool Active { get; set; }
         public bool Independent { get; set; }
         public IEnumerable<FinancialRecord> AssignedFinnancialRecords { get; set; }
+        public IEnumerable<Elements> Elements { get; set; }
     }
 }

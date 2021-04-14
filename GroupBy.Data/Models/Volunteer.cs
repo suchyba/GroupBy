@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Data.Models
 {
@@ -13,9 +11,9 @@ namespace GroupBy.Data.Models
         public string LastName { get; set; }
         [Key]
         public string Id { get; set; }
-        public Position GetPosition()
+        public Position GetPosition(Group group)
         {
-            return PositionHistory.Where(h => h.DismissDate == null).FirstOrDefault()?.Position;
+            return PositionHistory.Where(h => h.DismissDate == null && h.RelatedGroup == group).FirstOrDefault()?.Position;
         }
         public IEnumerable<PositionRecord> PositionHistory { get; set; }
         public DateTime BirthDate { get; set; }
@@ -23,5 +21,7 @@ namespace GroupBy.Data.Models
         public string Address { get; set; }
         public IEnumerable<Project> OwnedProjects { get; set; }
         public IEnumerable<Group> Groups { get; set; }
+        public bool Confirmed { get; set; }
+        public Rank Rank { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace GroupBy.Data.Models
 {
@@ -17,5 +13,6 @@ namespace GroupBy.Data.Models
         public IEnumerable<Volunteer> Members { get; set; }
         public IEnumerable<AccountingBook> AccountingBooks { get; set; }
         public IEnumerable<Resolution> Resolutions { get; set; }
+        public virtual InventoryBook InventoryBook { get; set; }
     }
 }
