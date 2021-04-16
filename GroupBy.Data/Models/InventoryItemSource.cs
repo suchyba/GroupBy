@@ -7,10 +7,20 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Data.Models
 {
+    /// <summary>
+    /// Is the type describing the type of the inventory book record <seealso cref="InventoryBookRecord"/>
+    /// </summary>
     public class InventoryItemSource
     {
+        /// <summary>
+        /// Identificator
+        /// </summary>
         [Key]
         public int Id { get; set; }
+        /// <summary>
+        /// Name of the type
+        /// </summary>
+        [Required]
         public string Name { get; set; }
     }
 }

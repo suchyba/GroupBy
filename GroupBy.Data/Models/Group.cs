@@ -67,5 +67,9 @@ namespace GroupBy.Data.Models
         /// List of interactive elements added by members (for example reminder) <seealso cref="Element"/>
         /// </summary>
         public virtual IEnumerable<Element> Elements { get; set; }
+        /// <summary>
+        /// Permissions for positions
+        /// </summary>
+        public virtual IEnumerable<GroupsPermissions> Permissions { get; set; }
     }
 }
