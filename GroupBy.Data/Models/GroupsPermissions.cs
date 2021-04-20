@@ -16,12 +16,10 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Group identificator <see cref="Group"/>
         /// </summary>
-        [Key, Column(Order = 0)]
         public int GroupId { get; set; }
         /// <summary>
         /// Position identificator <see cref="Position"/>
         /// </summary>
-        [Key, Column(Order = 1)]
         public int PositionId { get; set; }
         /// <summary>
         /// Permission to invitate members to group <seealso cref="Invitation"/>
@@ -58,12 +56,12 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Group where this permissions are valid <seealso cref="Models.Group"/>
         /// </summary>
-        [ForeignKey("GroupId")]
+        [Required, ForeignKey("GroupId")]
         public virtual Group Group { get; set; }
         /// <summary>
         /// Position which you must have to use this permissions <seealso cref="Models.Position"/>
         /// </summary>
-        [ForeignKey("PositionId")]
+        [Required, ForeignKey("PositionId")]
         public virtual Position Position { get; set; }
     }
 }

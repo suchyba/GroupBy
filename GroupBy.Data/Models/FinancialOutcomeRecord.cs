@@ -9,7 +9,7 @@ namespace GroupBy.Data.Models
     /// <summary>
     /// The financial record for outcome (for example invoice)
     /// </summary>
-    public sealed class FinancialOutcomeRecord : FinancialRecord
+    public class FinancialOutcomeRecord : FinancialRecord
     {
         /// <summary>
         /// Inventory element (should be exact same value as in inventory book) <seealso cref="InventoryBook"/>

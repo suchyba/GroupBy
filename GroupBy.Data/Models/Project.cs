@@ -42,6 +42,7 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// If the group of target volunteers is diffrent than the group which is organising the project (<see cref="ProjectGroup"/>) or you want to set up the independent project, you could set this property <seealso cref="Group"/>
         /// </summary>
+        [Required]
         public virtual Group ProjectGroup { get; set; }
         /// <summary>
         /// Group which is organising this project <seealso cref="Group"/>

@@ -30,12 +30,12 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// List of lower-level groups
         /// </summary>
-        [ForeignKey("ParentGroup")]
+        [InverseProperty("ParentGroup")]
         public virtual IEnumerable<Group> ChildGroups { get; set; }
         /// <summary>
         /// The owner of the group
         /// </summary>
-        [Required]
+        [Required, InverseProperty("OwnedGroups")]
         public virtual Volunteer Owner { get; set; }
         /// <summary>
         /// List of group members <seealso cref="Volunteer"/>
@@ -53,15 +53,16 @@ namespace GroupBy.Data.Models
         /// Inventory book of the group <seealso cref="Models.InventoryBook"/>
         /// </summary>
         public virtual InventoryBook InventoryBook { get; set; }
+        public int? ProjectId { get; set; }
         /// <summary>
         /// This is the project in which this group is project group  <seealso cref="Project"/>
         /// </summary>
-        [ForeignKey("ProjectGroup")]
+        [InverseProperty("ProjectGroup"), ForeignKey("ProjectId")]
         public virtual Project RelatedProject { get; set; }
         /// <summary>
         /// List of projects realised in this group <seealso cref="Project"/>
         /// </summary>
-        [ForeignKey("ParentGroup")]
+        [InverseProperty("ParentGroup")]
         public virtual IEnumerable<Project> ProjectsRealisedInGroup { get; set; }
         /// <summary>
         /// List of interactive elements added by members (for example reminder) <seealso cref="Element"/>

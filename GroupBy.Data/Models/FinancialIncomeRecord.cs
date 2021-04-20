@@ -9,7 +9,7 @@ namespace GroupBy.Data.Models
     /// <summary>
     /// Financial record for income (for example membership fee) <seealso cref="FinancialRecord"/>
     /// </summary>
-    public sealed class FinancialIncomeRecord : FinancialRecord
+    public class FinancialIncomeRecord : FinancialRecord
     {
         /// <summary>
         /// Membership fee 

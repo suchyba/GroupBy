@@ -12,13 +12,11 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Group identificator <see cref="Group"/>
         /// </summary>
-        [Key, Column(Order = 0)]
         public int GroupId { get; set; }
         /// <summary>
         /// The identification symbol of the resolution
         /// </summary>
-        [Key, Column(Order = 1)]
-        public string Symbol { get; set; }
+        public string SymbolId { get; set; }
         /// <summary>
         /// Date when the resolution has been adopted
         /// </summary>
@@ -36,7 +34,7 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Group where that resolution has been adopted <seealso cref="Group"/>
         /// </summary>
-        [ForeignKey("GroupId")]
-        public Group Group { get; set; }
+        [Required, ForeignKey("GroupId")]
+        public virtual Group Group { get; set; }
     }
 }

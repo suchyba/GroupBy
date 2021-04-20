@@ -12,17 +12,14 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Accounting book identification number
         /// </summary>
-        [Key]
         public int BookId { get; set; }
         /// <summary>
         /// Order number of this specific accounting book
         /// </summary>
-        [Key]
-        public int BookOrderNumber { get; set; }
+        public int BookOrderNumberId { get; set; }
         /// <summary>
         /// Order number in the book
         /// </summary>
-        [Key]
         public int Id { get; set; }
         /// <summary>
         /// Summary income/outcome (read only - need to refresh by calling <see cref="CalculateTotalAmount"/>)
@@ -43,7 +40,7 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Accounting book where this record is located (it is also part of primary key: <see cref="BookId"/>, <see cref="BookOrderNumber"/>)<seealso cref="AccountingBook"/>
         /// </summary>
-        [Required, ForeignKey("BookId, BookOrderNumber")]
+        [Required, ForeignKey("BookId, BookOrderNumberId")]
         public virtual AccountingBook Book { get; set; }
         /// <summary>
         /// If this record is associated with the project, here is the tag <seealso cref="Project"/>

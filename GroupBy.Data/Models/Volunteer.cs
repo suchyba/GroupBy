@@ -50,11 +50,18 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// The list of projects where this volunteer is the owner <seealso cref="Project"/>
         /// </summary>
-        public  virtual IEnumerable<Project> OwnedProjects { get; set; }
+        [InverseProperty("Owner")]
+        public virtual IEnumerable<Project> OwnedProjects { get; set; }
         /// <summary>
         /// The groups of which this volunteer is member
         /// </summary>
-        public  virtual IEnumerable<Group> Groups { get; set; }
+        [InverseProperty("Members")]
+        public virtual IEnumerable<Group> Groups { get; set; }
+        /// <summary>
+        /// The groups of which this volunteer is owner
+        /// </summary>
+        [InverseProperty("Owner")]
+        public virtual IEnumerable<Group> OwnedGroups { get; set; }
         /// <summary>
         /// Describes if this volunteer has been confirmed
         /// </summary>
@@ -64,9 +71,10 @@ namespace GroupBy.Data.Models
         /// </summary>
         public virtual Rank Rank { get; set; }
         public virtual IEnumerable<RegistrationCode> RegistrationCodes { get; set; }
-        [ForeignKey("Invited")]
+        [InverseProperty("Inviter")]
         public virtual IEnumerable<InvitationToGroup> YourInvitations { get; set; }
-        [ForeignKey("Invited")]
+        [InverseProperty("Invited")]
         public virtual IEnumerable<InvitationToGroup> InvitationsToGroup { get; set; }
+        public virtual IEnumerable<TODOListElement> AssignedTasks { get; set; }
     }
 }

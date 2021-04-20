@@ -12,12 +12,10 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// The volunteer id <see cref="Person"/>
         /// </summary>
-        [Key, Column(Order = 0)]
         public string VolunteerId { get; set; }
         /// <summary>
         /// Id of the record
         /// </summary>
-        [Key, Column(Order = 1)]
         public int Id { get; set; }
         /// <summary>
         /// Position which this record references
@@ -48,7 +46,7 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// The person
         /// </summary>
-        [ForeignKey("VolunteerId")]
+        [Required, ForeignKey("VolunteerId")]
         public virtual Volunteer Person { get; set; }
     }
 }

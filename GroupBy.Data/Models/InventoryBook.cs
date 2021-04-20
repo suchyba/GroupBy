@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +22,11 @@ namespace GroupBy.Data.Models
         /// Records of the book <seealso cref="InventoryBookRecord"/>
         /// </summary>
         public virtual IEnumerable<InventoryBookRecord> Records { get; set; }
+        public int? GroupId { get; set; }
         /// <summary>
         /// Group which is owner of the items in this book
         /// </summary>
-        [Required]
+        [Required, ForeignKey("GroupId")]
         public virtual Group RelatedGroup { get; set; }
     }
 }

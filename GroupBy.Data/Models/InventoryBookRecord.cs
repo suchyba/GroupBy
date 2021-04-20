@@ -16,12 +16,10 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Part of the primary key. Identificator of the book  containing this record <see cref="Book"/>
         /// </summary>
-        [Key, Column(Order = 0)]
         public int InventoryBookId { get; set; }
         /// <summary>
         /// Identificator of the record in the book
         /// </summary>
-        [Key, Column(Order = 1)]
         public int Id { get; set; }
         /// <summary>
         /// Related item <seealso cref="InventoryItem"/>
