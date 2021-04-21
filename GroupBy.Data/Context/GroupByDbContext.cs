@@ -34,6 +34,7 @@ namespace GroupBy.Data.Context
         public DbSet<Resolution> Resolutions { get; set; }
         public DbSet<RegistrationCode> RegistrationCodes { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<Agreement> Agreements { get; set; }
 
         public GroupByDbContext() : base()
         {
