@@ -5,7 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\GroupBy.Design\GroupBy.Design.csproj" />
+    <ProjectReference Include="..\GroupBy.Maps\GroupBy.Maps.csproj" />
+    <ProjectReference Include="..\GroupBy.Repositories\GroupBy.Repositories.csproj" />
+    <ProjectReference Include="..\GroupBy.Services\GroupBy.Services.csproj" />
   </ItemGroup>
 
 </Project>

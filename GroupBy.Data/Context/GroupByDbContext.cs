@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Context
@@ -35,7 +36,6 @@ namespace GroupBy.Data.Context
         public DbSet<RegistrationCode> RegistrationCodes { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
-
         public GroupByDbContext() : base()
         {
             

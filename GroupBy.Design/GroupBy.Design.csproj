@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Maps\" />
-    <Folder Include="Services\" />
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\GroupBy.Data\GroupBy.Data.csproj" />
+    <ProjectReference Include="..\GroupBy.ViewModels\GroupBy.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
