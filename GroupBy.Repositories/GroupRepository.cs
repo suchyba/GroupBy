@@ -32,11 +32,11 @@ namespace GroupBy.Repositories
             }
         }
 
-        public bool Delete(int id)
+        public bool Delete(Group domain)
         {
             try
             {
-                context.Groups.Remove(context.Groups.FirstOrDefault(g => g.Id == id));
+                context.Groups.Remove(context.Groups.FirstOrDefault(g => g.Id == domain.Id));
                 return true;
             }
             catch (Exception)
@@ -46,14 +46,19 @@ namespace GroupBy.Repositories
             }
         }
 
-        public Group Get(int id)
+        public Group Get(Group domain)
         {
-            return context.Groups.FirstOrDefault(g => g.Id == id);
+            return context.Groups.FirstOrDefault(g => g.Id == domain.Id);
         }
 
         public IEnumerable<Group> GetAll()
         {
             return context.Groups.ToList();
+        }
+
+        public IEnumerable<Volunteer> GetVolunteers(Group group)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Update(Group group)

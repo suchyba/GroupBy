@@ -12,6 +12,11 @@ namespace GroupBy.Data.Models
     public class Volunteer
     {
         /// <summary>
+        /// The identification number of the volunteer
+        /// </summary>
+        [Key]
+        public string Id { get; set; }
+        /// <summary>
         /// The names of the volunteer
         /// </summary>
         [Required]
@@ -21,11 +26,6 @@ namespace GroupBy.Data.Models
         /// </summary>
         [Required]
         public string LastName { get; set; }
-        /// <summary>
-        /// The identification number of the volunteer
-        /// </summary>
-        [Key]
-        public string Id { get; set; }
         public Position GetPosition(Group group)
         {
             // nie takie proste
@@ -38,6 +38,7 @@ namespace GroupBy.Data.Models
         /// <summary>
         /// Birth date of this volunteer
         /// </summary>
+        [Required]
         public DateTime BirthDate { get; set; }
         /// <summary>
         /// The phone number of the volunteer

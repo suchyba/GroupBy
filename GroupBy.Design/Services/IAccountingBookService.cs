@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Design.Services
 {
-    public interface IGroupService : IService<Group>
+    public interface IAccountingBookService : IService<AccountingBook>
     {
-        public IEnumerable<Volunteer> GetVolunteers(Group domain);
+
     }
 }

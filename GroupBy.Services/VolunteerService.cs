@@ -9,42 +9,37 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Services
 {
-    public class GroupService : IGroupService
+    public class VolunteerService : IVolunteerService
     {
-        private readonly IGroupRepository repository;
+        private readonly IVolunteerRepository repository;
 
-        public GroupService(IGroupRepository repository)
+        public VolunteerService(IVolunteerRepository repository)
         {
             this.repository = repository;
         }
-        public Group Create(Group domain)
+        public Volunteer Create(Volunteer domain)
         {
             return repository.Create(domain);
         }
 
-        public bool Delete(Group domain)
+        public bool Delete(Volunteer domain)
         {
             return repository.Delete(domain);
         }
 
-        public Group Get(Group domain)
+        public Volunteer Get(Volunteer domain)
         {
             return repository.Get(domain);
         }
 
-        public IEnumerable<Group> GetAll()
+        public IEnumerable<Volunteer> GetAll()
         {
             return repository.GetAll();
         }
 
-        public IEnumerable<Volunteer> GetVolunteers(Group domain)
+        public bool Update(Volunteer domain)
         {
-            return repository.GetVolunteers(domain);
-        }
-
-        public bool Update(Group group)
-        {
-            return repository.Update(group);
+            return repository.Update(domain);
         }
     }
 }

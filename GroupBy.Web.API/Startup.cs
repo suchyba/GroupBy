@@ -28,6 +28,12 @@ namespace GroupBy.Web.API
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGroupRepository, GroupDevelopmentRepository>();
             //services.AddDbContext<IGroupByDbContext, GroupByDbContext>();
+            services.AddScoped<IVolunteerMap, VolunteerMap>();
+            services.AddScoped<IVolunteerService, VolunteerService>();
+            services.AddScoped<IVolunteerRepository, VolunteerDevelopmentRepository>();
+            services.AddScoped<IAccountingBookMap, AccountingBookMap>();
+            services.AddScoped<IAccountingBookService, AccountingBookService>();
+            services.AddScoped<IAccountingBookRepository, AccountingBookDevelopmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

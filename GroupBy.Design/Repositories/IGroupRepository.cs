@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Design.Repositories
 {
-    public interface IGroupRepository
+    public interface IGroupRepository : IRepository<Group>
     {
-        public Group Create(Group group);
-        public bool Update(Group group);
-        public bool Delete(int id);
-        public IEnumerable<Group> GetAll();
-        public Group Get(int id);
+        public IEnumerable<Volunteer> GetVolunteers(Group group);
     }
 }

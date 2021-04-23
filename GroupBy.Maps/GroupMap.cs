@@ -30,22 +30,20 @@ namespace GroupBy.Maps
 
         public GroupViewModel DomainToViewModel(Group domain)
         {
+            if (domain == null)
+                return null;
+
             return new GroupViewModel { Id = domain.Id, Name = domain.Name, Description = domain.Description };
         }
 
         public IEnumerable<GroupViewModel> DomainToViewModel(IEnumerable<Group> domain)
         {
-            return domain.Select(g => new GroupViewModel
-            {
-                Id = g.Id,
-                Name = g.Name,
-                Description = g.Description
-            });
+            return domain.Select(g => DomainToViewModel(g));
         }
 
-        public GroupViewModel Get(int id)
+        public GroupViewModel Get(GroupViewModel model)
         {
-            return DomainToViewModel(service.Get(id));
+            return DomainToViewModel(service.Get(ViewModelToDomain(model)));
         }
 
         public IEnumerable<GroupViewModel> GetAll()

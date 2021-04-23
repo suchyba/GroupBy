@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Design.Services
+namespace GroupBy.Design.Repositories
 {
-    public interface IGroupService : IService<Group>
+    public interface IVolunteerRepository : IRepository<Volunteer>
     {
-        public IEnumerable<Volunteer> GetVolunteers(Group domain);
+
     }
 }
