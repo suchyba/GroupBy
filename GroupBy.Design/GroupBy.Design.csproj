@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GroupBy.Data\GroupBy.Data.csproj" />
-    <ProjectReference Include="..\GroupBy.ViewModels\GroupBy.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

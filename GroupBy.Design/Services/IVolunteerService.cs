@@ -1,4 +1,4 @@
-﻿using GroupBy.Data.Models;
+﻿using GroupBy.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

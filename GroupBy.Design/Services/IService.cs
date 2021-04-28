@@ -10,8 +10,8 @@ namespace GroupBy.Design.Services
     {
         public Entity Create(Entity domain);
         public bool Update(Entity domain);
-        public bool Delete(Entity domain);
+        public bool Delete(Guid id);
         public IEnumerable<Entity> GetAll();
-        public Entity Get(Entity domain);
+        public Entity Get(Guid id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using GroupBy.Data.Models;
+﻿using GroupBy.Core.Entities;
 using GroupBy.Design.Maps;
 using GroupBy.Design.Services;
 using GroupBy.ViewModels;

@@ -1,4 +1,4 @@
-﻿using GroupBy.Data.Models;
+﻿using GroupBy.Core.Entities;
 using GroupBy.Design.Repositories;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Repositories
+namespace GroupBy.Infrastructure.Repositories
 {
     public class VolunteerDevelopmentRepository : IVolunteerRepository
     {

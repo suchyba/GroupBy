@@ -1,39 +1,32 @@
-using GroupBy.Data.Context;
-using GroupBy.Design.Maps;
-using GroupBy.Design.Repositories;
-using GroupBy.Design.Services;
-using GroupBy.Maps;
-using GroupBy.Repositories;
-using GroupBy.Services;
+using GroupBy.Application;
+using GroupBy.Application.Design.Repositories;
+using GroupBy.Application.Design.Services;
+using GroupBy.Application.Services;
+using GroupBy.Data;
+using GroupBy.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace GroupBy.Web.API
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+
+        public Startup(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDataServices(configuration);
+            services.AddApplicationServices();
             services.AddControllers();
-            services.AddScoped<IGroupMap, GroupMap>();
-            services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IGroupRepository, GroupDevelopmentRepository>();
-            //services.AddDbContext<IGroupByDbContext, GroupByDbContext>();
-            services.AddScoped<IVolunteerMap, VolunteerMap>();
-            services.AddScoped<IVolunteerService, VolunteerService>();
-            services.AddScoped<IVolunteerRepository, VolunteerDevelopmentRepository>();
-            services.AddScoped<IAccountingBookMap, AccountingBookMap>();
-            services.AddScoped<IAccountingBookService, AccountingBookService>();
-            services.AddScoped<IAccountingBookRepository, AccountingBookDevelopmentRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

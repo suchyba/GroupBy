@@ -1,5 +1,8 @@
-﻿using GroupBy.Design.Maps;
-using GroupBy.ViewModels;
+﻿using GroupBy.Application.Design.Services;
+using GroupBy.Application.Exceptions;
+using GroupBy.Application.Responses;
+using GroupBy.Application.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,47 +11,98 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Web.API.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class AccountingBookController : Controller
+    public class AccountingBookController : ControllerBase
     {
-        private readonly IAccountingBookMap accountingBookMap;
+        private readonly IAccountingBookAsyncService accountingBookService;
 
-        public AccountingBookController(IAccountingBookMap accountingBookMap)
+        public AccountingBookController(IAccountingBookAsyncService accountingBookService)
         {
-            this.accountingBookMap = accountingBookMap;
+            this.accountingBookService = accountingBookService;
         }
-        public IActionResult Index()
+
+        [HttpGet(Name = "GetAllAccountingBooks")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<AccountingBookViewModel>>> GetAllAsync()
         {
-            return View();
+            return Ok(await accountingBookService.GetAllAsync());
         }
-        [HttpGet]
-        public IEnumerable<AccountingBookViewModel> GetAll()
+        [HttpGet("{id}", Name = "GetAccountingBook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AccountingBookViewModel>> GetAsync(Guid id)
         {
-            return accountingBookMap.GetAll();
+            try
+            {
+                return Ok(await accountingBookService.GetAsync(id));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
         }
-        [HttpGet]
-        [Route("{id:int}/{orderNumber:int}")]
-        public AccountingBookViewModel Get(int id, int orderNumber)
+        [HttpPost("add")]
+        public async Task<ActionResult<AccountingBookResponse>> CreateAsync([FromBody] AccountingBookViewModel model)
         {
-            return accountingBookMap.Get(new AccountingBookViewModel { BookId = id , BookOrderNumberId = orderNumber});
+            var response = new AccountingBookResponse();
+            try
+            {
+                var accountingBook = await accountingBookService.CreateAsync(model);
+                response.Succes = true;
+                response.accountingBook = accountingBook;
+                return Ok(response);
+            }
+            catch (ValidationException e)
+            {
+                response.Succes = false;
+                foreach (var error in e.ValidationErrors)
+                {
+                    response.ValidationErrors.Add(error);
+                }
+                return BadRequest(response);
+            }
         }
-        [HttpPost]
-        [Route("add")]
-        public AccountingBookViewModel Create([FromBody] AccountingBookViewModel model)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> Delete(Guid id)
         {
-            return accountingBookMap.Create(model);
+            try
+            {
+                await accountingBookService.DeleteAsync(id);
+                
+                return NoContent();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
         }
-        [HttpDelete]
-        [Route("delete")]
-        public bool Delete([FromBody] AccountingBookViewModel model)
+        [HttpPut("edit")]
+        public async Task<ActionResult<AccountingBookResponse>> Edit([FromBody] AccountingBookViewModel model)
         {
-            return accountingBookMap.Delete(model);
-        }
-        [HttpPut]
-        [Route("edit")]
-        public bool Edit([FromBody] AccountingBookViewModel model)
-        {
-            return accountingBookMap.Update(model);
+            var response = new AccountingBookResponse();
+            try
+            {
+                var accountingBook = await accountingBookService.UpdateAsync(model);
+                response.Succes = true;
+                response.accountingBook = accountingBook;
+                return Ok(response);
+            }
+            catch (ValidationException e)
+            {
+                response.Succes = false;
+                foreach (var error in e.ValidationErrors)
+                {
+                    response.ValidationErrors.Add(error);
+                }
+                return BadRequest(response);
+            }
+            catch(NotFoundException e)
+            {
+                response.Succes = false;
+                response.Message = e.Message;
+                return NotFound(response);
+            }
         }
     }
 }

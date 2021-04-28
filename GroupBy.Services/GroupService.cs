@@ -1,4 +1,4 @@
-﻿using GroupBy.Data.Models;
+﻿using GroupBy.Core.Entities;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Services
+namespace GroupBy.Infrastructure.Services
 {
     public class GroupService : IGroupService
     {
