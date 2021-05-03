@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// The rank (some kind of tag 
@@ -13,7 +13,7 @@ namespace GroupBy.Domain
         /// The identificator
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Name of the rank
         /// </summary>

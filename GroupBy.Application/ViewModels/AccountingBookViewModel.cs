@@ -8,9 +8,8 @@ namespace GroupBy.Application.ViewModels
 {
     public class AccountingBookViewModel
     {
-        public Guid Id { get; set; }
-        public int BookNumber { get; set; }
-        public int BookOrderNumber { get; set; }
+        public int BookId { get; set; }
+        public int BookOrderNumberId { get; set; }
         public string Name { get; set; }
         public bool Locked { get; set; }
     }

@@ -1,5 +1,10 @@
-﻿using GroupBy.Application.Design.Services;
+﻿using AutoMapper;
+using GroupBy.Application.Design.Repositories;
+using GroupBy.Application.Design.Services;
+using GroupBy.Application.Exceptions;
+using GroupBy.Application.Validators;
 using GroupBy.Application.ViewModels;
+using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,34 +15,52 @@ namespace GroupBy.Application.Services
 {
     public class VolunteerAsyncService : IVolunteerAsyncService
     {
-        public Task<VolunteerViewModel> CreateAsync(VolunteerViewModel domain)
+        private readonly IVolunteerRepository volunteerRepository;
+        private readonly IMapper mapper;
+
+        public VolunteerAsyncService(IVolunteerRepository volunteerRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.volunteerRepository = volunteerRepository;
+            this.mapper = mapper;
+        }
+        public async Task<VolunteerViewModel> CreateAsync(VolunteerViewModel model)
+        {
+            var validator = new VolunteerValidator();
+            var validationResult = await validator.ValidateAsync(model);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult);
+
+            return mapper.Map<VolunteerViewModel>(await volunteerRepository.CreateAsync(mapper.Map<Volunteer>(model)));
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(VolunteerViewModel model)
         {
-            throw new NotImplementedException();
+            await volunteerRepository.DeleteAsync(mapper.Map<Volunteer>(model));
         }
 
-        public Task<VolunteerViewModel> GetAsync(Guid id)
+        public async Task<VolunteerViewModel> GetAsync(VolunteerViewModel model)
         {
-            throw new NotImplementedException();
+            return mapper.Map<VolunteerViewModel>(await volunteerRepository.GetAsync(mapper.Map<Volunteer>(model)));
         }
 
-        public Task<IEnumerable<VolunteerViewModel>> GetAllAsync()
+        public async Task<IEnumerable<VolunteerViewModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<VolunteerViewModel>>(await volunteerRepository.GetAllAsync());
         }
 
-        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(Guid volunteerId)
+        public async Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId)
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<GroupViewModel>>(await volunteerRepository.GetGroupsAsync(volunteerId));
         }
 
-        public Task<VolunteerViewModel> UpdateAsync(VolunteerViewModel domain)
+        public async Task<VolunteerViewModel> UpdateAsync(VolunteerViewModel model)
         {
-            throw new NotImplementedException();
+            var validator = new VolunteerValidator();
+            var validationResult = await validator.ValidateAsync(model);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult);
+
+            return mapper.Map<VolunteerViewModel>(await volunteerRepository.UpdateAsync(mapper.Map<Volunteer>(model)));
         }
     }
 }

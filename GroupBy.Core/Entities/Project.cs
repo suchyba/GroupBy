@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Type representing project which is organised by group <see cref="ParentGroup"/>
@@ -16,7 +16,7 @@ namespace GroupBy.Domain
         /// Identificator of the project
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Name of the project
         /// </summary>

@@ -2,15 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Record describing when the volunteer has been appointed on and dismissed off the position
     /// </summary>
     public class PositionRecord
     {
-        [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+        public int VolunteerId { get; set; }
         /// <summary>
         /// Position which this record references
         /// </summary>
@@ -40,7 +40,8 @@ namespace GroupBy.Domain
         /// <summary>
         /// The person
         /// </summary>
-        [Required]
+        [Key]
+        [Required, ForeignKey("VolunteerId")]
         public virtual Volunteer Person { get; set; }
     }
 }

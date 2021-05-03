@@ -1,6 +1,5 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.Responses;
 using GroupBy.Application.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,77 +30,67 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountingBookViewModel>> GetAsync(Guid id)
+        public async Task<ActionResult<AccountingBookViewModel>> GetAsync(int bookId, int bookOrderNumberId)
         {
             try
             {
-                return Ok(await accountingBookService.GetAsync(id));
+                var accountingBook = await accountingBookService.GetAsync(new AccountingBookViewModel { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                return Ok(accountingBook);
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
-                return NotFound();
+                return NotFound(new { Id = new { bookId, bookOrderNumberId }, e.Message });
             }
         }
-        [HttpPost("add")]
-        public async Task<ActionResult<AccountingBookResponse>> CreateAsync([FromBody] AccountingBookViewModel model)
+        [HttpPost("add", Name = "AddAccountingBook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<AccountingBookViewModel>> CreateAsync([FromBody] AccountingBookViewModel model)
         {
-            var response = new AccountingBookResponse();
             try
             {
                 var accountingBook = await accountingBookService.CreateAsync(model);
-                response.Succes = true;
-                response.accountingBook = accountingBook;
-                return Ok(response);
+                return Ok(accountingBook);
             }
             catch (ValidationException e)
             {
-                response.Succes = false;
-                foreach (var error in e.ValidationErrors)
-                {
-                    response.ValidationErrors.Add(error);
-                }
-                return BadRequest(response);
+                return BadRequest(e.ValidationErrors);
             }
         }
-        [HttpDelete("delete/{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        [HttpDelete("delete/{bookId}/{bookOrderNumberId}", Name = "DeleteAccountingBook")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> Delete(int bookId, int bookOrderNumberId)
         {
             try
             {
-                await accountingBookService.DeleteAsync(id);
-                
+                await accountingBookService.DeleteAsync(new AccountingBookViewModel { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+
                 return NoContent();
             }
             catch (NotFoundException e)
             {
-                return NotFound(e.Message);
+                return NotFound(new { Id = new { bookId, bookOrderNumberId }, e.Message });
             }
         }
-        [HttpPut("edit")]
-        public async Task<ActionResult<AccountingBookResponse>> Edit([FromBody] AccountingBookViewModel model)
+        [HttpPut("edit", Name = "EditAccountingBook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<AccountingBookViewModel>> Edit([FromBody] AccountingBookViewModel model)
         {
-            var response = new AccountingBookResponse();
             try
             {
                 var accountingBook = await accountingBookService.UpdateAsync(model);
-                response.Succes = true;
-                response.accountingBook = accountingBook;
-                return Ok(response);
+                return Ok(accountingBook);
             }
             catch (ValidationException e)
             {
-                response.Succes = false;
-                foreach (var error in e.ValidationErrors)
-                {
-                    response.ValidationErrors.Add(error);
-                }
-                return BadRequest(response);
+                return BadRequest(e.ValidationErrors);
             }
-            catch(NotFoundException e)
+            catch (NotFoundException e)
             {
-                response.Succes = false;
-                response.Message = e.Message;
-                return NotFound(response);
+                return NotFound(new { Id = new { model.BookId, model.BookOrderNumberId }, e.Message });
             }
         }
     }

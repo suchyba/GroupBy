@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Position of the volounteer <seealso cref="Volunteer"/>
@@ -12,7 +12,7 @@ namespace GroupBy.Domain
         /// Identiicator
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Name of the position
         /// </summary>

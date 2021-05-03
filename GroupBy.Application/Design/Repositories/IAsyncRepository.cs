@@ -10,8 +10,8 @@ namespace GroupBy.Application.Design.Repositories
     {
         public Task<Entity> CreateAsync(Entity domain);
         public Task<Entity> UpdateAsync(Entity domain);
-        public Task DeleteAsync(Guid id);
+        public Task DeleteAsync(Entity domain);
         public Task<IEnumerable<Entity>> GetAllAsync();
-        public Task<Entity> GetAsync(Guid id);
+        public Task<Entity> GetAsync(Entity domain);
     }
 }

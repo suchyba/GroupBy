@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Record in inventory book
@@ -16,8 +16,8 @@ namespace GroupBy.Domain
         /// <summary>
         /// Identificator of the record in the book
         /// </summary>
-        [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+        public int InventoryBookId { get; set; }
         /// <summary>
         /// Related item <seealso cref="InventoryItem"/>
         /// </summary>
@@ -46,7 +46,7 @@ namespace GroupBy.Domain
         /// <summary>
         /// Book containing this record <seealso cref="InventoryBook"/>
         /// </summary>
-        [Required]
+        [Required, ForeignKey("InventoryBookId")]
         public virtual InventoryBook Book { get; set; }
     }
 }

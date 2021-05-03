@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace GroupBy.Web.API
 {
@@ -24,9 +25,23 @@ namespace GroupBy.Web.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            AddSwagger(services);
+
             services.AddDataServices(configuration);
             services.AddApplicationServices();
             services.AddControllers();
+        }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("groupbydoc", new OpenApiInfo
+                {
+                    Version = "1.0.0",
+                    Title = "GroupBy API"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +55,12 @@ namespace GroupBy.Web.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/groupbydoc/swagger.json", "GroupBy API");
+            });
 
             app.UseEndpoints(endpoints =>
             {

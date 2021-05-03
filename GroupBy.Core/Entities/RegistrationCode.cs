@@ -1,18 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Code that can be generated and when typed in registration form some proporties will be setted
     /// </summary>
     public class RegistrationCode
     {
+        [Key]
+        public int Id { get; set; }
         /// <summary>
         /// The cliphered key
         /// </summary>
-        [Key]
-        public Guid Key { get; set; }
+        public string Key { get; set; }
         /// <summary>
         /// Name for easier identification
         /// </summary>

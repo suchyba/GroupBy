@@ -12,19 +12,21 @@ namespace GroupBy.Application.Validators
 {
     public class AccountingBookValidator : AbstractValidator<AccountingBookViewModel>
     {
-        private readonly IAccountingBookAsyncRepository accountingBookRepository;
+        private readonly IAccountingBookRepository accountingBookRepository;
 
-        public AccountingBookValidator(IAccountingBookAsyncRepository accountingBookRepository)
+        public AccountingBookValidator(IAccountingBookRepository accountingBookRepository)
         {
-            RuleFor(a => a.BookNumber)
+            RuleFor(a => a.BookId)
                 .GreaterThan(0).WithMessage("{PropertyName} must be grater than 0.")
                 .MustAsync(AccountingNumberUnique).WithMessage("{PropertyName} must be unique.")
                 .NotNull();
 
-            RuleFor(a => a.BookOrderNumber)
+            RuleFor(a => a.BookOrderNumberId)
                 .GreaterThan(0).WithMessage("{PropertyName} must be grater than 0.")
-                .MustAsync(AccountingOrderNumberUnique).WithMessage("{PropertyName} must be unique.")
                 .NotNull();
+
+            RuleFor(a => a)
+                .MustAsync(AccountingOrderNumberUnique).WithMessage("Accounting book order number must be unique.").OverridePropertyName("BookOrderNumberId");
 
             RuleFor(a => a.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
@@ -36,9 +38,9 @@ namespace GroupBy.Application.Validators
         {
             return !(await accountingBookRepository.IsAccountingBookNumberUnique(number));
         }
-        private async Task<bool> AccountingOrderNumberUnique(int number, CancellationToken token)
+        private async Task<bool> AccountingOrderNumberUnique(AccountingBookViewModel book, CancellationToken token)
         {
-            return !(await accountingBookRepository.IsAccountingBookOrderNumberUnique(number));
+            return !(await accountingBookRepository.IsAccountingBookOrderNumberUnique(book.BookId, book.BookOrderNumberId));
         }
     }
 }

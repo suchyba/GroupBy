@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Represent the group of permissions in group for user with specific position
     /// </summary>
     public class GroupsPermissions
     {
-        public Guid Id { get; set; }
+        public int GroupId { get; set; }
+        public int PositionId { get; set; }
         /// <summary>
         /// Permission to invitate members to group <seealso cref="Invitation"/>
         /// </summary>
@@ -49,12 +50,12 @@ namespace GroupBy.Domain
         /// <summary>
         /// Group where this permissions are valid <seealso cref="Models.Group"/>
         /// </summary>
-        [Required]
+        [Required, ForeignKey("GroupId")]
         public virtual Group Group { get; set; }
         /// <summary>
         /// Position which you must have to use this permissions <seealso cref="Models.Position"/>
         /// </summary>
-        [Required]
+        [Required, ForeignKey("PositionId")]
         public virtual Position Position { get; set; }
     }
 }

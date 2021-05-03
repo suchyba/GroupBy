@@ -1,4 +1,4 @@
-﻿using GroupBy.Domain;
+﻿using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +7,14 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
-    public class GroupRepository : IGroupAsyncRepository
+    public class GroupRepository : IGroupRepository
     {
         public Task<Group> CreateAsync(Group domain)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Group> GetAsync(Guid id)
+        public Task DeleteAsync(Group domain)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +24,12 @@ namespace GroupBy.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Volunteer>> GetVolunteersAsync(Group group)
+        public Task<Group> GetAsync(Group domain)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group)
         {
             throw new NotImplementedException();
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Abstract type for interactive element which group members can add
@@ -12,7 +12,7 @@ namespace GroupBy.Domain
         /// Identificator of the element
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Group in which this element is added <seealso cref="Models.Group"/>
         /// </summary>

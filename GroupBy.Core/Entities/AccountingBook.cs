@@ -6,23 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Accounting book 
     /// </summary>
     public class AccountingBook
     {
-        [Key]
-        public Guid Id { get; set; }
         /// <summary>
         /// Accounting book identification number
         /// </summary>
-        public int BookNumber { get; set; }
+        public int BookId { get; set; }
         /// <summary>
         /// Order number of this specific accounting book
         /// </summary>
-        public int BookOrderNumber { get; set; }
+        public int BookOrderNumberId { get; set; }
         /// <summary>
         /// Name of the book (depends on owner specification)
         /// </summary>

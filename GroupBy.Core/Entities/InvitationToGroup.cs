@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Invitation to group
@@ -14,7 +15,8 @@ namespace GroupBy.Domain
         /// <summary>
         /// Identificator of the invitation
         /// </summary>
-        public Guid Id { get; set; }
+        [Key]
+        public int Id { get; set; }
         /// <summary>
         /// Group from this invitation came from <seealso cref="Group"/>
         /// </summary>

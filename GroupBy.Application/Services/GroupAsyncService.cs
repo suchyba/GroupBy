@@ -1,5 +1,10 @@
-﻿using GroupBy.Application.Design.Services;
+﻿using AutoMapper;
+using GroupBy.Application.Design.Repositories;
+using GroupBy.Application.Design.Services;
+using GroupBy.Application.Exceptions;
+using GroupBy.Application.Validators;
 using GroupBy.Application.ViewModels;
+using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,34 +15,52 @@ namespace GroupBy.Application.Services
 {
     public class GroupAsyncService : IGroupAsyncService
     {
-        public Task<GroupViewModel> CreateAsync(GroupViewModel domain)
+        private readonly IGroupRepository groupRepository;
+        private readonly IMapper mapper;
+
+        public GroupAsyncService(IGroupRepository groupRepository, IMapper mapper)
         {
-            throw new NotImplementedException();
+            this.groupRepository = groupRepository;
+            this.mapper = mapper;
+        }
+        public async Task<GroupViewModel> CreateAsync(GroupViewModel domain)
+        {
+            var validator = new GroupValidator();
+            var validationResult = await validator.ValidateAsync(domain);
+            if(!validationResult.IsValid)
+                throw (new ValidationException(validationResult));
+
+            return mapper.Map<GroupViewModel>(await groupRepository.CreateAsync(mapper.Map<Group>(domain)));
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(GroupViewModel model)
         {
-            throw new NotImplementedException();
+            await groupRepository.DeleteAsync(mapper.Map<Group>(model));
         }
 
-        public Task<GroupViewModel> GetAsync(Guid id)
+        public async Task<GroupViewModel> GetAsync(GroupViewModel model)
         {
-            throw new NotImplementedException();
+            return mapper.Map<GroupViewModel>(await groupRepository.GetAsync(mapper.Map<Group>(model)));
         }
 
-        public Task<IEnumerable<GroupViewModel>> GetAllAsync()
+        public async Task<IEnumerable<GroupViewModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<GroupViewModel>>(await groupRepository.GetAllAsync());
         }
 
-        public Task<IEnumerable<VolunteerViewModel>> GetVolunteersAsync(Guid groupId)
+        public async Task<IEnumerable<VolunteerViewModel>> GetVolunteersAsync(int groupId)
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<VolunteerViewModel>>(await groupRepository.GetVolunteersAsync(groupId));
         }
 
-        public Task<GroupViewModel> UpdateAsync(GroupViewModel domain)
+        public async Task<GroupViewModel> UpdateAsync(GroupViewModel domain)
         {
-            throw new NotImplementedException();
+            var validator = new GroupValidator();
+            var validationResult = await validator.ValidateAsync(domain);
+            if (!validationResult.IsValid)
+                throw new ValidationException(validationResult);
+
+            return mapper.Map<GroupViewModel>(await groupRepository.UpdateAsync(mapper.Map<Group>(domain)));
         }
     }
 }

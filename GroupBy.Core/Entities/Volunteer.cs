@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// The volunteer
@@ -15,7 +15,7 @@ namespace GroupBy.Domain
         /// The identification number of the volunteer
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// The names of the volunteer
         /// </summary>
@@ -88,5 +88,6 @@ namespace GroupBy.Domain
         /// Agreement accepted by this volunteer <seealso cref="Agreement"/>
         /// </summary>
         public virtual IEnumerable<Agreement> Agreements { get; set; }
+        public virtual IdentityModel Identity { get; set; }
     }
 }

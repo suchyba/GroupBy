@@ -9,14 +9,14 @@ namespace GroupBy.Application.Exceptions
 {
     public class ValidationException : ApplicationException
     {
-        public List<string> ValidationErrors { get; set; }
+        public Dictionary<string, string> ValidationErrors { get; set; }
         public ValidationException(ValidationResult validationResult)
         {
-            ValidationErrors = new List<string>();
+            ValidationErrors = new Dictionary<string, string>();
 
             foreach (var validationError in validationResult.Errors)
             {
-                ValidationErrors.Add(validationError.ErrorMessage);
+                ValidationErrors.Add(validationError.PropertyName, validationError.ErrorMessage);
             }
         }
     }

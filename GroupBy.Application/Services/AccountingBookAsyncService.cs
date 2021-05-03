@@ -4,7 +4,7 @@ using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
 using GroupBy.Application.Validators;
 using GroupBy.Application.ViewModels;
-using GroupBy.Domain;
+using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +15,10 @@ namespace GroupBy.Application.Services
 {
     public class AccountingBookAsyncService : IAccountingBookAsyncService
     {
-        private readonly IAccountingBookAsyncRepository accountingBookRepository;
+        private readonly IAccountingBookRepository accountingBookRepository;
         private readonly IMapper mapper;
 
-        public AccountingBookAsyncService(IAccountingBookAsyncRepository accountingBookRepository, IMapper mapper)
+        public AccountingBookAsyncService(IAccountingBookRepository accountingBookRepository, IMapper mapper)
         {
             this.accountingBookRepository = accountingBookRepository;
             this.mapper = mapper;
@@ -33,14 +33,14 @@ namespace GroupBy.Application.Services
             return mapper.Map<AccountingBookViewModel>(await accountingBookRepository.CreateAsync(mapper.Map<AccountingBook>(model)));
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(AccountingBookViewModel model)
         {
-            await accountingBookRepository.DeleteAsync(id);
+            await accountingBookRepository.DeleteAsync(mapper.Map<AccountingBook>(model));
         }
 
-        public async Task<AccountingBookViewModel> GetAsync(Guid id)
+        public async Task<AccountingBookViewModel> GetAsync(AccountingBookViewModel model)
         {
-            return mapper.Map<AccountingBookViewModel>(await accountingBookRepository.GetAsync(id));
+            return mapper.Map<AccountingBookViewModel>(await accountingBookRepository.GetAsync(mapper.Map<AccountingBook>(model)));
         }
 
         public async Task<IEnumerable<AccountingBookViewModel>> GetAllAsync()

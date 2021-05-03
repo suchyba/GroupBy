@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Item mentioned in inventory book <seealso cref="InventoryBook"/>
@@ -13,7 +14,7 @@ namespace GroupBy.Domain
     public class InventoryItem
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Identification symbol of the item
         /// </summary>
@@ -26,6 +27,7 @@ namespace GroupBy.Domain
         /// <summary>
         /// Value of the item
         /// </summary>
+        [Column(TypeName = "decimal(10, 2)")]
         public decimal Value { get; set; }
         /// <summary>
         /// Description of the item

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Represents group of volunteers <seealso cref="Volunteer"/>
@@ -14,7 +14,7 @@ namespace GroupBy.Domain
         /// Identificator of the group
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Name of the group
         /// </summary>

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Type represents Inventory book of the group <seealso cref="Group"/>
@@ -17,7 +17,7 @@ namespace GroupBy.Domain
         /// Identificator of book
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Records of the book <seealso cref="InventoryBookRecord"/>
         /// </summary>

@@ -1,9 +1,10 @@
-﻿using GroupBy.Domain;
+﻿using GroupBy.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroupBy.Data.DbContexts
 {
-    public class GroupByDbContext : DbContext
+    public class GroupByDbContext : IdentityDbContext<IdentityModel>
     {
         public DbSet<FinancialRecord> FinancialRecords { get; set; }
         public DbSet<FinancialIncomeRecord> FinancialIncomeRecords { get; set; }
@@ -30,6 +31,7 @@ namespace GroupBy.Data.DbContexts
         public DbSet<RegistrationCode> RegistrationCodes { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
+        public DbSet<IdentityModel> Identities { get; set; }
         public GroupByDbContext() : base()
         {
             
@@ -38,13 +40,40 @@ namespace GroupBy.Data.DbContexts
         {
 
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GroupBy;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        }
+        }*/
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.Entity<AccountingBook>()
+                .HasKey(a => new { a.BookId, a.BookOrderNumberId });
+            modelBuilder.Entity<FinancialRecord>()
+                .HasKey(f => new { f.BookId, f.BookOrderNumberId, f.Id });
+            modelBuilder.Entity<GroupsPermissions>()
+                .HasKey(p => new { p.GroupId, p.PositionId });
+            modelBuilder.Entity<PositionRecord>()
+                .HasKey(p => new { p.VolunteerId, p.Id });
+            modelBuilder.Entity<InventoryBookRecord>()
+                .HasKey(i => new { i.InventoryBookId, i.Id });
+            modelBuilder.Entity<Resolution>()
+                .HasKey(r => new { r.GroupId, r.Id });
+
+            modelBuilder.Entity<Element>()
+                .HasOne(e => e.Group)
+                .WithMany(g => g.Elements)
+                .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<Group>()
+                .HasOne(g => g.Owner)
+                .WithMany(v => v.OwnedGroups)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            /*modelBuilder.Entity<IdentityModel>()
+                .HasOne(i => i.RelatedVolunteer)
+                .WithOne(v => v.Identity)
+                .*/
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

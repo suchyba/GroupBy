@@ -2,14 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// The resolution adopted in the group <see cref="Group"/>
     /// </summary>
     public class Resolution
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+        public int GroupId { get; set; }
         /// <summary>
         /// The identification symbol of the resolution
         /// </summary>
@@ -32,7 +33,7 @@ namespace GroupBy.Domain
         /// <summary>
         /// Group where that resolution has been adopted <seealso cref="Group"/>
         /// </summary>
-        [Required]
+        [Required, ForeignKey("GroupId")]
         public virtual Group Group { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Is the type describing the type of the inventory book record <seealso cref="InventoryBookRecord"/>
@@ -16,7 +16,7 @@ namespace GroupBy.Domain
         /// Identificator
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Name of the type
         /// </summary>

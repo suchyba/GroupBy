@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Domain
+namespace GroupBy.Domain.Entities
 {
     /// <summary>
     /// Agreement to accept by volunteer <seealso cref="Volunteer"/>
@@ -16,7 +16,7 @@ namespace GroupBy.Domain
         /// Primary key
         /// </summary>
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// Content of agreement
         /// </summary>

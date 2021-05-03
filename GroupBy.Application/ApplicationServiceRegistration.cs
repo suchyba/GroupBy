@@ -17,7 +17,7 @@ namespace GroupBy.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IGroupAsyncService, GroupAsyncService>();
-            services.AddScoped<IVolunteerAsyncService, VolunteerAsyncService>();
+            //services.AddScoped<IVolunteerAsyncService, VolunteerAsyncService>();
             services.AddScoped<IAccountingBookAsyncService, AccountingBookAsyncService>();
 
             return services;

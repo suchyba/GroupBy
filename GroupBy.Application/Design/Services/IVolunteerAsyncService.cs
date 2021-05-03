@@ -9,6 +9,6 @@ namespace GroupBy.Application.Design.Services
 {
     public interface IVolunteerAsyncService : IAsyncService<VolunteerViewModel>
     {
-        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(Guid volunteerId);
+        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId);
     }
 }

@@ -1,4 +1,4 @@
-﻿using GroupBy.Domain;
+﻿using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Repositories
 {
-    public interface IVolunteerAsyncRepository : IAsyncRepository<Volunteer>
+    public interface IGroupRepository : IAsyncRepository<Group>
     {
-
+        public Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group);
     }
 }

@@ -14,10 +14,8 @@ namespace GroupBy.Data
             services.AddDbContext<GroupByDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));
 
-            services.AddScoped<IVolunteerAsyncRepository, VolunteerDevelopmentRepository>();
-            services.AddScoped<IGroupAsyncRepository, GroupDevelopmentRepository>();
-            services.AddScoped<IAccountingBookAsyncRepository, AccountingBookDevelopmentRepository>();
-            services.AddScoped<IAccountingBookAsyncRepository, AccountingBookDevelopmentRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
+            services.AddScoped<IAccountingBookRepository, AccountingBookRepository>();
 
             return services;
         }
