@@ -11,7 +11,7 @@ namespace GroupBy.Data
     {
         public static IServiceCollection AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<GroupByDbContext>(options =>
+            services.AddDbContext<DbContext, GroupByDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));
 
             services.AddScoped<IGroupRepository, GroupRepository>();

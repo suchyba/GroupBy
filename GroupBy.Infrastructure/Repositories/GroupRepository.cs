@@ -19,9 +19,9 @@ namespace GroupBy.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public override Task<Group> GetAsync(Group domain)
+        public override async Task<Group> GetAsync(Group domain)
         {
-            throw new NotImplementedException();
+            return await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.Id);
         }
 
         public Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group)
