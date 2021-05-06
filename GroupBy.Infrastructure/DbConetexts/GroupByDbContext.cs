@@ -69,10 +69,6 @@ namespace GroupBy.Data.DbContexts
                 .WithMany(v => v.OwnedGroups)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            /*modelBuilder.Entity<IdentityModel>()
-                .HasOne(i => i.RelatedVolunteer)
-                .WithOne(v => v.Identity)
-                .*/
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IGroupAsyncService : IAsyncService<GroupViewModel>
+    public interface IVolunteerService : IAsyncService<VolunteerViewModel, VolunteerViewModel>
     {
-        public Task<IEnumerable<VolunteerViewModel>> GetVolunteersAsync(int groupId);
+        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId);
     }
 }

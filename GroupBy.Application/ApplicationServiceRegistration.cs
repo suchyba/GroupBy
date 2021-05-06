@@ -1,5 +1,8 @@
-﻿using GroupBy.Application.Design.Services;
+﻿using FluentValidation;
+using GroupBy.Application.Design.Services;
 using GroupBy.Application.Services;
+using GroupBy.Application.Validators;
+using GroupBy.Application.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,9 +19,13 @@ namespace GroupBy.Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<IGroupAsyncService, GroupAsyncService>();
-            //services.AddScoped<IVolunteerAsyncService, VolunteerAsyncService>();
-            services.AddScoped<IAccountingBookAsyncService, AccountingBookAsyncService>();
+            services.AddScoped<IValidator<AccountingBookViewModel>, AccountingBookModifyValidator>();
+            services.AddScoped<IValidator<GroupViewModel>, 
+
+            services.AddScoped<IValidator<AccountingBookCreateViewModel>, AccountingBookCreateValidator>();
+
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IAccountingBookService, AccountingBookService>();
 
             return services;
         }

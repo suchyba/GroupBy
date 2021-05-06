@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    [Migration("20210503212033_InitialCreate")]
+    [Migration("20210504102634_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -674,14 +674,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<int?>("RankId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RemainderId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RankId");
-
-                    b.HasIndex("RemainderId");
 
                     b.ToTable("Volunteers");
                 });
@@ -830,6 +825,21 @@ namespace GroupBy.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("RemainderVolunteer", b =>
+                {
+                    b.Property<int>("RemaindersId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VolunteersAcceptedId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RemaindersId", "VolunteersAcceptedId");
+
+                    b.HasIndex("VolunteersAcceptedId");
+
+                    b.ToTable("RemainderVolunteer");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Document", b =>
@@ -1238,10 +1248,6 @@ namespace GroupBy.Data.Migrations
                         .WithMany("VolunteersRanked")
                         .HasForeignKey("RankId");
 
-                    b.HasOne("GroupBy.Domain.Entities.Remainder", null)
-                        .WithMany("VolunteersAccepted")
-                        .HasForeignKey("RemainderId");
-
                     b.Navigation("Rank");
                 });
 
@@ -1307,6 +1313,21 @@ namespace GroupBy.Data.Migrations
                     b.HasOne("GroupBy.Domain.Entities.IdentityModel", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RemainderVolunteer", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.Remainder", null)
+                        .WithMany()
+                        .HasForeignKey("RemaindersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.Volunteer", null)
+                        .WithMany()
+                        .HasForeignKey("VolunteersAcceptedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1378,11 +1399,6 @@ namespace GroupBy.Data.Migrations
                     b.Navigation("RegistrationCodes");
 
                     b.Navigation("YourInvitations");
-                });
-
-            modelBuilder.Entity("GroupBy.Domain.Entities.Remainder", b =>
-                {
-                    b.Navigation("VolunteersAccepted");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.TODOList", b =>

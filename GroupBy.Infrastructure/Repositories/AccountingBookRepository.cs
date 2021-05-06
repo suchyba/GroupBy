@@ -18,24 +18,38 @@ namespace GroupBy.Data.Repositories
 
         }
 
-        public override Task DeleteAsync(AccountingBook domain)
+        public override async Task DeleteAsync(AccountingBook domain)
         {
-            throw new NotImplementedException();
+            var book = await GetAsync(domain);
+            if (book == null)
+                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
+
+            context.Set<AccountingBook>().Remove(book);
+            await context.SaveChangesAsync();
         }
 
-        public override Task<AccountingBook> GetAsync(AccountingBook domain)
+        public override async Task<AccountingBook> GetAsync(AccountingBook domain)
         {
-            throw new NotImplementedException();
+            var book = await context.Set<AccountingBook>().FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
+            if (book == null)
+                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
+            return book;
         }
-
-        public Task<bool> IsAccountingBookNumberUnique(int number)
+        public override async Task<AccountingBook> CreateAsync(AccountingBook domain)
         {
-            throw new NotImplementedException();
+            int key = domain.RelatedGroup.Id;
+            domain.RelatedGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.RelatedGroup.Id);
+            if (domain.RelatedGroup == null)
+                throw new NotFoundException("Group", key);
+
+            return await base.CreateAsync(domain);
         }
-
-        public Task<bool> IsAccountingBookOrderNumberUnique(int bookNumber, int orderNumber)
+        public async Task<bool> IsIdUnique(int bookNumber, int orderNumber)
         {
-            throw new NotImplementedException();
+            if (!(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber).AnyAsync()))
+                return true;
+
+            return !(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber && book.BookOrderNumberId == orderNumber).AnyAsync());
         }
 
         public override async Task<AccountingBook> UpdateAsync(AccountingBook domain)
@@ -52,5 +66,9 @@ namespace GroupBy.Data.Repositories
             return book;
         }
 
+        public Task<IEnumerable<FinancialRecord>> GetFinancialRecords()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

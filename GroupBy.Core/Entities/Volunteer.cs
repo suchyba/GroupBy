@@ -89,5 +89,6 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public virtual IEnumerable<Agreement> Agreements { get; set; }
         public virtual IdentityModel Identity { get; set; }
+        public virtual IEnumerable<Remainder> Remainders { get; set; }
     }
 }

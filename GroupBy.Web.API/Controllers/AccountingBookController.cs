@@ -14,9 +14,9 @@ namespace GroupBy.Web.API.Controllers
     [Route("api/[controller]")]
     public class AccountingBookController : ControllerBase
     {
-        private readonly IAccountingBookAsyncService accountingBookService;
+        private readonly IAccountingBookService accountingBookService;
 
-        public AccountingBookController(IAccountingBookAsyncService accountingBookService)
+        public AccountingBookController(IAccountingBookService accountingBookService)
         {
             this.accountingBookService = accountingBookService;
         }
@@ -27,7 +27,7 @@ namespace GroupBy.Web.API.Controllers
         {
             return Ok(await accountingBookService.GetAllAsync());
         }
-        [HttpGet("{id}", Name = "GetAccountingBook")]
+        [HttpGet("{bookId}/{bookOrderNumberId}", Name = "GetAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AccountingBookViewModel>> GetAsync(int bookId, int bookOrderNumberId)
@@ -45,7 +45,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "AddAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingBookViewModel>> CreateAsync([FromBody] AccountingBookViewModel model)
+        public async Task<ActionResult<AccountingBookViewModel>> CreateAsync([FromBody] AccountingBookCreateViewModel model)
         {
             try
             {

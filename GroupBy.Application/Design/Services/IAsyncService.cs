@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAsyncService<ViewModel>
+    public interface IAsyncService<ViewModel, CreateViewModel>
     {
-        public Task<ViewModel> CreateAsync(ViewModel model);
+        public Task<ViewModel> CreateAsync(CreateViewModel model);
         public Task<ViewModel> UpdateAsync(ViewModel model);
         public Task DeleteAsync(ViewModel model);
         public Task<IEnumerable<ViewModel>> GetAllAsync();

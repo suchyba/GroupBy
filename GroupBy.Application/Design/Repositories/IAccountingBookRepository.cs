@@ -9,7 +9,7 @@ namespace GroupBy.Application.Design.Repositories
 {
     public interface IAccountingBookRepository : IAsyncRepository<AccountingBook>
     {
-        public Task<bool> IsAccountingBookNumberUnique(int number);
-        public Task<bool> IsAccountingBookOrderNumberUnique(int bookNumber, int orderNumber);
+        public Task<bool> IsIdUnique(int bookNumber, int orderNumber);
+        public Task<IEnumerable<FinancialRecord>> GetFinancialRecords();
     }
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class VolunteerAsyncService : IVolunteerAsyncService
+    public class VolunteerAsyncService : IVolunteerService
     {
         private readonly IVolunteerRepository volunteerRepository;
         private readonly IMapper mapper;

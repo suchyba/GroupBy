@@ -16,7 +16,10 @@ namespace GroupBy.Application.Exceptions
 
             foreach (var validationError in validationResult.Errors)
             {
-                ValidationErrors.Add(validationError.PropertyName, validationError.ErrorMessage);
+                if(ValidationErrors.TryAdd(validationError.PropertyName, validationError.ErrorMessage) == false)
+                {
+                    ValidationErrors[validationError.PropertyName] += $"\n{validationError.ErrorMessage}";
+                }
             }
         }
     }

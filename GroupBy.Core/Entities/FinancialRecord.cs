@@ -13,14 +13,10 @@ namespace GroupBy.Domain.Entities
         public int BookId { get; set; }
         public int BookOrderNumberId { get; set; }
         /// <summary>
-        /// Summary income/outcome (read only - need to refresh by calling <see cref="CalculateTotalAmount"/>)
+        /// Total value.
         /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal TotalAmount { get; protected set; }
-        /// <summary>
-        /// Refreshs <see cref="TotalAmount"/>
-        /// </summary>
-        public abstract void CalculateTotalAmount();
+        /// <returns>Sum of values.</returns>
+        public abstract decimal GetTotal();
         /// <summary>
         /// Date of the record
         /// </summary>

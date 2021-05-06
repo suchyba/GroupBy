@@ -4,27 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using GroupBy.Application.Design.Repositories;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroupBy.Data.Repositories
 {
-    public class GroupRepository : IGroupRepository
+    public class GroupRepository : AsyncRepository<Group>, IGroupRepository
     {
-        public Task<Group> CreateAsync(Group domain)
+        public GroupRepository(DbContext context) : base(context)
+        {
+
+        }
+        public override Task DeleteAsync(Group domain)
         {
             throw new NotImplementedException();
         }
 
-        public Task DeleteAsync(Group domain)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Group>> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Group> GetAsync(Group domain)
+        public override Task<Group> GetAsync(Group domain)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +29,7 @@ namespace GroupBy.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Group> UpdateAsync(Group domain)
+        public override Task<Group> UpdateAsync(Group domain)
         {
             throw new NotImplementedException();
         }

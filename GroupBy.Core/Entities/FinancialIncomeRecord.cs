@@ -43,11 +43,12 @@ namespace GroupBy.Domain.Entities
         [Column(TypeName = "decimal(10, 2)")]
         public decimal? Other { get; set; }
         /// <summary>
-        /// Override of abstract function (sums all sources) <seealso cref="FinancialRecord.CalculateTotalAmount"/> <seealso cref="FinancialRecord.TotalAmount"/>
+        /// Sum of all variables
         /// </summary>
-        public override void CalculateTotalAmount()
+        /// <returns></returns>
+        public override decimal GetTotal()
         {
-            TotalAmount = MembershipFee ?? 0 + ProgramFee ?? 0 + Dotation ?? 0 + EarningAction ?? 0 + OnePercent ?? 0 + Other ?? 0;
+            return MembershipFee ?? 0 + ProgramFee ?? 0 + Dotation ?? 0 + EarningAction ?? 0 + OnePercent ?? 0 + Other ?? 0;
         }
     }
 }

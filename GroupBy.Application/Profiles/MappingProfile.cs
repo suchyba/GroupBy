@@ -9,6 +9,8 @@ namespace GroupBy.Application.Profiles
         public MappingProfile()
         {
             CreateMap<AccountingBook, AccountingBookViewModel>().ReverseMap();
+            CreateMap<AccountingBook, AccountingBookCreateViewModel>().ReverseMap();
+
             CreateMap<Group, GroupViewModel>().ReverseMap();
             CreateMap<Volunteer, VolunteerViewModel>().ReverseMap();
         }
