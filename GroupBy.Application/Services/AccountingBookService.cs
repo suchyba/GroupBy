@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookViewModel, AccountingBookCreateViewModel>, IAccountingBookService
+    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookViewModel, AccountingBookCreateViewModel, AccountingBookViewModel>, IAccountingBookService
     {
         public AccountingBookService(IAccountingBookRepository accountingBookRepository, IMapper mapper, 
             IValidator<AccountingBookViewModel> updateValidator, IValidator<AccountingBookCreateViewModel> createValidator)

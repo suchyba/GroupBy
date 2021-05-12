@@ -20,9 +20,11 @@ namespace GroupBy.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped<IValidator<AccountingBookViewModel>, AccountingBookModifyValidator>();
-            services.AddScoped<IValidator<GroupViewModel>,  GroupValidator>();
+            services.AddScoped<IValidator<GroupViewModel>, GroupValidator>();
 
             services.AddScoped<IValidator<AccountingBookCreateViewModel>, AccountingBookCreateValidator>();
+            services.AddScoped<IValidator<GroupCreateViewModel>, GroupCreateValidator>();
+            services.AddScoped<IValidator<GroupUpdateViewModel>, GroupUpdateValidator>();
 
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IAccountingBookService, AccountingBookService>();

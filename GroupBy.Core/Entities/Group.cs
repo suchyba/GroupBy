@@ -41,7 +41,7 @@ namespace GroupBy.Domain.Entities
         /// <summary>
         /// List of group members <seealso cref="Volunteer"/>
         /// </summary>
-        public virtual IEnumerable<Volunteer> Members { get; set; }
+        public virtual ICollection<Volunteer> Members { get; set; }
         /// <summary>
         /// Accounting books of the group <seealso cref="AccountingBook"/>
         /// </summary>

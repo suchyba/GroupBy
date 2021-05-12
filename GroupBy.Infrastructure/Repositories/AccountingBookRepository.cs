@@ -13,7 +13,7 @@ namespace GroupBy.Data.Repositories
 {
     public class AccountingBookRepository : AsyncRepository<AccountingBook>, IAccountingBookRepository
     {
-        public AccountingBookRepository(GroupByDbContext context) : base(context)
+        public AccountingBookRepository(DbContext context) : base(context)
         {
 
         }

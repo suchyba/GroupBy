@@ -14,18 +14,24 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class GroupService : AsyncService<Group, GroupViewModel, GroupViewModel>, IGroupService
+    public class GroupService : AsyncService<Group, GroupViewModel, GroupCreateViewModel, GroupUpdateViewModel>, IGroupService
     {
 
         public GroupService(IGroupRepository groupRepository, IMapper mapper,
-            IValidator<GroupViewModel> validator) : base(groupRepository, mapper, validator, validator)
+            IValidator<GroupCreateViewModel> createValidator, 
+            IValidator<GroupUpdateViewModel> updateValidator) : base(groupRepository, mapper, updateValidator, createValidator)
         {
 
         }
 
-        public Task<IEnumerable<VolunteerViewModel>> GetVolunteersAsync(int groupId)
+        public async Task AddMember(int groupId, int volunteerId)
         {
-            throw new NotImplementedException();
+            await (repository as IGroupRepository).AddMamber(groupId, volunteerId);
+        }
+
+        public async Task<IEnumerable<SimpleVolunteerViewModel>> GetVolunteersAsync(int groupId)
+        {
+            return mapper.Map<IEnumerable<SimpleVolunteerViewModel>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
         }
     }
 }

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public abstract class AsyncService<Domain, ViewModel, CreateViewModel> : IAsyncService<ViewModel, CreateViewModel>
+    public abstract class AsyncService <Domain, ViewModel, CreateViewModel, UpdateViewModel> : IAsyncService<ViewModel, CreateViewModel, UpdateViewModel>
     {
         protected readonly IAsyncRepository<Domain> repository;
         protected readonly IMapper mapper;
-        protected readonly IValidator<ViewModel> updateValidator;
+        protected readonly IValidator<UpdateViewModel> updateValidator;
         protected readonly IValidator<CreateViewModel> createValidator;
 
-        public AsyncService(IAsyncRepository<Domain> repository, IMapper mapper, IValidator<ViewModel> updateValidator, IValidator<CreateViewModel> createValidator)
+        public AsyncService(IAsyncRepository<Domain> repository, IMapper mapper, IValidator<UpdateViewModel> updateValidator, IValidator<CreateViewModel> createValidator)
         {
             this.repository = repository;
             this.mapper = mapper;
@@ -46,7 +46,7 @@ namespace GroupBy.Application.Services
             return mapper.Map<ViewModel>(await repository.GetAsync(mapper.Map<Domain>(model)));
         }
 
-        public virtual async Task<ViewModel> UpdateAsync(ViewModel model)
+        public virtual async Task<ViewModel> UpdateAsync(UpdateViewModel model)
         {
             var validationResult = await updateValidator.ValidateAsync(model);
             if (!validationResult.IsValid)

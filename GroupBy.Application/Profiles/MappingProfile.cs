@@ -12,7 +12,11 @@ namespace GroupBy.Application.Profiles
             CreateMap<AccountingBook, AccountingBookCreateViewModel>().ReverseMap();
 
             CreateMap<Group, GroupViewModel>().ReverseMap();
+            CreateMap<Group, GroupCreateViewModel>().ReverseMap();
+            CreateMap<Group, GroupUpdateViewModel>().ReverseMap();
+
             CreateMap<Volunteer, VolunteerViewModel>().ReverseMap();
+            CreateMap<Volunteer, SimpleVolunteerViewModel>();
         }
     }
 }

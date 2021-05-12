@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAccountingBookService : IAsyncService<AccountingBookViewModel, AccountingBookCreateViewModel>
+    public interface IAccountingBookService : IAsyncService<AccountingBookViewModel, AccountingBookCreateViewModel, AccountingBookViewModel>
     {
 
     }

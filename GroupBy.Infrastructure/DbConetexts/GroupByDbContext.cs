@@ -1,6 +1,8 @@
-﻿using GroupBy.Domain.Entities;
+﻿using GroupBy.Application.Design;
+using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace GroupBy.Data.DbContexts
 {
@@ -32,10 +34,10 @@ namespace GroupBy.Data.DbContexts
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<IdentityModel> Identities { get; set; }
-        public GroupByDbContext() : base()
+        /*public GroupByDbContext() : base()
         {
-            
-        }
+
+        }*/
         public GroupByDbContext(DbContextOptions<GroupByDbContext> options) : base(options)
         {
 
