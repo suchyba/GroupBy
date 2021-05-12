@@ -16,6 +16,8 @@ namespace GroupBy.Application.Profiles
             CreateMap<Group, GroupUpdateViewModel>().ReverseMap();
 
             CreateMap<Volunteer, VolunteerViewModel>().ReverseMap();
+            CreateMap<Volunteer, VolunteerCreateViewModel>().ReverseMap();
+            CreateMap<Volunteer, VolunteerUpdateViewModel>().ReverseMap();
             CreateMap<Volunteer, SimpleVolunteerViewModel>();
         }
     }

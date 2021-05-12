@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators
 {
-    public class AccountingBookModifyValidator : AbstractValidator<AccountingBookViewModel>
+    public class AccountingBookUpdateValidator : AbstractValidator<AccountingBookViewModel>
     {
-        public AccountingBookModifyValidator()
+        public AccountingBookUpdateValidator()
         {
             RuleFor(a => a.BookId)
                 .GreaterThan(0).WithMessage("{PropertyName} must be grater than 0.")

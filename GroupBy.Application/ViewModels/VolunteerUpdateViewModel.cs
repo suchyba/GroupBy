@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.ViewModels
 {
-    public class VolunteerViewModel
+    public class VolunteerUpdateViewModel
     {
         public int Id { get; set; }
         public string FirstNames { get; set; }
@@ -15,6 +15,6 @@ namespace GroupBy.Application.ViewModels
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public bool Confirmed { get; set; }
-        public string RankName { get; set; }
+        public int? RankId { get; set; }
     }
 }
