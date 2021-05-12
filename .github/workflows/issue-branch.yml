@@ -1,3 +1,9 @@
+mode: chatops
+branches:
+  - label: enhancement
+    prefix: feature/
+  - label: bug
+    prefix: bugfix/
 on:
     issues:
         types: [assigned]
@@ -14,9 +20,3 @@ jobs:
           uses: robvanderleek/create-issue-branch@master
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-mode: chatops
-branches:
-  - label: enhancement
-    prefix: feature/
-  - label: bug
-    prefix: bugfix/
