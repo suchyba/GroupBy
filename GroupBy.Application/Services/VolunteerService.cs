@@ -22,9 +22,9 @@ namespace GroupBy.Application.Services
         {
 
         }
-        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId)
+        public async Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId)
         {
-            throw new NotImplementedException();
+            return mapper.Map<IEnumerable<GroupViewModel>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
         }
     }
 }

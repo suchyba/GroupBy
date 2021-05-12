@@ -8,7 +8,7 @@ namespace GroupBy.Application.ViewModels
 {
     public class VolunteerViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string FirstNames { get; set; }
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
