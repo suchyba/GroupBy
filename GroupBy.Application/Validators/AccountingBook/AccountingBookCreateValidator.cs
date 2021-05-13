@@ -1,14 +1,10 @@
 ﻿using FluentValidation;
 using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using GroupBy.Application.ViewModels.AccountingBook;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.Validators
+namespace GroupBy.Application.Validators.AccountingBook
 {
     public class AccountingBookCreateValidator : AbstractValidator<AccountingBookCreateViewModel>
     {

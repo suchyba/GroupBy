@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
-using GroupBy.Application.ViewModels;
+using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.ViewModels.Agreement;
+using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.Volunteer;
 using GroupBy.Domain.Entities;
 
 namespace GroupBy.Application.Profiles
@@ -18,7 +21,10 @@ namespace GroupBy.Application.Profiles
             CreateMap<Volunteer, VolunteerViewModel>().ReverseMap();
             CreateMap<Volunteer, VolunteerCreateViewModel>().ReverseMap();
             CreateMap<Volunteer, VolunteerUpdateViewModel>().ReverseMap();
-            CreateMap<Volunteer, SimpleVolunteerViewModel>();
+            CreateMap<Volunteer, VolunteerSimpleViewModel>();
+
+            CreateMap<Agreement, AgreementViewModel>().ReverseMap();
+            CreateMap<Agreement, AgreementCreateViewModel>().ReverseMap();
         }
     }
 }

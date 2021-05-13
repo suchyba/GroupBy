@@ -2,14 +2,10 @@
 using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.Validators;
-using GroupBy.Application.ViewModels;
+using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.Volunteer;
 using GroupBy.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
@@ -29,9 +25,9 @@ namespace GroupBy.Application.Services
             await (repository as IGroupRepository).AddMamber(groupId, volunteerId);
         }
 
-        public async Task<IEnumerable<SimpleVolunteerViewModel>> GetVolunteersAsync(int groupId)
+        public async Task<IEnumerable<VolunteerSimpleViewModel>> GetVolunteersAsync(int groupId)
         {
-            return mapper.Map<IEnumerable<SimpleVolunteerViewModel>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
+            return mapper.Map<IEnumerable<VolunteerSimpleViewModel>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
         }
     }
 }

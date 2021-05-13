@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GroupBy.Application.Design.Services;
 using System.Net.Mime;
-using GroupBy.Application.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using GroupBy.Application.Exceptions;
+using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.ViewModels.Group;
 
 namespace GroupBy.Web.API.Controllers
 {

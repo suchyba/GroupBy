@@ -1,15 +1,16 @@
 ﻿using FluentValidation;
 using GroupBy.Application.Design.Services;
 using GroupBy.Application.Services;
-using GroupBy.Application.Validators;
-using GroupBy.Application.ViewModels;
+using GroupBy.Application.Validators.AccountingBook;
+using GroupBy.Application.Validators.Agreement;
+using GroupBy.Application.Validators.Group;
+using GroupBy.Application.Validators.Volunteer;
+using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.ViewModels.Agreement;
+using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.Volunteer;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Application
 {
@@ -26,13 +27,17 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<AccountingBookViewModel>, AccountingBookUpdateValidator>();
             services.AddScoped<IValidator<AccountingBookCreateViewModel>, AccountingBookCreateValidator>();
 
-            services.AddScoped <IValidator<VolunteerViewModel>, VolunteerValidator>();
-            services.AddScoped <IValidator<VolunteerCreateViewModel>, VolunteerCreateValidator>();
-            services.AddScoped <IValidator<VolunteerUpdateViewModel>, VolunteerUpdateValidator>();
+            services.AddScoped<IValidator<VolunteerViewModel>, VolunteerValidator>();
+            services.AddScoped<IValidator<VolunteerCreateViewModel>, VolunteerCreateValidator>();
+            services.AddScoped<IValidator<VolunteerUpdateViewModel>, VolunteerUpdateValidator>();
+
+            services.AddScoped<IValidator<AgreementViewModel>, AgreementValidator>();
+            services.AddScoped<IValidator<AgreementCreateViewModel>, AgreementCreateValidator>();
 
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IAccountingBookService, AccountingBookService>();
             services.AddScoped<IVolunteerService, VolunteerService>();
+            services.AddScoped<IAgreementService, AgreementService>();
 
             return services;
         }

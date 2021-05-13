@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels
+namespace GroupBy.Application.ViewModels.Group
 {
     public class GroupViewModel
     {

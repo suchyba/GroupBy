@@ -1,12 +1,7 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GroupBy.Application.ViewModels.Group;
 
-namespace GroupBy.Application.Validators
+namespace GroupBy.Application.Validators.Group
 {
     public class GroupValidator : AbstractValidator<GroupViewModel>
     {
