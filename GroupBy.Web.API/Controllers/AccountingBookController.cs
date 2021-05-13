@@ -1,11 +1,9 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels;
+using GroupBy.Application.ViewModels.AccountingBook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 

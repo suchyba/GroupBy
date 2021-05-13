@@ -1,12 +1,13 @@
 ﻿using FluentValidation;
 using GroupBy.Application.ViewModels;
+using GroupBy.Application.ViewModels.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.Validators
+namespace GroupBy.Application.Validators.Volunteer
 {
     public class VolunteerValidator : AbstractValidator<VolunteerViewModel>
     {

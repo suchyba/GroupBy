@@ -17,15 +17,6 @@ namespace GroupBy.Data.Repositories
 
         }
 
-        public override async Task DeleteAsync(Volunteer domain)
-        {
-            Volunteer v = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == domain.Id);
-            if (v == null)
-                throw new NotFoundException("Volunteer", domain.Id);
-            context.Set<Volunteer>().Remove(v);
-            await context.SaveChangesAsync();
-        }
-
         public override async Task<Volunteer> GetAsync(Volunteer domain)
         {
             Volunteer v = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == domain.Id);

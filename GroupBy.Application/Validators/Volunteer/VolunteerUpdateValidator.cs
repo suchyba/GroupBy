@@ -1,17 +1,16 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels;
+using GroupBy.Application.ViewModels.Volunteer;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace GroupBy.Application.Validators
+namespace GroupBy.Application.Validators.Volunteer
 {
-    public class VolunteerCreateValidator : AbstractValidator<VolunteerCreateViewModel>
+    public class VolunteerUpdateValidator : AbstractValidator<VolunteerUpdateViewModel>
     {
-        public VolunteerCreateValidator()
+        public VolunteerUpdateValidator()
         {
+            RuleFor(v => v.Id)
+                .GreaterThan(0).WithMessage("{PropertyName} is required.");
             RuleFor(v => v.FirstNames)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(v => v.LastName)

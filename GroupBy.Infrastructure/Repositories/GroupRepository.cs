@@ -57,15 +57,6 @@ namespace GroupBy.Data.Repositories
 
             return createdGroup.Entity;
         }
-        public override async Task DeleteAsync(Group domain)
-        {
-            Group g = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.Id);
-            if (g == null)
-                throw new NotFoundException("Group", domain.Id);
-
-            context.Set<Group>().Remove(g);
-            await context.SaveChangesAsync();
-        }
 
         public override async Task<Group> GetAsync(Group domain)
         {

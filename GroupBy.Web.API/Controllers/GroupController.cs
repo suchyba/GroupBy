@@ -1,11 +1,12 @@
 ﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.ViewModels;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using GroupBy.Application.Exceptions;
 using System.Net.Mime;
+using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.ViewModels.Group;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -46,7 +47,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("members/{id}", Name = "GetMembers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<SimpleVolunteerViewModel>>> GetMembersAsync(int id)
+        public async Task<ActionResult<IEnumerable<VolunteerSimpleViewModel>>> GetMembersAsync(int id)
         {
             try
             {
