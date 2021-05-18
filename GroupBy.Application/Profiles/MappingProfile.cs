@@ -2,6 +2,7 @@
 using GroupBy.Application.ViewModels.AccountingBook;
 using GroupBy.Application.ViewModels.Agreement;
 using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.Rank;
 using GroupBy.Application.ViewModels.Volunteer;
 using GroupBy.Domain.Entities;
 
@@ -25,6 +26,9 @@ namespace GroupBy.Application.Profiles
 
             CreateMap<Agreement, AgreementViewModel>().ReverseMap();
             CreateMap<Agreement, AgreementCreateViewModel>().ReverseMap();
+
+            CreateMap<Rank, RankViewModel>().ReverseMap();
+            CreateMap<Rank, RankCreateViewModel>().ReverseMap();
         }
     }
 }

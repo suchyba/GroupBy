@@ -4,10 +4,12 @@ using GroupBy.Application.Services;
 using GroupBy.Application.Validators.AccountingBook;
 using GroupBy.Application.Validators.Agreement;
 using GroupBy.Application.Validators.Group;
+using GroupBy.Application.Validators.Rank;
 using GroupBy.Application.Validators.Volunteer;
 using GroupBy.Application.ViewModels.AccountingBook;
 using GroupBy.Application.ViewModels.Agreement;
 using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.Rank;
 using GroupBy.Application.ViewModels.Volunteer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -34,10 +36,14 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<AgreementViewModel>, AgreementValidator>();
             services.AddScoped<IValidator<AgreementCreateViewModel>, AgreementCreateValidator>();
 
+            services.AddScoped<IValidator<RankViewModel>, RankValidator>();
+            services.AddScoped<IValidator<RankCreateViewModel>, RankCreateValidator>();
+
             services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IAccountingBookService, AccountingBookService>();
             services.AddScoped<IVolunteerService, VolunteerService>();
             services.AddScoped<IAgreementService, AgreementService>();
+            services.AddScoped<IRankService, RankService>();
 
             return services;
         }
