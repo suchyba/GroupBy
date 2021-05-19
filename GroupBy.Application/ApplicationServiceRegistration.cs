@@ -4,12 +4,14 @@ using GroupBy.Application.Services;
 using GroupBy.Application.Validators.AccountingBook;
 using GroupBy.Application.Validators.Agreement;
 using GroupBy.Application.Validators.Group;
+using GroupBy.Application.Validators.InventoryItem;
 using GroupBy.Application.Validators.Position;
 using GroupBy.Application.Validators.Rank;
 using GroupBy.Application.Validators.Volunteer;
 using GroupBy.Application.ViewModels.AccountingBook;
 using GroupBy.Application.ViewModels.Agreement;
 using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.InventoryItem;
 using GroupBy.Application.ViewModels.Position;
 using GroupBy.Application.ViewModels.Rank;
 using GroupBy.Application.ViewModels.Volunteer;
@@ -24,6 +26,20 @@ namespace GroupBy.Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+            RegisterValidators(services);
+
+            services.AddScoped<IGroupService, GroupService>();
+            services.AddScoped<IAccountingBookService, AccountingBookService>();
+            services.AddScoped<IVolunteerService, VolunteerService>();
+            services.AddScoped<IAgreementService, AgreementService>();
+            services.AddScoped<IRankService, RankService>();
+            services.AddScoped<IPositionService, PositionService>();
+            services.AddScoped<IInventoryItemService, InventoryItemService>();
+
+            return services;
+        }
+        private static void RegisterValidators(IServiceCollection services)
+        {
             services.AddScoped<IValidator<GroupViewModel>, GroupValidator>();
             services.AddScoped<IValidator<GroupCreateViewModel>, GroupCreateValidator>();
             services.AddScoped<IValidator<GroupUpdateViewModel>, GroupUpdateValidator>();
@@ -44,14 +60,8 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<PositionViewModel>, PositionValidator>();
             services.AddScoped<IValidator<PositionCreateViewModel>, PositionCreateValidator>();
 
-            services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IAccountingBookService, AccountingBookService>();
-            services.AddScoped<IVolunteerService, VolunteerService>();
-            services.AddScoped<IAgreementService, AgreementService>();
-            services.AddScoped<IRankService, RankService>();
-            services.AddScoped<IPositionService, PositionService>();
-
-            return services;
+            services.AddScoped<IValidator<InventoryItemViewModel>, InventoryItemValidator>();
+            services.AddScoped<IValidator<InventoryItemCreateViewModel>, InventoryItemCreateValidator>();
         }
     }
 }
