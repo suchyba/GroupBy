@@ -19,6 +19,7 @@ namespace GroupBy.Data
             services.AddScoped<IVolunteerRepository, VolunteerRepository>();
             services.AddScoped<IAgreementRepository, AgreementRepository>();
             services.AddScoped<IRankRepository, RankRepository>();
+            services.AddScoped<IPositionRepository, PositionRepository>();
 
             return services;
         }
