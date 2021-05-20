@@ -2,6 +2,7 @@
 using GroupBy.Application.ViewModels.AccountingBook;
 using GroupBy.Application.ViewModels.Agreement;
 using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.ViewModels.InventoryItem;
 using GroupBy.Application.ViewModels.Position;
 using GroupBy.Application.ViewModels.Rank;
 using GroupBy.Application.ViewModels.Volunteer;
@@ -43,6 +44,9 @@ namespace GroupBy.Application.Profiles
             CreateMap<PositionCreateViewModel, Position>()
                 .ForMember(dest => dest.HigherPosition, opt => opt.MapFrom(
                     src => src.HigherPositionId == null ? null : new Position { Id = src.HigherPositionId.Value }));
+
+            CreateMap<InventoryItem, InventoryItemViewModel>().ReverseMap();
+            CreateMap<InventoryItem, InventoryItemCreateViewModel>().ReverseMap();
         }
     }
 }
