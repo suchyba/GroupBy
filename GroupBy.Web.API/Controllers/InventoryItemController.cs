@@ -37,5 +37,59 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.ValidationErrors);
             }
         }
+        [HttpGet("", Name = "GetAllInventoryItems")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<InventoryItemViewModel>>> GetAllAsync()
+        {
+            return Ok(await inventoryItemService.GetAllAsync());
+        }
+        [HttpGet("{id}", Name = "GetInventoryItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<InventoryItemViewModel>> GetAsync(int id)
+        {
+            try
+            {
+                return Ok(await inventoryItemService.GetAsync(new InventoryItemViewModel { Id = id }));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = id, e.Message });
+            }
+        }
+        [HttpPut("update", Name = "UpdateInventoryItem")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<InventoryItemViewModel>> UpdateAsync([FromBody] InventoryItemViewModel model)
+        {
+            try
+            {
+                return Ok(await inventoryItemService.UpdateAsync(model));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+            catch(ValidationException e)
+            {
+                return BadRequest(e.ValidationErrors);
+            }
+        }
+        [HttpDelete("delete/{id}", Name = "DeleteInventoryItem")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+                await inventoryItemService.DeleteAsync(new InventoryItemViewModel { Id = id });
+                return NoContent();
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = id, e.Message });
+            }
+        }
     }
 }
