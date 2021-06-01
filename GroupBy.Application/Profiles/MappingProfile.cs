@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using GroupBy.Application.ViewModels.AccountingBook;
-using GroupBy.Application.ViewModels.Agreement;
-using GroupBy.Application.ViewModels.Group;
-using GroupBy.Application.ViewModels.InventoryItem;
-using GroupBy.Application.ViewModels.Position;
-using GroupBy.Application.ViewModels.Rank;
-using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.Agreement;
+using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.InventoryItem;
+using GroupBy.Application.DTO.Position;
+using GroupBy.Application.DTO.Rank;
+using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 
 namespace GroupBy.Application.Profiles
@@ -14,39 +14,39 @@ namespace GroupBy.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<AccountingBook, AccountingBookViewModel>().ReverseMap();
-            CreateMap<AccountingBook, AccountingBookCreateViewModel>().ReverseMap();
+            CreateMap<AccountingBook, AccountingBookDTO>().ReverseMap();
+            CreateMap<AccountingBook, AccountingBookCreateDTO>().ReverseMap();
 
-            CreateMap<Group, GroupViewModel>().ReverseMap();
-            CreateMap<Group, GroupCreateViewModel>().ReverseMap();
-            CreateMap<Group, GroupUpdateViewModel>().ReverseMap();
+            CreateMap<Group, GroupDTO>().ReverseMap();
+            CreateMap<Group, GroupCreateDTO>().ReverseMap();
+            CreateMap<Group, GroupUpdateDTO>().ReverseMap();
 
-            CreateMap<Volunteer, VolunteerViewModel>().ReverseMap();
-            CreateMap<Volunteer, VolunteerCreateViewModel>().ReverseMap();
-            CreateMap<Volunteer, VolunteerUpdateViewModel>().ReverseMap();
-            CreateMap<Volunteer, VolunteerSimpleViewModel>();
+            CreateMap<Volunteer, VolunteerDTO>().ReverseMap();
+            CreateMap<Volunteer, VolunteerCreateDTO>().ReverseMap();
+            CreateMap<Volunteer, VolunteerUpdateDTO>().ReverseMap();
+            CreateMap<Volunteer, VolunteerSimpleDTO>();
 
-            CreateMap<Agreement, AgreementViewModel>().ReverseMap();
-            CreateMap<Agreement, AgreementCreateViewModel>().ReverseMap();
+            CreateMap<Agreement, AgreementDTO>().ReverseMap();
+            CreateMap<Agreement, AgreementCreateDTO>().ReverseMap();
 
-            CreateMap<Rank, RankViewModel>();
-            CreateMap<RankViewModel, Rank>()
+            CreateMap<Rank, RankDTO>();
+            CreateMap<RankDTO, Rank>()
                 .ForMember(dest => dest.HigherRank, opt => opt.MapFrom(
                     src => src.HigherRankId.HasValue ? new Rank { Id = src.HigherRankId.Value } : null));
-            CreateMap<RankCreateViewModel, Rank>()
+            CreateMap<RankCreateDTO, Rank>()
                 .ForMember(dest => dest.HigherRank, opt => opt.MapFrom(
                     src => src.HigherRankId.HasValue ? new Rank { Id = src.HigherRankId.Value } : null));
 
-            CreateMap<Position, PositionViewModel>();
-            CreateMap<PositionViewModel, Position>()
+            CreateMap<Position, PositionDTO>();
+            CreateMap<PositionDTO, Position>()
                 .ForMember(dest => dest.HigherPosition, opt => opt.MapFrom(
                     src => src.HigherPositionId == null ? null : new Position { Id = src.HigherPositionId.Value }));
-            CreateMap<PositionCreateViewModel, Position>()
+            CreateMap<PositionCreateDTO, Position>()
                 .ForMember(dest => dest.HigherPosition, opt => opt.MapFrom(
                     src => src.HigherPositionId == null ? null : new Position { Id = src.HigherPositionId.Value }));
 
-            CreateMap<InventoryItem, InventoryItemViewModel>().ReverseMap();
-            CreateMap<InventoryItem, InventoryItemCreateViewModel>().ReverseMap();
+            CreateMap<InventoryItem, InventoryItemDTO>().ReverseMap();
+            CreateMap<InventoryItem, InventoryItemCreateDTO>().ReverseMap();
         }
     }
 }

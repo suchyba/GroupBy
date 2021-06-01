@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.DTO.AccountingBook;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.AccountingBook
 {
-    public class AccountingBookCreateValidator : AbstractValidator<AccountingBookCreateViewModel>
+    public class AccountingBookCreateValidator : AbstractValidator<AccountingBookCreateDTO>
     {
         private readonly IAccountingBookRepository accountingBookRepository;
 
@@ -32,7 +32,7 @@ namespace GroupBy.Application.Validators.AccountingBook
             RuleFor(a => a.RelatedGroupId)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
         }
-        private async Task<bool> IdUnique(AccountingBookCreateViewModel book, CancellationToken token)
+        private async Task<bool> IdUnique(AccountingBookCreateDTO book, CancellationToken token)
         {
             return await accountingBookRepository.IsIdUnique(book.BookId, book.BookOrderNumberId);
         }

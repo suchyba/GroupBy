@@ -1,6 +1,6 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.DTO.AccountingBook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -24,18 +24,18 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllAccountingBooks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<AccountingBookViewModel>>> GetAllAsync()
+        public async Task<ActionResult<List<AccountingBookDTO>>> GetAllAsync()
         {
             return Ok(await accountingBookService.GetAllAsync());
         }
         [HttpGet("{bookId}/{bookOrderNumberId}", Name = "GetAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountingBookViewModel>> GetAsync(int bookId, int bookOrderNumberId)
+        public async Task<ActionResult<AccountingBookDTO>> GetAsync(int bookId, int bookOrderNumberId)
         {
             try
             {
-                var accountingBook = await accountingBookService.GetAsync(new AccountingBookViewModel { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                var accountingBook = await accountingBookService.GetAsync(new AccountingBookDTO { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
                 return Ok(accountingBook);
             }
             catch (NotFoundException e)
@@ -46,7 +46,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "AddAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingBookViewModel>> CreateAsync([FromBody] AccountingBookCreateViewModel model)
+        public async Task<ActionResult<AccountingBookDTO>> CreateAsync([FromBody] AccountingBookCreateDTO model)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await accountingBookService.DeleteAsync(new AccountingBookViewModel { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                await accountingBookService.DeleteAsync(new AccountingBookDTO { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
 
                 return NoContent();
             }
@@ -78,7 +78,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountingBookViewModel>> Edit([FromBody] AccountingBookViewModel model)
+        public async Task<ActionResult<AccountingBookDTO>> Edit([FromBody] AccountingBookDTO model)
         {
             try
             {

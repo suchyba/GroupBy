@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.Position;
+using GroupBy.Application.DTO.Position;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Position
 {
-    public class PositionValidator : AbstractValidator<PositionViewModel>
+    public class PositionValidator : AbstractValidator<PositionDTO>
     {
         public PositionValidator()
         {

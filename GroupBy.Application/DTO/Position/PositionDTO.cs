@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.Rank
+namespace GroupBy.Application.DTO.Position
 {
-    public class RankViewModel
+    public class PositionDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int? HigherRankId { get; set; }
+        public int? HigherPositionId { get; set; }
     }
 }

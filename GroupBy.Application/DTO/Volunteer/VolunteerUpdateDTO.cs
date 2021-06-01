@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.Volunteer
+namespace GroupBy.Application.DTO.Volunteer
 {
-    public class VolunteerUpdateViewModel
+    public class VolunteerUpdateDTO
     {
         public int Id { get; set; }
         public string FirstNames { get; set; }

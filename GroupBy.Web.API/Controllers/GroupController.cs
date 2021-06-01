@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using GroupBy.Application.Exceptions;
 using System.Net.Mime;
-using GroupBy.Application.ViewModels.Volunteer;
-using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.DTO.Volunteer;
+using GroupBy.Application.DTO.Group;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -24,19 +24,19 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<GroupViewModel>>> GetAllAsync()
+        public async Task<ActionResult<List<GroupDTO>>> GetAllAsync()
         {
             return Ok(await groupService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GroupViewModel>> GetAsync(int id)
+        public async Task<ActionResult<GroupDTO>> GetAsync(int id)
         {
-            GroupViewModel group;
+            GroupDTO group;
             try
             {
-                group = await groupService.GetAsync(new GroupViewModel { Id = id });
+                group = await groupService.GetAsync(new GroupDTO { Id = id });
             }
             catch (NotFoundException e)
             {
@@ -47,7 +47,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("members/{id}", Name = "GetMembers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<VolunteerSimpleViewModel>>> GetMembersAsync(int id)
+        public async Task<ActionResult<IEnumerable<VolunteerSimpleDTO>>> GetMembersAsync(int id)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<GroupViewModel>> CreateAsync([FromBody] GroupCreateViewModel model)
+        public async Task<ActionResult<GroupDTO>> CreateAsync([FromBody] GroupCreateDTO model)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await groupService.DeleteAsync(new GroupViewModel { Id = id });
+                await groupService.DeleteAsync(new GroupDTO { Id = id });
             }
             catch (NotFoundException e)
             {
@@ -111,7 +111,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GroupViewModel>> UpdateAsync([FromBody] GroupUpdateViewModel model)
+        public async Task<ActionResult<GroupDTO>> UpdateAsync([FromBody] GroupUpdateDTO model)
         {
             try
             {

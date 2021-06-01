@@ -2,20 +2,20 @@
 using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
-using GroupBy.Application.ViewModels.Group;
-using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class GroupService : AsyncService<Group, GroupViewModel, GroupCreateViewModel, GroupUpdateViewModel>, IGroupService
+    public class GroupService : AsyncService<Group, GroupDTO, GroupCreateDTO, GroupUpdateDTO>, IGroupService
     {
 
         public GroupService(IGroupRepository groupRepository, IMapper mapper,
-            IValidator<GroupCreateViewModel> createValidator, 
-            IValidator<GroupUpdateViewModel> updateValidator) : base(groupRepository, mapper, updateValidator, createValidator)
+            IValidator<GroupCreateDTO> createValidator, 
+            IValidator<GroupUpdateDTO> updateValidator) : base(groupRepository, mapper, updateValidator, createValidator)
         {
 
         }
@@ -25,9 +25,9 @@ namespace GroupBy.Application.Services
             await (repository as IGroupRepository).AddMamber(groupId, volunteerId);
         }
 
-        public async Task<IEnumerable<VolunteerSimpleViewModel>> GetVolunteersAsync(int groupId)
+        public async Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId)
         {
-            return mapper.Map<IEnumerable<VolunteerSimpleViewModel>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
+            return mapper.Map<IEnumerable<VolunteerSimpleDTO>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
         }
     }
 }

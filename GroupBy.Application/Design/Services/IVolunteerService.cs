@@ -1,12 +1,12 @@
-﻿using GroupBy.Application.ViewModels.Group;
-using GroupBy.Application.ViewModels.Volunteer;
+﻿using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.Volunteer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IVolunteerService : IAsyncService<VolunteerViewModel, VolunteerCreateViewModel, VolunteerUpdateViewModel>
+    public interface IVolunteerService : IAsyncService<VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>
     {
-        public Task<IEnumerable<GroupViewModel>> GetGroupsAsync(int volunteerId);
+        public Task<IEnumerable<GroupDTO>> GetGroupsAsync(int volunteerId);
     }
 }

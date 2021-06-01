@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.ViewModels.Rank;
+using GroupBy.Application.DTO.Rank;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Rank
 {
-    public class RankCreateValidator : AbstractValidator<RankCreateViewModel>
+    public class RankCreateValidator : AbstractValidator<RankCreateDTO>
     {
         public RankCreateValidator(IRankRepository rankRepository)
         {

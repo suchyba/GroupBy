@@ -1,8 +1,8 @@
-﻿using GroupBy.Application.ViewModels.Agreement;
+﻿using GroupBy.Application.DTO.Agreement;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAgreementService : IAsyncService<AgreementViewModel, AgreementCreateViewModel, AgreementViewModel>
+    public interface IAgreementService : IAsyncService<AgreementDTO, AgreementCreateDTO, AgreementDTO>
     {
 
     }

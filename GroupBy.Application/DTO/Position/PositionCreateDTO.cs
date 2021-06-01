@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.Position
+namespace GroupBy.Application.DTO.Position
 {
-    public class PositionCreateViewModel
+    public class PositionCreateDTO
     {
         public string Name { get; set; }
         public int? HigherPositionId { get; set; }

@@ -1,6 +1,6 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels.Position;
+using GroupBy.Application.DTO.Position;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,7 +27,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionViewModel>> CreateAsync([FromBody] PositionCreateViewModel model)
+        public async Task<ActionResult<PositionDTO>> CreateAsync([FromBody] PositionCreateDTO model)
         {
             try
             {
@@ -44,18 +44,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllPositions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<PositionViewModel>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<PositionDTO>>> GetAllAsync()
         {
             return Ok(await positionService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetPosition")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionViewModel>> GetAsync(int id)
+        public async Task<ActionResult<PositionDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await positionService.GetAsync(new PositionViewModel { Id = id }));
+                return Ok(await positionService.GetAsync(new PositionDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -66,7 +66,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionViewModel>> UpdateAsync([FromBody] PositionViewModel model)
+        public async Task<ActionResult<PositionDTO>> UpdateAsync([FromBody] PositionDTO model)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await positionService.DeleteAsync(new PositionViewModel { Id = id });
+                await positionService.DeleteAsync(new PositionDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)

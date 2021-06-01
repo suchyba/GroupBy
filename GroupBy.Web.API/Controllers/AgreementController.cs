@@ -1,6 +1,6 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels.Agreement;
+using GroupBy.Application.DTO.Agreement;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,18 +25,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllAgreements")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AgreementViewModel>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<AgreementDTO>>> GetAllAsync()
         {
             return Ok(await agreementService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetAgreement")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AgreementViewModel>> GetAsync(int id)
+        public async Task<ActionResult<AgreementDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await agreementService.GetAsync(new AgreementViewModel { Id = id }));
+                return Ok(await agreementService.GetAsync(new AgreementDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -46,7 +46,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "AddNewAgreement")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AgreementViewModel>> CreateAsync([FromBody] AgreementCreateViewModel model)
+        public async Task<ActionResult<AgreementDTO>> CreateAsync([FromBody] AgreementCreateDTO model)
         {
             try
             {
@@ -61,7 +61,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AgreementViewModel>> UpdateAsync([FromBody] AgreementViewModel model)
+        public async Task<ActionResult<AgreementDTO>> UpdateAsync([FromBody] AgreementDTO model)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await agreementService.DeleteAsync(new AgreementViewModel { Id = id });
+                await agreementService.DeleteAsync(new AgreementDTO { Id = id });
             }
             catch (NotFoundException e)
             {
