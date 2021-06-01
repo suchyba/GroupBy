@@ -1,6 +1,6 @@
 ﻿using GroupBy.Application.Design.Services;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels.InventoryItem;
+using GroupBy.Application.DTO.InventoryItem;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,7 +26,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "CreateInventoryItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryItemViewModel>> CreateAsync([FromBody] InventoryItemCreateViewModel model)
+        public async Task<ActionResult<InventoryItemDTO>> CreateAsync([FromBody] InventoryItemCreateDTO model)
         {
             try
             {
@@ -39,18 +39,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryItemViewModel>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryItemDTO>>> GetAllAsync()
         {
             return Ok(await inventoryItemService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetInventoryItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemViewModel>> GetAsync(int id)
+        public async Task<ActionResult<InventoryItemDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await inventoryItemService.GetAsync(new InventoryItemViewModel { Id = id }));
+                return Ok(await inventoryItemService.GetAsync(new InventoryItemDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -61,7 +61,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemViewModel>> UpdateAsync([FromBody] InventoryItemViewModel model)
+        public async Task<ActionResult<InventoryItemDTO>> UpdateAsync([FromBody] InventoryItemDTO model)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await inventoryItemService.DeleteAsync(new InventoryItemViewModel { Id = id });
+                await inventoryItemService.DeleteAsync(new InventoryItemDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)

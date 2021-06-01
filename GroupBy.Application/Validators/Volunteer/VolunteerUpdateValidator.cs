@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.DTO.Volunteer;
 using System;
 using System.Linq;
 
 namespace GroupBy.Application.Validators.Volunteer
 {
-    public class VolunteerUpdateValidator : AbstractValidator<VolunteerUpdateViewModel>
+    public class VolunteerUpdateValidator : AbstractValidator<VolunteerUpdateDTO>
     {
         public VolunteerUpdateValidator()
         {

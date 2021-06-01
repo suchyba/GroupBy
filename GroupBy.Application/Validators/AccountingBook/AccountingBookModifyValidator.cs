@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.DTO.AccountingBook;
 
 namespace GroupBy.Application.Validators.AccountingBook
 {
-    public class AccountingBookUpdateValidator : AbstractValidator<AccountingBookViewModel>
+    public class AccountingBookUpdateValidator : AbstractValidator<AccountingBookDTO>
     {
         public AccountingBookUpdateValidator()
         {

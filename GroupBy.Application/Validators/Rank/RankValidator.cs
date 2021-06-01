@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.Rank;
+using GroupBy.Application.DTO.Rank;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Rank
 {
-    public class RankValidator : AbstractValidator<RankViewModel>
+    public class RankValidator : AbstractValidator<RankDTO>
     {
         public RankValidator()
         {

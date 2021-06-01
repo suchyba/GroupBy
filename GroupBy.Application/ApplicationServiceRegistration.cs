@@ -8,13 +8,13 @@ using GroupBy.Application.Validators.InventoryItem;
 using GroupBy.Application.Validators.Position;
 using GroupBy.Application.Validators.Rank;
 using GroupBy.Application.Validators.Volunteer;
-using GroupBy.Application.ViewModels.AccountingBook;
-using GroupBy.Application.ViewModels.Agreement;
-using GroupBy.Application.ViewModels.Group;
-using GroupBy.Application.ViewModels.InventoryItem;
-using GroupBy.Application.ViewModels.Position;
-using GroupBy.Application.ViewModels.Rank;
-using GroupBy.Application.ViewModels.Volunteer;
+using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.Agreement;
+using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.InventoryItem;
+using GroupBy.Application.DTO.Position;
+using GroupBy.Application.DTO.Rank;
+using GroupBy.Application.DTO.Volunteer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -40,28 +40,28 @@ namespace GroupBy.Application
         }
         private static void RegisterValidators(IServiceCollection services)
         {
-            services.AddScoped<IValidator<GroupViewModel>, GroupValidator>();
-            services.AddScoped<IValidator<GroupCreateViewModel>, GroupCreateValidator>();
-            services.AddScoped<IValidator<GroupUpdateViewModel>, GroupUpdateValidator>();
+            services.AddScoped<IValidator<GroupDTO>, GroupValidator>();
+            services.AddScoped<IValidator<GroupCreateDTO>, GroupCreateValidator>();
+            services.AddScoped<IValidator<GroupUpdateDTO>, GroupUpdateValidator>();
 
-            services.AddScoped<IValidator<AccountingBookViewModel>, AccountingBookUpdateValidator>();
-            services.AddScoped<IValidator<AccountingBookCreateViewModel>, AccountingBookCreateValidator>();
+            services.AddScoped<IValidator<AccountingBookDTO>, AccountingBookUpdateValidator>();
+            services.AddScoped<IValidator<AccountingBookCreateDTO>, AccountingBookCreateValidator>();
 
-            services.AddScoped<IValidator<VolunteerViewModel>, VolunteerValidator>();
-            services.AddScoped<IValidator<VolunteerCreateViewModel>, VolunteerCreateValidator>();
-            services.AddScoped<IValidator<VolunteerUpdateViewModel>, VolunteerUpdateValidator>();
+            services.AddScoped<IValidator<VolunteerDTO>, VolunteerValidator>();
+            services.AddScoped<IValidator<VolunteerCreateDTO>, VolunteerCreateValidator>();
+            services.AddScoped<IValidator<VolunteerUpdateDTO>, VolunteerUpdateValidator>();
 
-            services.AddScoped<IValidator<AgreementViewModel>, AgreementValidator>();
-            services.AddScoped<IValidator<AgreementCreateViewModel>, AgreementCreateValidator>();
+            services.AddScoped<IValidator<AgreementDTO>, AgreementValidator>();
+            services.AddScoped<IValidator<AgreementCreateDTO>, AgreementCreateValidator>();
 
-            services.AddScoped<IValidator<RankViewModel>, RankValidator>();
-            services.AddScoped<IValidator<RankCreateViewModel>, RankCreateValidator>();
+            services.AddScoped<IValidator<RankDTO>, RankValidator>();
+            services.AddScoped<IValidator<RankCreateDTO>, RankCreateValidator>();
 
-            services.AddScoped<IValidator<PositionViewModel>, PositionValidator>();
-            services.AddScoped<IValidator<PositionCreateViewModel>, PositionCreateValidator>();
+            services.AddScoped<IValidator<PositionDTO>, PositionValidator>();
+            services.AddScoped<IValidator<PositionCreateDTO>, PositionCreateValidator>();
 
-            services.AddScoped<IValidator<InventoryItemViewModel>, InventoryItemValidator>();
-            services.AddScoped<IValidator<InventoryItemCreateViewModel>, InventoryItemCreateValidator>();
+            services.AddScoped<IValidator<InventoryItemDTO>, InventoryItemValidator>();
+            services.AddScoped<IValidator<InventoryItemCreateDTO>, InventoryItemCreateValidator>();
         }
     }
 }

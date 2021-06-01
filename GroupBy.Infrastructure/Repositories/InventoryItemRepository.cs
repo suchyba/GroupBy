@@ -1,6 +1,6 @@
 ﻿using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Exceptions;
-using GroupBy.Application.ViewModels.InventoryItem;
+using GroupBy.Application.DTO.InventoryItem;
 using GroupBy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;

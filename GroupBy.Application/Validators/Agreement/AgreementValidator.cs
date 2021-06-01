@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.Agreement;
+using GroupBy.Application.DTO.Agreement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Agreement
 {
-    public class AgreementValidator : AbstractValidator<AgreementViewModel>
+    public class AgreementValidator : AbstractValidator<AgreementDTO>
     {
         public AgreementValidator()
         {

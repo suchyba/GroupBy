@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.InventoryItem;
+using GroupBy.Application.DTO.InventoryItem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.InventoryItem
 {
-    public class InventoryItemCreateValidator : AbstractValidator<InventoryItemCreateViewModel>
+    public class InventoryItemCreateValidator : AbstractValidator<InventoryItemCreateDTO>
     {
         public InventoryItemCreateValidator()
         {

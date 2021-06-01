@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.FinancialRecord
+namespace GroupBy.Application.DTO.FinancialRecord
 {
-    public class FinancialRecordViewModel
+    public class FinancialRecordDTO
     {
         public decimal Total { get; set; }
         public DateTime Date { get; set; }

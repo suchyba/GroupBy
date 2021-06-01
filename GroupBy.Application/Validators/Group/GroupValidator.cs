@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using GroupBy.Application.ViewModels.Group;
+using GroupBy.Application.DTO.Group;
 
 namespace GroupBy.Application.Validators.Group
 {
-    public class GroupValidator : AbstractValidator<GroupViewModel>
+    public class GroupValidator : AbstractValidator<GroupDTO>
     {
         public GroupValidator()
         {

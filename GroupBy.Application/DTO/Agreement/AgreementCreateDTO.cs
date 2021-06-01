@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.Agreement
+namespace GroupBy.Application.DTO.Agreement
 {
-    public class AgreementCreateViewModel
+    public class AgreementCreateDTO
     {
         public string Content { get; set; }
     }

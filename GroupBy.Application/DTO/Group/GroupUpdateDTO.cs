@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.ViewModels.Group
+namespace GroupBy.Application.DTO.Group
 {
-    public class GroupCreateViewModel
+    public class GroupUpdateDTO
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? ParentGroupId { get; set; }
         public int OwnerId { get; set; }
-        public int? ProjectId { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using GroupBy.Application.ViewModels.InventoryItem;
+﻿using GroupBy.Application.DTO.InventoryItem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IInventoryItemService : IAsyncService<InventoryItemViewModel, InventoryItemCreateViewModel, InventoryItemViewModel>
+    public interface IInventoryItemService : IAsyncService<InventoryItemDTO, InventoryItemCreateDTO, InventoryItemDTO>
     {
 
     }

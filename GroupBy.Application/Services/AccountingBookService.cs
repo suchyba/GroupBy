@@ -2,15 +2,15 @@
 using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
-using GroupBy.Application.ViewModels.AccountingBook;
+using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Domain.Entities;
 
 namespace GroupBy.Application.Services
 {
-    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookViewModel, AccountingBookCreateViewModel, AccountingBookViewModel>, IAccountingBookService
+    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookDTO>, IAccountingBookService
     {
         public AccountingBookService(IAccountingBookRepository accountingBookRepository, IMapper mapper, 
-            IValidator<AccountingBookViewModel> updateValidator, IValidator<AccountingBookCreateViewModel> createValidator)
+            IValidator<AccountingBookDTO> updateValidator, IValidator<AccountingBookCreateDTO> createValidator)
             :base(accountingBookRepository, mapper, updateValidator, createValidator)
         {
 
