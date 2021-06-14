@@ -61,6 +61,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpDelete("delete/{bookId}/{bookOrderNumberId}", Name = "DeleteAccountingBook")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Delete(int bookId, int bookOrderNumberId)
         {
             try
@@ -72,6 +73,10 @@ namespace GroupBy.Web.API.Controllers
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = new { bookId, bookOrderNumberId }, e.Message });
+            }
+            catch (DeleteNotPermittedException e)
+            {
+                return BadRequest(e.Message);
             }
         }
         [HttpPut("edit", Name = "EditAccountingBook")]
