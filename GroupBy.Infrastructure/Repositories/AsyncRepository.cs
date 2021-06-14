@@ -1,4 +1,5 @@
 ﻿using GroupBy.Application.Design.Repositories;
+using GroupBy.Application.Exceptions;
 using GroupBy.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,9 +22,18 @@ namespace GroupBy.Data.Repositories
         {
             var entity = await GetAsync(domain);
 
+
             context.Set<Entity>().Remove(entity);
 
-            await context.SaveChangesAsync();
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch(DbUpdateException e)
+            {
+                throw new DeleteNotPermittedException(typeof(Entity).Name);
+            }
+
         }
         public abstract Task<Entity> GetAsync(Entity domain);
         public abstract Task<Entity> UpdateAsync(Entity domain);
