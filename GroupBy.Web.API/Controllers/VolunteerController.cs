@@ -59,7 +59,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpDelete("delete/{id}", Name = "DeleteVolunteer")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> DeleteAsync(int id)
         {
             try
@@ -72,7 +72,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (DeleteNotPermittedException e)
             {
-                return BadRequest(e.Message);
+                return Conflict(e.Message);
             }
             return NoContent();
         }
