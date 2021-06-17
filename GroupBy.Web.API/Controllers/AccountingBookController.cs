@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -61,7 +62,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpDelete("delete/{bookId}/{bookOrderNumberId}", Name = "DeleteAccountingBook")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult> Delete(int bookId, int bookOrderNumberId)
         {
             try
@@ -76,7 +77,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (DeleteNotPermittedException e)
             {
-                return BadRequest(e.Message);
+                return Conflict(e.Message);
             }
         }
         [HttpPut("edit", Name = "EditAccountingBook")]
