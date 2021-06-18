@@ -2,6 +2,7 @@
 using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryItem;
 using GroupBy.Application.DTO.Position;
 using GroupBy.Application.DTO.Rank;
@@ -47,6 +48,15 @@ namespace GroupBy.Application.Profiles
 
             CreateMap<InventoryItem, InventoryItemDTO>().ReverseMap();
             CreateMap<InventoryItem, InventoryItemCreateDTO>().ReverseMap();
+
+            CreateMap<InventoryBook, InventoryBookDTO>();
+            CreateMap<InventoryBookDTO, InventoryBook>();
+            CreateMap<InventoryBookCreateDTO, InventoryBook>()
+                .ForMember(dest => dest.RelatedGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.RelatedGroupId }));
+            CreateMap<InventoryBookUpdateDTO, InventoryBook>()
+                .ForMember(dest => dest.RelatedGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.RelatedGroupId }));
         }
     }
 }

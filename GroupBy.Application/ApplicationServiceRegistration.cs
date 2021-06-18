@@ -17,6 +17,8 @@ using GroupBy.Application.DTO.Rank;
 using GroupBy.Application.DTO.Volunteer;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using GroupBy.Application.DTO.InventoryBook;
+using GroupBy.Application.Validators.InventoryBook;
 
 namespace GroupBy.Application
 {
@@ -35,6 +37,7 @@ namespace GroupBy.Application
             services.AddScoped<IRankService, RankService>();
             services.AddScoped<IPositionService, PositionService>();
             services.AddScoped<IInventoryItemService, InventoryItemService>();
+            services.AddScoped<IInventoryBookService, InventoryBookService>();
 
             return services;
         }
@@ -62,6 +65,10 @@ namespace GroupBy.Application
 
             services.AddScoped<IValidator<InventoryItemDTO>, InventoryItemValidator>();
             services.AddScoped<IValidator<InventoryItemCreateDTO>, InventoryItemCreateValidator>();
+
+            services.AddScoped<IValidator<InventoryBookDTO>, InventoryBookValidator>();
+            services.AddScoped<IValidator<InventoryBookCreateDTO>, InventoryBookCreateValidator>();
+            services.AddScoped<IValidator<InventoryBookUpdateDTO>, InventoryBookUpdateValidator>();
         }
     }
 }

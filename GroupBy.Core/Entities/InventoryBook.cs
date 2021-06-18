@@ -19,10 +19,14 @@ namespace GroupBy.Domain.Entities
         [Key]
         public int Id { get; set; }
         /// <summary>
+        /// Name of the book
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
+        /// <summary>
         /// Records of the book <seealso cref="InventoryBookRecord"/>
         /// </summary>
         public virtual IEnumerable<InventoryBookRecord> Records { get; set; }
-        public int? GroupId { get; set; }
         /// <summary>
         /// Group which is owner of the items in this book
         /// </summary>
