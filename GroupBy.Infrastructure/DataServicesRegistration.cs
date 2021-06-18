@@ -21,6 +21,7 @@ namespace GroupBy.Data
             services.AddScoped<IRankRepository, RankRepository>();
             services.AddScoped<IPositionRepository, PositionRepository>();
             services.AddScoped<IInventoryItemRepository, InventoryItemRepository>();
+            services.AddScoped<IInventoryBookRepository, InventoryBookRepository>();
 
             return services;
         }
