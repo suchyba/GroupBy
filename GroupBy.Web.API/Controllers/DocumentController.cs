@@ -1,5 +1,5 @@
 ﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryBook;
+using GroupBy.Application.DTO.Document;
 using GroupBy.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,65 +12,48 @@ using System.Threading.Tasks;
 namespace GroupBy.Web.API.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
-    [Route("api/[controller]")]
-    public class InventoryBookController : ControllerBase
+    public class DocumentController : ControllerBase
     {
-        private readonly IInventoryBookService inventoryBookService;
+        private readonly IDocumentService documentService;
 
-        public InventoryBookController(IInventoryBookService inventoryBookService)
+        public DocumentController(IDocumentService documentService)
         {
-            this.inventoryBookService = inventoryBookService;
+            this.documentService = documentService;
         }
-        [HttpGet("", Name = "GetAllInventoryBooks")]
+        [HttpGet("", Name = "GetAllDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryBookDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetAllAsync()
         {
-            return Ok(await inventoryBookService.GetAllAsync());
+            return Ok(await documentService.GetAllAsync());
         }
-        [HttpGet("{id}", Name = "GetInventoryBook")]
+
+        [HttpGet("{id}", Name = "GetDocument")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookDTO>> GetAsync(int id)
+        public async Task<ActionResult<DocumentDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await inventoryBookService.GetAsync(new InventoryBookDTO { Id = id }));
+                return Ok(await documentService.GetAsync(new DocumentDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = e.Key, e.Message });
             }
         }
-        [HttpPost("add", Name = "AddNewInventoryBook")]
+
+        [HttpPost("add", Name = "CreateNewDocument")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookDTO>> CreateAsync([FromBody] InventoryBookCreateDTO model)
+        public async Task<ActionResult<DocumentDTO>> CreateAsync([FromBody] DocumentCreateDTO document)
         {
             try
             {
-                return Ok(await inventoryBookService.CreateAsync(model));
-            }
-            catch (ValidationException e)
-            {
-                return BadRequest(e.ValidationErrors);
-            }
-            catch (NotFoundException e)
-            {
-                return NotFound(new { Id = e.Key, e.Message });
-            }
-        }
-        [HttpPut("edit", Name = "UpdateInventoryBook")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookDTO>> UpdateAsync([FromBody] InventoryBookUpdateDTO model)
-        {
-            try
-            {
-                return Ok(await inventoryBookService.UpdateAsync(model));
+                return Ok(await documentService.CreateAsync(document));
             }
             catch (NotFoundException e)
             {
@@ -81,7 +64,28 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.ValidationErrors);
             }
         }
-        [HttpDelete("delete", Name = "DeleteInventoryBook")]
+
+        [HttpPut("update", Name = "UpdateDocument")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<DocumentDTO>> UpdateAsync([FromBody] DocumentUpdateDTO document)
+        {
+            try
+            {
+                return Ok(await documentService.UpdateAsync(document));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.ValidationErrors);
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
@@ -89,7 +93,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await inventoryBookService.DeleteAsync(new InventoryBookDTO { Id = id });
+                await documentService.DeleteAsync(new DocumentDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)
