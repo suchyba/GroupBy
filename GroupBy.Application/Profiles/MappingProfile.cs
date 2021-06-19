@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.Agreement;
+using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryItem;
@@ -57,6 +58,19 @@ namespace GroupBy.Application.Profiles
             CreateMap<InventoryBookUpdateDTO, InventoryBook>()
                 .ForMember(dest => dest.RelatedGroup, opt => opt.MapFrom(
                     src => new Group { Id = src.RelatedGroupId }));
+
+            CreateMap<Document, DocumentDTO>();
+            CreateMap<DocumentDTO, Document>();
+            CreateMap<DocumentCreateDTO, Document>()
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(
+                    src => new Group { Id = src.GroupId }))
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<DocumentUpdateDTO, Document>()
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(
+                    src => new Group { Id = src.GroupId }))
+                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
         }
     }
 }
