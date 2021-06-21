@@ -14,7 +14,8 @@ namespace GroupBy.Application.Services
 {
     public class InventoryBookService : AsyncService<InventoryBook, InventoryBookDTO, InventoryBookCreateDTO, InventoryBookUpdateDTO>, IInventoryBookService
     {
-        public InventoryBookService(IInventoryBookRepository repository, IMapper mapper, IValidator<InventoryBookUpdateDTO> updateValidator, IValidator<InventoryBookCreateDTO> createValidator) 
+        public InventoryBookService(IInventoryBookRepository repository, IMapper mapper, 
+            IValidator<InventoryBookUpdateDTO> updateValidator, IValidator<InventoryBookCreateDTO> createValidator) 
             : base(repository, mapper, updateValidator, createValidator)
         {
 

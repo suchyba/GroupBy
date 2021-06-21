@@ -21,6 +21,8 @@ using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.Validators.InventoryBook;
 using GroupBy.Application.Validators.Document;
 using GroupBy.Application.DTO.Document;
+using GroupBy.Application.DTO.InventoryBookRecord;
+using GroupBy.Application.Validators.InventoryBookRecord;
 
 namespace GroupBy.Application
 {
@@ -41,6 +43,7 @@ namespace GroupBy.Application
             services.AddScoped<IInventoryItemService, InventoryItemService>();
             services.AddScoped<IInventoryBookService, InventoryBookService>();
             services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IInventoryBookRecordService, InventoryBookRecordService>();
 
             return services;
         }
@@ -76,6 +79,10 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<DocumentDTO>, DocumentValidator>();
             services.AddScoped<IValidator<DocumentCreateDTO>, DocumentCreateValidator>();
             services.AddScoped<IValidator<DocumentUpdateDTO>, DocumentUpdateValidator>();
+
+            services.AddScoped<IValidator<InventoryBookRecordDTO>, InventoryBookRecordValidator>();
+            services.AddScoped<IValidator<InventoryBookRecordCreateDTO>, InventoryBookRecordCreateValidator>();
+            services.AddScoped<IValidator<InventoryBookRecordUpdateDTO>, InventoryBookRecordUpdateValidator>();
         }
     }
 }

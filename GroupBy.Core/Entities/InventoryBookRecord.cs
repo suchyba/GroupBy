@@ -36,8 +36,6 @@ namespace GroupBy.Domain.Entities
         /// Describes if the record is the income 
         /// </summary>
         public bool Income { get; set; }
-        [Required]
-        public int OrderNumber { get; set; }
         /// <summary>
         /// Source of the item <seealso cref="InventoryItemSource"/>
         /// </summary>

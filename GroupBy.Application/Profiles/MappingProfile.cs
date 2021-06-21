@@ -4,6 +4,7 @@ using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
+using GroupBy.Application.DTO.InventoryBookRecord;
 using GroupBy.Application.DTO.InventoryItem;
 using GroupBy.Application.DTO.Position;
 using GroupBy.Application.DTO.Rank;
@@ -71,6 +72,19 @@ namespace GroupBy.Application.Profiles
                     src => new Group { Id = src.GroupId }))
                  .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+
+            CreateMap<InventoryBookRecord, InventoryBookRecordDTO>();
+            CreateMap<InventoryBookRecordDTO, InventoryBookRecord>();
+            CreateMap<InventoryBookRecordCreateDTO, InventoryBookRecord>()
+                .ForMember(dest => dest.Source, opt => opt.MapFrom(
+                    src => new InventoryItemSource { Id = src.SourceId }))
+                .ForMember(dest => dest.Item, opt => opt.MapFrom(
+                    src => new InventoryItem { Id = src.ItemId }));
+            CreateMap<InventoryBookRecordUpdateDTO, InventoryBookRecord>()
+                .ForMember(dest => dest.Source, opt => opt.MapFrom(
+                    src => new InventoryItemSource { Id = src.SourceId }))
+                .ForMember(dest => dest.Item, opt => opt.MapFrom(
+                    src => new InventoryItem { Id = src.ItemId }));
         }
     }
 }
