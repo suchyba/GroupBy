@@ -23,6 +23,7 @@ namespace GroupBy.Data
             services.AddScoped<IInventoryItemRepository, InventoryItemRepository>();
             services.AddScoped<IInventoryBookRepository, InventoryBookRepository>();
             services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IInventoryBookRecordRepository, InventoryBookRecordRepository>();
 
             return services;
         }
