@@ -14,7 +14,7 @@ namespace GroupBy.Application.DTO.Project
         public DateTime? EndDate { get; set; }
         public bool Active { get; set; }
         public bool Independent { get; set; }
-        public int ProjectGroupId { get; set; }
+        public int? ProjectGroupId { get; set; }
         public int ParentGroupId { get; set; }
         public int OwnerId { get; set; }
     }
