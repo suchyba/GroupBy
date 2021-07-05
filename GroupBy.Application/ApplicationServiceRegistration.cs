@@ -23,6 +23,8 @@ using GroupBy.Application.Validators.Document;
 using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.InventoryBookRecord;
 using GroupBy.Application.Validators.InventoryBookRecord;
+using GroupBy.Application.DTO.Project;
+using GroupBy.Application.Validators.Project;
 
 namespace GroupBy.Application
 {
@@ -44,6 +46,7 @@ namespace GroupBy.Application
             services.AddScoped<IInventoryBookService, InventoryBookService>();
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IInventoryBookRecordService, InventoryBookRecordService>();
+            services.AddScoped<IProjectService, ProjectService>();
 
             return services;
         }
@@ -83,6 +86,10 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<InventoryBookRecordDTO>, InventoryBookRecordValidator>();
             services.AddScoped<IValidator<InventoryBookRecordCreateDTO>, InventoryBookRecordCreateValidator>();
             services.AddScoped<IValidator<InventoryBookRecordUpdateDTO>, InventoryBookRecordUpdateValidator>();
+
+            services.AddScoped<IValidator<ProjectDTO>, ProjectValidator>();
+            services.AddScoped<IValidator<ProjectCreateDTO>, ProjectCreateValidator>();
+            services.AddScoped<IValidator<ProjectUpdateDTO>, ProjectUpdateValidator>();
         }
     }
 }

@@ -7,6 +7,7 @@ using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryBookRecord;
 using GroupBy.Application.DTO.InventoryItem;
 using GroupBy.Application.DTO.Position;
+using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Rank;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
@@ -85,6 +86,22 @@ namespace GroupBy.Application.Profiles
                     src => new InventoryItemSource { Id = src.SourceId }))
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
                     src => new InventoryItem { Id = src.ItemId }));
+
+            CreateMap<ProjectDTO, Project>().ReverseMap();
+            CreateMap<ProjectCreateDTO, Project>()
+                .ForMember(dest => dest.ParentGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.ParentGroupId }))
+                .ForMember(dest => dest.ProjectGroup, opt => opt.MapFrom(
+                    src => src.ProjectGroupId.HasValue ? new Group { Id = src.ProjectGroupId.Value } : null))
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(
+                    src => new Volunteer { Id = src.OwnerId }));
+            CreateMap<ProjectUpdateDTO, Project>()
+                .ForMember(dest => dest.ParentGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.ParentGroupId }))
+                .ForMember(dest => dest.ProjectGroup, opt => opt.MapFrom(
+                    src => src.ProjectGroupId.HasValue ? new Group { Id = src.ProjectGroupId.Value } : null))
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(
+                    src => new Volunteer { Id = src.OwnerId }));
         }
     }
 }

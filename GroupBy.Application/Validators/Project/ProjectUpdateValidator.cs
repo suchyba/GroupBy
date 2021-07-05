@@ -10,13 +10,17 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Project
 {
-    public class ProjectCreateValidator : AbstractValidator<ProjectCreateDTO>
+    public class ProjectUpdateValidator : AbstractValidator<ProjectUpdateDTO>
     {
         private readonly IGroupRepository groupRepository;
 
-        public ProjectCreateValidator(IGroupRepository groupRepository)
+        public ProjectUpdateValidator(IGroupRepository groupRepository)
         {
             this.groupRepository = groupRepository;
+
+            RuleFor(p => p.Id)
+                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
 
@@ -46,9 +50,7 @@ namespace GroupBy.Application.Validators.Project
                 .MustAsync(OwnerInParentGroup)
                 .When(p => p.OwnerId > 0)
                 .OverridePropertyName("OwnerId")
-                .WithMessage("Owner must be a member of the parent group.");
-
-            RuleFor(p => p)
+                .WithMessage("Owner must be a member of the parent group.")
                 .MustAsync(OwnerInProjectGroup)
                 .When(p => p.ProjectGroupId.HasValue && p.OwnerId > 0)
                 .WithMessage("Owner must be a member of the project group");
@@ -69,11 +71,11 @@ namespace GroupBy.Application.Validators.Project
 
 
         }
-        private async Task<bool> OwnerInParentGroup(ProjectCreateDTO project, CancellationToken token)
+        private async Task<bool> OwnerInParentGroup(ProjectUpdateDTO project, CancellationToken token)
         {
             return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
         }
-        private async Task<bool> OwnerInProjectGroup(ProjectCreateDTO project, CancellationToken token)
+        private async Task<bool> OwnerInProjectGroup(ProjectUpdateDTO project, CancellationToken token)
         {
             return await groupRepository.IsMember(project.ProjectGroupId.Value, project.OwnerId);
         }

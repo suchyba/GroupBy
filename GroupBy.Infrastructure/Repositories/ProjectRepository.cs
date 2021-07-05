@@ -29,10 +29,15 @@ namespace GroupBy.Data.Repositories
             if (domain.ParentGroup == null)
                 throw new NotFoundException("Group", parentGroupId);
 
-            int projectGroupId = domain.ProjectGroup.Id;
-            domain.ProjectGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == projectGroupId);
-            if (domain.ProjectGroup == null)
-                throw new NotFoundException("Group", projectGroupId);
+            if (domain.Independent)
+            {
+                int projectGroupId = domain.ProjectGroup.Id;
+                domain.ProjectGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == projectGroupId);
+                if (domain.ProjectGroup == null)
+                    throw new NotFoundException("Group", projectGroupId);
+            }
+            else
+                domain.ProjectGroup = null;
 
             var project = await context.Set<Project>().AddAsync(domain);
             await context.SaveChangesAsync();

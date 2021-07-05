@@ -76,6 +76,12 @@ namespace GroupBy.Data.Repositories
             return g.Members.Where(v => v.Confirmed);
         }
 
+        public async Task<bool> IsMember(int groupId, int volunteerId)
+        {
+            var group = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == groupId);
+            return group.Members.Contains(await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == volunteerId));
+        }
+
         public override async Task<Group> UpdateAsync(Group domain)
         {
             Group g = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.Id);
