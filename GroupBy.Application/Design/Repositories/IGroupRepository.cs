@@ -11,5 +11,6 @@ namespace GroupBy.Application.Design.Repositories
     {
         public Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group);
         public Task AddMamber(int groupId, int volunteerId);
+        public Task<bool> IsMember(int groupId, int volunteerId);
     }
 }

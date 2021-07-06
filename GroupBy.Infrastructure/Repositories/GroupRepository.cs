@@ -37,13 +37,7 @@ namespace GroupBy.Data.Repositories
             domain.Owner = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == ownerId);
             if (domain.Owner == null)
                 throw new NotFoundException("Volunteer", ownerId);
-
-            if(domain.ProjectId != null)
-            {
-                domain.RelatedProject = await context.Set<Project>().FirstOrDefaultAsync(p => p.Id == domain.ProjectId);
-                if (domain.RelatedProject == null)
-                    throw new NotFoundException("Project", domain.ProjectId);
-            }
+            
             if(domain.ParentGroup != null)
             {
                 int parentGroupId = domain.ParentGroup.Id;
@@ -74,6 +68,12 @@ namespace GroupBy.Data.Repositories
                 throw new NotFoundException("Group", group);
 
             return g.Members.Where(v => v.Confirmed);
+        }
+
+        public async Task<bool> IsMember(int groupId, int volunteerId)
+        {
+            var group = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == groupId);
+            return group.Members.Contains(await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == volunteerId));
         }
 
         public override async Task<Group> UpdateAsync(Group domain)

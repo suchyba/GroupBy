@@ -22,7 +22,6 @@ namespace GroupBy.Data.Repositories
         {
             var entity = await GetAsync(domain);
 
-
             context.Set<Entity>().Remove(entity);
 
             try
