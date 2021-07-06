@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,10 +40,11 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         [Required]
         public virtual Volunteer Owner { get; set; }
+        public int? ProjectGroupId { get; set; }
         /// <summary>
         /// If the group of target volunteers is diffrent than the group which is organising the project (<see cref="ProjectGroup"/>) or you want to set up the independent project, you could set this property <seealso cref="Group"/>
         /// </summary>
-        [Required]
+        [ForeignKey("ProjectGroupId")]
         public virtual Group ProjectGroup { get; set; }
         /// <summary>
         /// Group which is organising this project <seealso cref="Group"/>

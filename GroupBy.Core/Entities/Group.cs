@@ -54,11 +54,10 @@ namespace GroupBy.Domain.Entities
         /// Inventory book of the group <seealso cref="Models.InventoryBook"/>
         /// </summary>
         public virtual InventoryBook InventoryBook { get; set; }
-        public int? ProjectId { get; set; }
         /// <summary>
         /// This is the project in which this group is project group  <seealso cref="Project"/>
         /// </summary>
-        [InverseProperty("ProjectGroup"), ForeignKey("ProjectId")]
+        [InverseProperty("ProjectGroup")]
         public virtual Project RelatedProject { get; set; }
         /// <summary>
         /// List of projects realised in this group <seealso cref="Project"/>
