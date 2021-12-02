@@ -15,6 +15,8 @@ namespace GroupBy.Application.Validators.Group
                 .GreaterThan(0).When(g => g.ProjectId != null).WithMessage("{PropertyName} has to be greater than 0.");
             RuleFor(g => g.ParentGroupId)
                 .GreaterThan(0).When(g => g.ParentGroupId != null).WithMessage("{PropertyName} has to be greater than 0.");
+            RuleFor(g => g.ParentGroupId)
+                .NotNull().WithMessage("You have to declare parent group!");
         }
     }
 }

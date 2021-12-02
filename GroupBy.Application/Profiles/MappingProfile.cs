@@ -6,6 +6,7 @@ using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryBookRecord;
 using GroupBy.Application.DTO.InventoryItem;
+using GroupBy.Application.DTO.InventoryItemSource;
 using GroupBy.Application.DTO.Position;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Rank;
@@ -27,7 +28,9 @@ namespace GroupBy.Application.Profiles
             CreateMap<Group, GroupUpdateDTO>().ReverseMap();
 
             CreateMap<Volunteer, VolunteerDTO>().ReverseMap();
-            CreateMap<Volunteer, VolunteerCreateDTO>().ReverseMap();
+            CreateMap<VolunteerCreateDTO, Volunteer>()
+                .ForMember(dest => dest.Rank, opt => opt.MapFrom(
+                    src => src.RankId.HasValue ? new Rank { Id = src.RankId.Value } : null));
             CreateMap<Volunteer, VolunteerUpdateDTO>().ReverseMap();
             CreateMap<Volunteer, VolunteerSimpleDTO>();
 
@@ -103,6 +106,9 @@ namespace GroupBy.Application.Profiles
                     src => src.ProjectGroupId.HasValue ? new Group { Id = src.ProjectGroupId.Value } : null))
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(
                     src => new Volunteer { Id = src.OwnerId }));
+
+            CreateMap<InventoryItemSource, InventoryItemSourceDTO>().ReverseMap();
+            CreateMap<InventoryItemSource, InventoryItemSourceCreateDTO>().ReverseMap();
         }
     }
 }

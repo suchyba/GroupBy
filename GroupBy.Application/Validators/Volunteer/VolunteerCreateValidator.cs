@@ -14,7 +14,7 @@ namespace GroupBy.Application.Validators.Volunteer
             RuleFor(v => v.LastName)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(v => v.BirthDate)
-                .GreaterThan(DateTime.Today).WithMessage("{PropertyName} has to be the past date.");
+                .LessThan(DateTime.Today).WithMessage("{PropertyName} has to be the past date.");
             RuleFor(v => v.RankId)
                 .GreaterThan(0).When(v => v.RankId != null).WithMessage("{PropertyName} has to be greater than 0.");
             RuleFor(v => v.PhoneNumber)
