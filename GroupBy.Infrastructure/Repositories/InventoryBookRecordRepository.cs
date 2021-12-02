@@ -49,7 +49,10 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<InventoryBookRecord> CreateAsync(InventoryBookRecord domain)
         {
-            domain.Id = await context.Set<InventoryBookRecord>().MaxAsync(r => r.Id) + 1;
+            if (context.Set<InventoryBookRecord>().Count() > 0)
+                domain.Id = await context.Set<InventoryBookRecord>().MaxAsync(r => r.Id) + 1;
+            else
+                domain.Id = 1;
 
             int bookId = domain.InventoryBookId;
             domain.Book = await context.Set<InventoryBook>().FirstOrDefaultAsync(i => i.Id == bookId);
