@@ -40,7 +40,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             return Ok(group);
         }
@@ -55,7 +55,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
         [HttpPost("add", Name = "CreateGroup")]
@@ -89,7 +89,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch (DeleteNotPermittedException e)
             {

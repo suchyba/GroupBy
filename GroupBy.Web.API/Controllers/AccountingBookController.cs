@@ -41,7 +41,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = new { bookId, bookOrderNumberId }, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
         [HttpPost("add", Name = "AddAccountingBook")]
@@ -73,7 +73,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = new { bookId, bookOrderNumberId }, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch (DeleteNotPermittedException e)
             {
@@ -97,7 +97,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = new { model.BookId, model.BookOrderNumberId }, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
     }

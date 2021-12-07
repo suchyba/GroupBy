@@ -40,7 +40,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
                 throw;
             }
         }
@@ -91,7 +91,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch(DeleteNotPermittedException e)
             {
