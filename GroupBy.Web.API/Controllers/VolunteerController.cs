@@ -39,7 +39,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
         [HttpPost("add", Name = "CreateVolunteer")]
@@ -68,7 +68,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch (DeleteNotPermittedException e)
             {
@@ -88,7 +88,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = model.Id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch (ValidationException e)
             {
@@ -106,7 +106,7 @@ namespace GroupBy.Web.API.Controllers
             }
             catch (NotFoundException e)
             {
-                return NotFound(new { Id = id, e.Message });
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
     }

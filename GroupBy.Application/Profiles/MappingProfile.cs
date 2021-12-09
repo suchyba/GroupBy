@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.Group;
@@ -109,6 +110,13 @@ namespace GroupBy.Application.Profiles
 
             CreateMap<InventoryItemSource, InventoryItemSourceDTO>().ReverseMap();
             CreateMap<InventoryItemSource, InventoryItemSourceCreateDTO>().ReverseMap();
+
+            CreateMap<AccountingDocument, AccountingDocumentDTO>().ReverseMap();
+            CreateMap<AccountingDocumentCreateDTO, AccountingDocument>()
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(
+                    src => new Group { Id = src.GroupId }));
         }
     }
 }
