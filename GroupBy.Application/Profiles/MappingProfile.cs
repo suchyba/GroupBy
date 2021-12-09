@@ -114,7 +114,9 @@ namespace GroupBy.Application.Profiles
             CreateMap<AccountingDocument, AccountingDocumentDTO>().ReverseMap();
             CreateMap<AccountingDocumentCreateDTO, AccountingDocument>()
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
-                    src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null));
+                    src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(
+                    src => new Group { Id = src.GroupId }));
         }
     }
 }
