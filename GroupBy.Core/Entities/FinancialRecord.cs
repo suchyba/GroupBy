@@ -9,6 +9,7 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public abstract class FinancialRecord
     {
+        [Key]
         public int Id { get; set; }
         public int BookId { get; set; }
         public int BookOrderNumberId { get; set; }

@@ -3,6 +3,7 @@ using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Document;
+using GroupBy.Application.DTO.FinancialOutcomeRecord;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryBookRecord;
@@ -117,6 +118,16 @@ namespace GroupBy.Application.Profiles
                     src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(
                     src => new Group { Id = src.GroupId }));
+
+            CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>().ReverseMap();
+            CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()
+                .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
+                    src => new AccountingDocument { Id = src.RelatedDocumentId }))
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<FinancialOutcomeRecordUpdateDTO, FinancialOutcomeRecord>()
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
         }
     }
 }

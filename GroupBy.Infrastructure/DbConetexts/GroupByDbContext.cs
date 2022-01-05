@@ -50,8 +50,6 @@ namespace GroupBy.Data.DbContexts
         {
             modelBuilder.Entity<AccountingBook>()
                 .HasKey(a => new { a.BookId, a.BookOrderNumberId });
-            modelBuilder.Entity<FinancialRecord>()
-                .HasKey(f => new { f.BookId, f.BookOrderNumberId, f.Id });
             modelBuilder.Entity<GroupsPermissions>()
                 .HasKey(p => new { p.GroupId, p.PositionId });
             modelBuilder.Entity<PositionRecord>()
