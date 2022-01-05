@@ -31,6 +31,8 @@ using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.Validators.AccountingDocument;
 using GroupBy.Application.Validators.FinancialOutcomeRecord;
 using GroupBy.Application.DTO.FinancialOutcomeRecord;
+using GroupBy.Application.Validators.FinancialIncomeRecord;
+using GroupBy.Application.DTO.FinancialIncomeRecord;
 
 namespace GroupBy.Application
 {
@@ -56,6 +58,7 @@ namespace GroupBy.Application
             services.AddScoped<IInventoryItemSourceService, InventoryItemSourceService>();
             services.AddScoped<IAccountingDocumentService, AccountingDocumentService>();
             services.AddScoped<IFinancialOutcomeRecordService, FinancialOutcomeRecordService>();
+            services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
 
             return services;
         }
@@ -108,6 +111,9 @@ namespace GroupBy.Application
 
             services.AddScoped<IValidator<FinancialOutcomeRecordCreateDTO>, FinancialOutcomeRecordCreateValidator>();
             services.AddScoped<IValidator<FinancialOutcomeRecordUpdateDTO>, FinancialOutcomeRecordUpdateValidator>();
+            
+            services.AddScoped<IValidator<FinancialIncomeRecordCreateDTO>, FinancialIncomeRecordCreateValidator>();
+            services.AddScoped<IValidator<FinancialIncomeRecordUpdateDTO>, FinancialIncomeRecordUpdateValidator>();
         }
     }
 }
