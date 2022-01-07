@@ -10,6 +10,7 @@ namespace GroupBy.Application.Design.Repositories
     public interface IGroupRepository : IAsyncRepository<Group>
     {
         public Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group);
+        public Task<IEnumerable<Group>> GetSubgroupsAsync(int parentGroupId);
         public Task AddMamber(int groupId, int volunteerId);
         public Task<bool> IsMember(int groupId, int volunteerId);
     }

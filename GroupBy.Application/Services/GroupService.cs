@@ -23,6 +23,11 @@ namespace GroupBy.Application.Services
         public async Task AddMember(int groupId, int volunteerId)
         {
             await (repository as IGroupRepository).AddMamber(groupId, volunteerId);
+        }        
+
+        public async Task<IEnumerable<GroupDTO>> GetSubgroupsAsync(int groupId)
+        {
+            return mapper.Map<IEnumerable<GroupDTO>>(await (repository as IGroupRepository).GetSubgroupsAsync(groupId));
         }
 
         public async Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId)
