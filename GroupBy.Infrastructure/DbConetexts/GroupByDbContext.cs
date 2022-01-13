@@ -58,8 +58,6 @@ namespace GroupBy.Data.DbContexts
                 .HasKey(p => new { p.VolunteerId, p.Id });
             modelBuilder.Entity<InventoryBookRecord>()
                 .HasKey(i => new { i.InventoryBookId, i.Id });
-            modelBuilder.Entity<Resolution>()
-                .HasKey(r => new { r.GroupId, r.Id });
 
             modelBuilder.Entity<Element>()
                 .HasOne(e => e.Group)

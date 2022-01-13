@@ -4,14 +4,16 @@ using GroupBy.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    partial class GroupByDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211209143718_UpdateResolutionEntityDefinition1")]
+    partial class UpdateResolutionEntityDefinition1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,7 +436,7 @@ namespace GroupBy.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AppointingResolutionId")
+                    b.Property<int?>("AppointingResolutionIdRes")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("AppointmentDate")
@@ -443,7 +445,7 @@ namespace GroupBy.Data.Migrations
                     b.Property<DateTime?>("DismissDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DismissingResolutionId")
+                    b.Property<int?>("DismissingResolutionIdRes")
                         .HasColumnType("int");
 
                     b.Property<int?>("PositionId")
@@ -454,9 +456,9 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("VolunteerId", "Id");
 
-                    b.HasIndex("AppointingResolutionId");
+                    b.HasIndex("AppointingResolutionIdRes");
 
-                    b.HasIndex("DismissingResolutionId");
+                    b.HasIndex("DismissingResolutionIdRes");
 
                     b.HasIndex("PositionId");
 
@@ -569,7 +571,7 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Resolution", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdRes")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -584,6 +586,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<int?>("LegislatorId")
                         .HasColumnType("int");
 
@@ -591,7 +596,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdRes");
 
                     b.HasIndex("GroupId");
 
@@ -1115,11 +1120,11 @@ namespace GroupBy.Data.Migrations
                 {
                     b.HasOne("GroupBy.Domain.Entities.Resolution", "AppointingResolution")
                         .WithMany()
-                        .HasForeignKey("AppointingResolutionId");
+                        .HasForeignKey("AppointingResolutionIdRes");
 
                     b.HasOne("GroupBy.Domain.Entities.Resolution", "DismissingResolution")
                         .WithMany()
-                        .HasForeignKey("DismissingResolutionId");
+                        .HasForeignKey("DismissingResolutionIdRes");
 
                     b.HasOne("GroupBy.Domain.Entities.Position", "Position")
                         .WithMany()
