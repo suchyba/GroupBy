@@ -12,9 +12,11 @@ namespace GroupBy.Data.Repositories
 {
     public class VolunteerRepository : AsyncRepository<Volunteer>, IVolunteerRepository
     {
-        public VolunteerRepository(DbContext context) : base(context)
-        {
+        private readonly IRankRepository rankRepository;
 
+        public VolunteerRepository(DbContext context, IRankRepository rankRepository) : base(context)
+        {
+            this.rankRepository = rankRepository;
         }
 
         public override async Task<Volunteer> GetAsync(Volunteer domain)
@@ -32,6 +34,16 @@ namespace GroupBy.Data.Repositories
                 throw new NotFoundException("Volunteer", volunteerId);
 
             return v.Groups;
+        }
+
+        public async override Task<Volunteer> CreateAsync(Volunteer domain)
+        {
+            if (domain.Rank != null)
+                domain.Rank = await rankRepository.GetAsync(domain.Rank);
+
+            var volunteer = await context.Set<Volunteer>().AddAsync(domain);
+            await context.SaveChangesAsync();
+            return volunteer.Entity;
         }
 
         public override async Task<Volunteer> UpdateAsync(Volunteer domain)
