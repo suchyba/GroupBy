@@ -62,7 +62,6 @@ namespace GroupBy.Domain.Entities
         /// <summary>
         /// List of projects realised in this group <seealso cref="Project"/>
         /// </summary>
-        [InverseProperty("ParentGroup")]
         public virtual IEnumerable<Project> ProjectsRealisedInGroup { get; set; }
         /// <summary>
         /// List of interactive elements added by members (for example reminder) <seealso cref="Element"/>
