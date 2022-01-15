@@ -4,14 +4,16 @@ using GroupBy.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    partial class GroupByDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220105182933_FinancialRecordPrimaryKey")]
+    partial class FinancialRecordPrimaryKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -438,6 +440,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("AppointingResolutionGroupId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("AppointingResolutionId")
                         .HasColumnType("int");
 
@@ -446,6 +451,9 @@ namespace GroupBy.Data.Migrations
 
                     b.Property<DateTime?>("DismissDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("DismissingResolutionGroupId")
+                        .HasColumnType("int");
 
                     b.Property<int?>("DismissingResolutionId")
                         .HasColumnType("int");
@@ -458,13 +466,13 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("VolunteerId", "Id");
 
-                    b.HasIndex("AppointingResolutionId");
-
-                    b.HasIndex("DismissingResolutionId");
-
                     b.HasIndex("PositionId");
 
                     b.HasIndex("RelatedGroupId");
+
+                    b.HasIndex("AppointingResolutionGroupId", "AppointingResolutionId");
+
+                    b.HasIndex("DismissingResolutionGroupId", "DismissingResolutionId");
 
                     b.ToTable("PositionRecords");
                 });
@@ -573,10 +581,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Resolution", b =>
                 {
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -585,9 +594,6 @@ namespace GroupBy.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("LegislatorId")
                         .HasColumnType("int");
 
@@ -595,9 +601,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
+                    b.HasKey("GroupId", "Id");
 
                     b.HasIndex("LegislatorId");
 
@@ -1117,14 +1121,6 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.PositionRecord", b =>
                 {
-                    b.HasOne("GroupBy.Domain.Entities.Resolution", "AppointingResolution")
-                        .WithMany()
-                        .HasForeignKey("AppointingResolutionId");
-
-                    b.HasOne("GroupBy.Domain.Entities.Resolution", "DismissingResolution")
-                        .WithMany()
-                        .HasForeignKey("DismissingResolutionId");
-
                     b.HasOne("GroupBy.Domain.Entities.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionId");
@@ -1138,6 +1134,14 @@ namespace GroupBy.Data.Migrations
                         .HasForeignKey("VolunteerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.Resolution", "AppointingResolution")
+                        .WithMany()
+                        .HasForeignKey("AppointingResolutionGroupId", "AppointingResolutionId");
+
+                    b.HasOne("GroupBy.Domain.Entities.Resolution", "DismissingResolution")
+                        .WithMany()
+                        .HasForeignKey("DismissingResolutionGroupId", "DismissingResolutionId");
 
                     b.Navigation("AppointingResolution");
 

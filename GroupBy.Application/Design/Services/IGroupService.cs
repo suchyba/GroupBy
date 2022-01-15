@@ -9,5 +9,6 @@ namespace GroupBy.Application.Design.Services
     {
         public Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId);
         public Task AddMember(int groupId, int volunteerId);
+        public Task<IEnumerable<GroupDTO>> GetSubgroupsAsync(int groupId);
     }
 }

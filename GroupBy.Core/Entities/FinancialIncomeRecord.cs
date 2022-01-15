@@ -48,7 +48,7 @@ namespace GroupBy.Domain.Entities
         /// <returns></returns>
         public override decimal GetTotal()
         {
-            return MembershipFee ?? 0 + ProgramFee ?? 0 + Dotation ?? 0 + EarningAction ?? 0 + OnePercent ?? 0 + Other ?? 0;
+            return (MembershipFee ?? 0) + (ProgramFee ?? 0) + (Dotation ?? 0) + (EarningAction ?? 0) + (OnePercent ?? 0) + (Other ?? 0);
         }
     }
 }

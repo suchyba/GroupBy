@@ -28,6 +28,8 @@ namespace GroupBy.Data
             services.AddScoped<IInventoryItemSourceRepository, InventoryItemSourceRepository>();
             services.AddScoped<IAccountingDocumentRepository, AccountingDocumentRepository>();
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
+            services.AddScoped<IFinancialOutcomeRecordRepository, FinancialOutcomeRecordRepository>();
+            services.AddScoped<IFinancialIncomeRecordRepository, FinancialIncomeRecordRepository>();
 
             return services;
         }

@@ -3,6 +3,8 @@ using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Document;
+using GroupBy.Application.DTO.FinancialIncomeRecord;
+using GroupBy.Application.DTO.FinancialOutcomeRecord;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryBookRecord;
@@ -126,6 +128,26 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Legislator, opt => opt.MapFrom(
                     src => new Volunteer { Id = src.LegislatorId }));
             CreateMap<ResolutionUpdateDTO, Resolution>();
+
+            CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>().ReverseMap();
+            CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()
+                .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
+                    src => new AccountingDocument { Id = src.RelatedDocumentId }))
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<FinancialOutcomeRecordUpdateDTO, FinancialOutcomeRecord>()
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+
+            CreateMap<FinancialIncomeRecord, FinancialIncomeRecordDTO>().ReverseMap();
+            CreateMap<FinancialIncomeRecordCreateDTO, FinancialIncomeRecord>()
+                .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
+                    src => new AccountingDocument { Id = src.RelatedDocumentId }))
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<FinancialIncomeRecordUpdateDTO, FinancialIncomeRecord>()
+                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
         }
     }
 }

@@ -37,8 +37,8 @@ namespace GroupBy.Data.Repositories
             domain.Owner = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == ownerId);
             if (domain.Owner == null)
                 throw new NotFoundException("Volunteer", ownerId);
-            
-            if(domain.ParentGroup != null)
+
+            if (domain.ParentGroup != null)
             {
                 int parentGroupId = domain.ParentGroup.Id;
                 domain.ParentGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == parentGroupId);
@@ -67,11 +67,18 @@ namespace GroupBy.Data.Repositories
                 .Include(g => g.Resolutions)
                 .Include(g => g.ProjectsRealisedInGroup)
                 .Include(g => g.Permissions)
+                .Include(g => g.ParentGroup)
+                .Include(g => g.ChildGroups)
                 .FirstOrDefaultAsync(g => g.Id == domain.Id);
             if (g == null)
                 throw new NotFoundException("Group", domain.Id);
 
             return g;
+        }
+
+        public async Task<IEnumerable<Group>> GetSubgroupsAsync(int groupId)
+        {
+            return (await GetAsync(new Group { Id = groupId })).ChildGroups;
         }
 
         public async Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group)
