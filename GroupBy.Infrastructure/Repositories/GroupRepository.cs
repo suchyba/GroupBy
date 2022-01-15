@@ -49,12 +49,24 @@ namespace GroupBy.Data.Repositories
 
             await context.SaveChangesAsync();
 
+            await AddMamber(createdGroup.Entity.Id, ownerId);
+
             return createdGroup.Entity;
         }
 
         public override async Task<Group> GetAsync(Group domain)
         {
             Group g = await context.Set<Group>()
+                .Include(g => g.Owner)
+                .Include(g => g.ParentGroup)
+                .Include(g => g.Members)
+                .Include(g => g.AccountingBooks)
+                .Include(g => g.Elements)
+                .Include(g => g.ChildGroups)
+                .Include(g => g.RelatedProject)
+                .Include(g => g.Resolutions)
+                .Include(g => g.ProjectsRealisedInGroup)
+                .Include(g => g.Permissions)
                 .Include(g => g.ParentGroup)
                 .Include(g => g.ChildGroups)
                 .FirstOrDefaultAsync(g => g.Id == domain.Id);

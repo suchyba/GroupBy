@@ -9,8 +9,8 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class Resolution
     {
+        [Key]
         public int Id { get; set; }
-        public int GroupId { get; set; }
         /// <summary>
         /// The identification symbol of the resolution
         /// </summary>
@@ -33,7 +33,7 @@ namespace GroupBy.Domain.Entities
         /// <summary>
         /// Group where that resolution has been adopted <seealso cref="Group"/>
         /// </summary>
-        [Required, ForeignKey("GroupId")]
+        [Required]
         public virtual Group Group { get; set; }
     }
 }

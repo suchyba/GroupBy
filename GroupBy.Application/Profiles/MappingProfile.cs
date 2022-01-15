@@ -13,6 +13,7 @@ using GroupBy.Application.DTO.InventoryItemSource;
 using GroupBy.Application.DTO.Position;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Rank;
+using GroupBy.Application.DTO.Resolution;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 using System;
@@ -119,6 +120,14 @@ namespace GroupBy.Application.Profiles
                     src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(
                     src => new Group { Id = src.GroupId }));
+
+            CreateMap<Resolution, ResolutionDTO>().ReverseMap();                
+            CreateMap<ResolutionCreateDTO, Resolution>()
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(
+                    src => new Group { Id = src.GroupId }))
+                .ForMember(dest => dest.Legislator, opt => opt.MapFrom(
+                    src => new Volunteer { Id = src.LegislatorId }));
+            CreateMap<ResolutionUpdateDTO, Resolution>();
 
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>().ReverseMap();
             CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()

@@ -29,6 +29,8 @@ using GroupBy.Application.Validators.InventoryItemSource;
 using GroupBy.Application.DTO.InventoryItemSource;
 using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.Validators.AccountingDocument;
+using GroupBy.Application.DTO.Resolution;
+using GroupBy.Application.Validators.Resolution;
 using GroupBy.Application.Validators.FinancialOutcomeRecord;
 using GroupBy.Application.DTO.FinancialOutcomeRecord;
 using GroupBy.Application.Validators.FinancialIncomeRecord;
@@ -57,6 +59,7 @@ namespace GroupBy.Application
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IInventoryItemSourceService, InventoryItemSourceService>();
             services.AddScoped<IAccountingDocumentService, AccountingDocumentService>();
+            services.AddScoped<IResolutionService, ResolutionService>();
             services.AddScoped<IFinancialOutcomeRecordService, FinancialOutcomeRecordService>();
             services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
 
@@ -108,6 +111,9 @@ namespace GroupBy.Application
 
             services.AddScoped<IValidator<AccountingDocumentDTO>, AccountingDocumentValidator>();
             services.AddScoped<IValidator<AccountingDocumentCreateDTO>, AccountingDocumentCreateValidator>();
+            
+            services.AddScoped<IValidator<ResolutionCreateDTO>, ResolutionCreateValidator>();
+            services.AddScoped<IValidator<ResolutionUpdateDTO>, ResolutionUpdateValidator>();
 
             services.AddScoped<IValidator<FinancialOutcomeRecordCreateDTO>, FinancialOutcomeRecordCreateValidator>();
             services.AddScoped<IValidator<FinancialOutcomeRecordUpdateDTO>, FinancialOutcomeRecordUpdateValidator>();
