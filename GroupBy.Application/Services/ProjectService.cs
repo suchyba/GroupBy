@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class ProjectService : AsyncService<Project, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>, IProjectService
+    public class ProjectService : AsyncService<Project, ProjectDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>, IProjectService
     {
         public ProjectService(IProjectRepository repository, IMapper mapper, 
             IValidator<ProjectUpdateDTO> updateValidator, IValidator<ProjectCreateDTO> createValidator) 

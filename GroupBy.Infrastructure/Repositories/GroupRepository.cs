@@ -11,12 +11,14 @@ namespace GroupBy.Data.Repositories
 {
     public class GroupRepository : AsyncRepository<Group>, IGroupRepository
     {
-        public GroupRepository(DbContext context) : base(context)
-        {
+        private readonly IVolunteerRepository volunteerRepository;
 
+        public GroupRepository(DbContext context, IVolunteerRepository volunteerRepository) : base(context)
+        {
+            this.volunteerRepository = volunteerRepository;
         }
 
-        public async Task AddMamber(int groupId, int volunteerId)
+        public async Task AddMemberAsync(int groupId, int volunteerId)
         {
             var group = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == groupId);
             if (group == null)
@@ -49,7 +51,7 @@ namespace GroupBy.Data.Repositories
 
             await context.SaveChangesAsync();
 
-            await AddMamber(createdGroup.Entity.Id, ownerId);
+            await AddMemberAsync(createdGroup.Entity.Id, ownerId);
 
             return createdGroup.Entity;
         }
@@ -92,8 +94,26 @@ namespace GroupBy.Data.Repositories
 
         public async Task<bool> IsMember(int groupId, int volunteerId)
         {
-            var group = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == groupId);
-            return group.Members.Contains(await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == volunteerId));
+            var group = await GetAsync(new Group { Id = groupId });
+
+            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
+            return group.Members.Contains(volunteer);
+        }
+
+        public async Task RemoveMemberAsync(int groupId, int volunteerId)
+        {
+            if (!await IsMember(groupId, volunteerId))
+                throw new BadRequestException("Volunteer is not a member of the group");
+
+            var group = await GetAsync(new Group { Id = groupId });
+            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
+
+            if (group.Owner == volunteer)
+                throw new BadRequestException("Volunteer cannot be an owner of the group");
+
+            group.Members.Remove(volunteer);
+
+            await context.SaveChangesAsync();
         }
 
         public override async Task<Group> UpdateAsync(Group domain)

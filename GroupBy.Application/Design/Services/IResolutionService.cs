@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IResolutionService : IAsyncService<ResolutionDTO, ResolutionCreateDTO, ResolutionUpdateDTO>
+    public interface IResolutionService : IAsyncService<ResolutionDTO, ResolutionDTO, ResolutionCreateDTO, ResolutionUpdateDTO>
     {
 
     }

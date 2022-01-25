@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class AgreementService : AsyncService<Agreement, AgreementDTO, AgreementCreateDTO, AgreementDTO>, IAgreementService
+    public class AgreementService : AsyncService<Agreement, AgreementDTO, AgreementDTO, AgreementCreateDTO, AgreementDTO>, IAgreementService
     {
         public AgreementService(IAgreementRepository repository, IMapper mapper, 
             IValidator<AgreementDTO> validator, IValidator<AgreementCreateDTO> createValidator) 

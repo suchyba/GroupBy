@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IProjectService : IAsyncService<ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>
+    public interface IProjectService : IAsyncService<ProjectDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>
     {
     }
 }

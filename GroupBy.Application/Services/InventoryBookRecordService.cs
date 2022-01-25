@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class InventoryBookRecordService : AsyncService<InventoryBookRecord, InventoryBookRecordDTO, InventoryBookRecordCreateDTO, InventoryBookRecordUpdateDTO>, IInventoryBookRecordService
+    public class InventoryBookRecordService : AsyncService<InventoryBookRecord, InventoryBookRecordDTO, InventoryBookRecordDTO, InventoryBookRecordCreateDTO, InventoryBookRecordUpdateDTO>, IInventoryBookRecordService
     {
         public InventoryBookRecordService(IInventoryBookRecordRepository repository, IMapper mapper, 
             IValidator<InventoryBookRecordUpdateDTO> updateValidator, IValidator<InventoryBookRecordCreateDTO> createValidator) 

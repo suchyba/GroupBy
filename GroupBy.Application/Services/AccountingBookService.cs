@@ -7,7 +7,7 @@ using GroupBy.Domain.Entities;
 
 namespace GroupBy.Application.Services
 {
-    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookDTO>, IAccountingBookService
+    public class AccountingBookService : AsyncService<AccountingBook, AccountingBookDTO, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookDTO>, IAccountingBookService
     {
         public AccountingBookService(IAccountingBookRepository accountingBookRepository, IMapper mapper, 
             IValidator<AccountingBookDTO> updateValidator, IValidator<AccountingBookCreateDTO> createValidator)

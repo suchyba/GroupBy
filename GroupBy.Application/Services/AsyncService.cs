@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public abstract class AsyncService <Domain, DTO, CreateDTO, UpdateDTO> : IAsyncService<DTO, CreateDTO, UpdateDTO>
+    public abstract class AsyncService <Domain, SimpleDTO, FullDTO, CreateDTO, UpdateDTO> : IAsyncService<SimpleDTO, FullDTO, CreateDTO, UpdateDTO>
     {
         protected readonly IAsyncRepository<Domain> repository;
         protected readonly IMapper mapper;
@@ -22,37 +22,37 @@ namespace GroupBy.Application.Services
             this.updateValidator = updateValidator;
             this.createValidator = createValidator;
         }
-        public virtual async Task<DTO> CreateAsync(CreateDTO model)
+        public virtual async Task<FullDTO> CreateAsync(CreateDTO model)
         {
             var validationResult = await createValidator.ValidateAsync(model);
             if (!validationResult.IsValid)
                 throw new Exceptions.ValidationException(validationResult);
 
-            return mapper.Map<DTO>(await repository.CreateAsync(mapper.Map<Domain>(model)));
+            return mapper.Map<FullDTO>(await repository.CreateAsync(mapper.Map<Domain>(model)));
         }
 
-        public virtual async Task DeleteAsync(DTO model)
+        public virtual async Task DeleteAsync(SimpleDTO model)
         {
             await repository.DeleteAsync(mapper.Map<Domain>(model));
         }
 
-        public virtual async Task<IEnumerable<DTO>> GetAllAsync()
+        public virtual async Task<IEnumerable<SimpleDTO>> GetAllAsync()
         {
-            return mapper.Map<IEnumerable<DTO>>(await repository.GetAllAsync());
+            return mapper.Map<IEnumerable<SimpleDTO>>(await repository.GetAllAsync());
         }
 
-        public virtual async Task<DTO> GetAsync(DTO model)
+        public virtual async Task<FullDTO> GetAsync(SimpleDTO model)
         {
-            return mapper.Map<DTO>(await repository.GetAsync(mapper.Map<Domain>(model)));
+            return mapper.Map<FullDTO>(await repository.GetAsync(mapper.Map<Domain>(model)));
         }
 
-        public virtual async Task<DTO> UpdateAsync(UpdateDTO model)
+        public virtual async Task<FullDTO> UpdateAsync(UpdateDTO model)
         {
             var validationResult = await updateValidator.ValidateAsync(model);
             if (!validationResult.IsValid)
                 throw new Exceptions.ValidationException(validationResult);
 
-            return mapper.Map<DTO>(await repository.UpdateAsync(mapper.Map<Domain>(model)));
+            return mapper.Map<FullDTO>(await repository.UpdateAsync(mapper.Map<Domain>(model)));
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class DocumentService : AsyncService<Document, DocumentDTO, DocumentCreateDTO, DocumentUpdateDTO>, IDocumentService
+    public class DocumentService : AsyncService<Document, DocumentDTO, DocumentDTO, DocumentCreateDTO, DocumentUpdateDTO>, IDocumentService
     {
         public DocumentService(IDocumentRepository repository, IMapper mapper, IValidator<DocumentUpdateDTO> updateValidator, IValidator<DocumentCreateDTO> createValidator) 
             : base(repository, mapper, updateValidator, createValidator)

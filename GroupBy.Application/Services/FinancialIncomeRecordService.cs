@@ -7,7 +7,7 @@ using GroupBy.Domain.Entities;
 
 namespace GroupBy.Application.Services
 {
-    public class FinancialIncomeRecordService : AsyncService<FinancialIncomeRecord, FinancialIncomeRecordDTO, FinancialIncomeRecordCreateDTO, FinancialIncomeRecordUpdateDTO>, IFinancialIncomeRecordService
+    public class FinancialIncomeRecordService : AsyncService<FinancialIncomeRecord, FinancialIncomeRecordDTO, FinancialIncomeRecordDTO, FinancialIncomeRecordCreateDTO, FinancialIncomeRecordUpdateDTO>, IFinancialIncomeRecordService
     {
         public FinancialIncomeRecordService(
             IFinancialIncomeRecordRepository repository,

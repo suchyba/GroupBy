@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAsyncService<DTO, CreateDTO, UpdateDTO>
+    public interface IAsyncService<SimpleDTO, FullDTO, CreateDTO, UpdateDTO>
     {
-        public Task<DTO> CreateAsync(CreateDTO model);
-        public Task<DTO> UpdateAsync(UpdateDTO model);
-        public Task DeleteAsync(DTO model);
-        public Task<IEnumerable<DTO>> GetAllAsync();
-        public Task<DTO> GetAsync(DTO model);
+        public Task<FullDTO> CreateAsync(CreateDTO model);
+        public Task<FullDTO> UpdateAsync(UpdateDTO model);
+        public Task DeleteAsync(SimpleDTO model);
+        public Task<IEnumerable<SimpleDTO>> GetAllAsync();
+        public Task<FullDTO> GetAsync(SimpleDTO model);
     }
 }

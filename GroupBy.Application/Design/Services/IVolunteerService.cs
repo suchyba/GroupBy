@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IVolunteerService : IAsyncService<VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>
+    public interface IVolunteerService : IAsyncService<VolunteerSimpleDTO, VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>
     {
-        public Task<IEnumerable<GroupDTO>> GetGroupsAsync(int volunteerId);
+        public Task<IEnumerable<GroupSimpleDTO>> GetGroupsAsync(int volunteerId);
     }
 }

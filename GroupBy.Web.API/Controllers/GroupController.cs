@@ -31,12 +31,12 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GroupDTO>> GetAsync(int id)
+        public async Task<ActionResult<GroupSimpleDTO>> GetAsync(int id)
         {
             GroupDTO group;
             try
             {
-                group = await groupService.GetAsync(new GroupDTO { Id = id });
+                group = await groupService.GetAsync(new GroupSimpleDTO { Id = id });
             }
             catch (NotFoundException e)
             {
@@ -85,7 +85,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await groupService.DeleteAsync(new GroupDTO { Id = id });
+                await groupService.DeleteAsync(new GroupSimpleDTO { Id = id });
             }
             catch (NotFoundException e)
             {
@@ -100,15 +100,34 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("members/add/{groupId}/{volunteerId}", Name = "AddMember")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> AddMember(int groupId, int volunteerId)
+        public async Task<ActionResult> AddMemberAsync(int groupId, int volunteerId)
         {
             try
             {
-                await groupService.AddMember(groupId, volunteerId);
+                await groupService.AddMemberAsync(groupId, volunteerId);
             }
             catch (NotFoundException e)
             {
                 return NotFound(new { e.Key, e.Message });
+            }
+            return NoContent();
+        }
+        [HttpPost("members/remove/{groupId}/{volunteerId}", Name = "RemoveMember")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> RemoveMemberAsync(int groupId, int volunteerId)
+        {
+            try
+            {
+                await groupService.RemoveMemberAsync(groupId, volunteerId);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { e.Key, e.Message });
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
             }
             return NoContent();
         }
@@ -134,7 +153,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{parentGroupId}/subgroups", Name = "GetSubgroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupDTO>>> GetSubgroupsAsync(int parentGroupId)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetSubgroupsAsync(int parentGroupId)
         {
             try
             {

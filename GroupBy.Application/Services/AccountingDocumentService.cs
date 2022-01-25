@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class AccountingDocumentService : AsyncService<AccountingDocument, AccountingDocumentDTO, AccountingDocumentCreateDTO, AccountingDocumentDTO>, IAccountingDocumentService
+    public class AccountingDocumentService : AsyncService<AccountingDocument, AccountingDocumentDTO, AccountingDocumentDTO, AccountingDocumentCreateDTO, AccountingDocumentDTO>, IAccountingDocumentService
     {
         public AccountingDocumentService(
             IAccountingDocumentRepository repository, 

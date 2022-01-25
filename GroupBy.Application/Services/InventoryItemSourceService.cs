@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class InventoryItemSourceService : AsyncService<InventoryItemSource, InventoryItemSourceDTO, InventoryItemSourceCreateDTO, InventoryItemSourceDTO>, IInventoryItemSourceService
+    public class InventoryItemSourceService : AsyncService<InventoryItemSource, InventoryItemSourceDTO, InventoryItemSourceDTO, InventoryItemSourceCreateDTO, InventoryItemSourceDTO>, IInventoryItemSourceService
     {
         public InventoryItemSourceService(
             IInventoryItemSourceRepository repository, 

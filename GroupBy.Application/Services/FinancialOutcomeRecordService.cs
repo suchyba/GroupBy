@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class FinancialOutcomeRecordService : AsyncService<FinancialOutcomeRecord, FinancialOutcomeRecordDTO, FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecordUpdateDTO>, IFinancialOutcomeRecordService
+    public class FinancialOutcomeRecordService : AsyncService<FinancialOutcomeRecord, FinancialOutcomeRecordDTO, FinancialOutcomeRecordDTO, FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecordUpdateDTO>, IFinancialOutcomeRecordService
     {
         public FinancialOutcomeRecordService(
             IFinancialOutcomeRecordRepository repository,
