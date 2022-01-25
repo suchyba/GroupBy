@@ -2,7 +2,7 @@
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAgreementService : IAsyncService<AgreementDTO, AgreementCreateDTO, AgreementDTO>
+    public interface IAgreementService : IAsyncService<AgreementDTO, AgreementDTO, AgreementCreateDTO, AgreementDTO>
     {
 
     }

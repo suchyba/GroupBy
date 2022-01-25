@@ -27,7 +27,8 @@ namespace GroupBy.Application.Profiles
             CreateMap<AccountingBook, AccountingBookDTO>().ReverseMap();
             CreateMap<AccountingBook, AccountingBookCreateDTO>().ReverseMap();
 
-            CreateMap<Group, GroupDTO>().ReverseMap();
+            CreateMap<Group, GroupDTO>();
+            CreateMap<Group, GroupSimpleDTO>().ReverseMap();
             CreateMap<Group, GroupCreateDTO>().ReverseMap();
             CreateMap<Group, GroupUpdateDTO>().ReverseMap();
 
@@ -36,7 +37,7 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Rank, opt => opt.MapFrom(
                     src => src.RankId.HasValue ? new Rank { Id = src.RankId.Value } : null));
             CreateMap<Volunteer, VolunteerUpdateDTO>().ReverseMap();
-            CreateMap<Volunteer, VolunteerSimpleDTO>();
+            CreateMap<Volunteer, VolunteerSimpleDTO>().ReverseMap();
 
             CreateMap<Agreement, AgreementDTO>().ReverseMap();
             CreateMap<Agreement, AgreementCreateDTO>().ReverseMap();

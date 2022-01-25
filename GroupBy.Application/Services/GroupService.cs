@@ -10,29 +10,37 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class GroupService : AsyncService<Group, GroupDTO, GroupCreateDTO, GroupUpdateDTO>, IGroupService
+    public class GroupService : AsyncService<Group, GroupSimpleDTO, GroupDTO, GroupCreateDTO, GroupUpdateDTO>, IGroupService
     {
 
-        public GroupService(IGroupRepository groupRepository, IMapper mapper,
-            IValidator<GroupCreateDTO> createValidator, 
-            IValidator<GroupUpdateDTO> updateValidator) : base(groupRepository, mapper, updateValidator, createValidator)
+        public GroupService(
+            IGroupRepository groupRepository,
+            IMapper mapper,
+            IValidator<GroupCreateDTO> createValidator,
+            IValidator<GroupUpdateDTO> updateValidator)
+            : base(groupRepository, mapper, updateValidator, createValidator)
         {
 
         }
 
-        public async Task AddMember(int groupId, int volunteerId)
+        public async Task AddMemberAsync(int groupId, int volunteerId)
         {
-            await (repository as IGroupRepository).AddMamber(groupId, volunteerId);
-        }        
+            await (repository as IGroupRepository).AddMemberAsync(groupId, volunteerId);
+        }
 
-        public async Task<IEnumerable<GroupDTO>> GetSubgroupsAsync(int groupId)
+        public async Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId)
         {
-            return mapper.Map<IEnumerable<GroupDTO>>(await (repository as IGroupRepository).GetSubgroupsAsync(groupId));
+            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IGroupRepository).GetSubgroupsAsync(groupId));
         }
 
         public async Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId)
         {
             return mapper.Map<IEnumerable<VolunteerSimpleDTO>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
+        }
+
+        public async Task RemoveMemberAsync(int groupId, int volunteerId)
+        {
+            await (repository as IGroupRepository).RemoveMemberAsync(groupId, volunteerId);
         }
     }
 }

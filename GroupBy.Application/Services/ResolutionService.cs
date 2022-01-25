@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class ResolutionService : AsyncService<Resolution, ResolutionDTO, ResolutionCreateDTO, ResolutionUpdateDTO>, IResolutionService
+    public class ResolutionService : AsyncService<Resolution, ResolutionDTO, ResolutionDTO, ResolutionCreateDTO, ResolutionUpdateDTO>, IResolutionService
     {
         public ResolutionService(
             IResolutionRepository repository,

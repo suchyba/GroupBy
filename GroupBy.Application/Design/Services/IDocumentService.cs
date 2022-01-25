@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IDocumentService : IAsyncService<DocumentDTO, DocumentCreateDTO, DocumentUpdateDTO>
+    public interface IDocumentService : IAsyncService<DocumentDTO, DocumentDTO, DocumentCreateDTO, DocumentUpdateDTO>
     {
 
     }

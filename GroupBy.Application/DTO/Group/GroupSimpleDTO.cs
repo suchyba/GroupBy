@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupBy.Application.DTO.Volunteer
+namespace GroupBy.Application.DTO.Group
 {
-    public class VolunteerSimpleDTO
+    public class GroupSimpleDTO
     {
         public int Id { get; set; }
-        public string FirstNames { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

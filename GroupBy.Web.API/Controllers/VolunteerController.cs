@@ -35,7 +35,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                return Ok(await volunteerService.GetAsync(new VolunteerDTO { Id = id }));
+                return Ok(await volunteerService.GetAsync(new VolunteerSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -64,7 +64,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await volunteerService.DeleteAsync(new VolunteerDTO { Id = id });
+                await volunteerService.DeleteAsync(new VolunteerSimpleDTO { Id = id });
             }
             catch (NotFoundException e)
             {
@@ -98,7 +98,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/groups", Name = "GetVoluneerGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupDTO>>> GetGroupsAsync(int id)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetGroupsAsync(int id)
         {
             try
             {

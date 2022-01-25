@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class VolunteerService : AsyncService<Volunteer, VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>, IVolunteerService
+    public class VolunteerService : AsyncService<Volunteer, VolunteerSimpleDTO, VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>, IVolunteerService
     {
         public VolunteerService(IVolunteerRepository volunteerRepository, IMapper mapper,
             IValidator<VolunteerCreateDTO> createValidator,
@@ -18,9 +18,9 @@ namespace GroupBy.Application.Services
         {
 
         }
-        public async Task<IEnumerable<GroupDTO>> GetGroupsAsync(int volunteerId)
+        public async Task<IEnumerable<GroupSimpleDTO>> GetGroupsAsync(int volunteerId)
         {
-            return mapper.Map<IEnumerable<GroupDTO>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
+            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
         }
     }
 }

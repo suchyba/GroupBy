@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IGroupService : IAsyncService<GroupDTO, GroupCreateDTO, GroupUpdateDTO>
+    public interface IGroupService : IAsyncService<GroupSimpleDTO, GroupDTO, GroupCreateDTO, GroupUpdateDTO>
     {
         public Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId);
-        public Task AddMember(int groupId, int volunteerId);
-        public Task<IEnumerable<GroupDTO>> GetSubgroupsAsync(int groupId);
+        public Task AddMemberAsync(int groupId, int volunteerId);
+        public Task RemoveMemberAsync(int groupId, int volunteerId);
+        public Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId);
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GroupBy.Application.DTO.Project;
+using GroupBy.Application.DTO.Volunteer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +13,8 @@ namespace GroupBy.Application.DTO.Group
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public VolunteerSimpleDTO Owner { get; set; }
+        public GroupSimpleDTO ParentGroup { get; set; }
+        public ProjectDTO RelatedProject { get; set; }
     }
 }

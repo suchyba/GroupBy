@@ -2,7 +2,7 @@
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IAccountingBookService : IAsyncService<AccountingBookDTO, AccountingBookCreateDTO, AccountingBookDTO>
+    public interface IAccountingBookService : IAsyncService<AccountingBookDTO, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookDTO>
     {
 
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IInventoryBookRecordService : IAsyncService<InventoryBookRecordDTO, InventoryBookRecordCreateDTO, InventoryBookRecordUpdateDTO>
+    public interface IInventoryBookRecordService : IAsyncService<InventoryBookRecordDTO, InventoryBookRecordDTO, InventoryBookRecordCreateDTO, InventoryBookRecordUpdateDTO>
     {
 
     }

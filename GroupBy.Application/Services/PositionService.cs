@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class PositionService : AsyncService<Position, PositionDTO, PositionCreateDTO, PositionDTO>, IPositionService
+    public class PositionService : AsyncService<Position, PositionDTO, PositionDTO, PositionCreateDTO, PositionDTO>, IPositionService
     {
         public PositionService(IPositionRepository positionRepository, IMapper mapper, 
             IValidator<PositionDTO> updateValidator, IValidator<PositionCreateDTO> createValidator) 
