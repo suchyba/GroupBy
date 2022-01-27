@@ -2,6 +2,7 @@
 using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
+using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
@@ -26,6 +27,11 @@ namespace GroupBy.Application.Services
         public async Task AddMemberAsync(int groupId, int volunteerId)
         {
             await (repository as IGroupRepository).AddMemberAsync(groupId, volunteerId);
+        }
+
+        public async Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(int groupId)
+        {
+            return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
         }
 
         public async Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId)

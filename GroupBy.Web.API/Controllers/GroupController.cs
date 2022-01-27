@@ -7,6 +7,7 @@ using GroupBy.Application.Exceptions;
 using System.Net.Mime;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.AccountingBook;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -158,6 +159,20 @@ namespace GroupBy.Web.API.Controllers
             try
             {
                 return Ok(await groupService.GetSubgroupsAsync(parentGroupId));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+        [HttpGet("{id}/accountingBooks")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<AccountingBookSimpleDTO>>> GetAccountingBooksAsync(int id)
+        {
+            try
+            {
+                return Ok(await groupService.GetAccountingBooksAsync(id));
             }
             catch (NotFoundException e)
             {
