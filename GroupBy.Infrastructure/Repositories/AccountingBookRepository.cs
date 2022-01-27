@@ -45,6 +45,8 @@ namespace GroupBy.Data.Repositories
             if (domain.RelatedGroup == null)
                 throw new NotFoundException("Group", key);
 
+            domain.Records = new List<FinancialRecord>();
+
             return await base.CreateAsync(domain);
         }
         public async Task<bool> IsIdUnique(int bookNumber, int orderNumber)
