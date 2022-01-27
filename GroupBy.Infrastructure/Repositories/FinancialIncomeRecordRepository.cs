@@ -13,14 +13,17 @@ namespace GroupBy.Data.Repositories
     public class FinancialIncomeRecordRepository : AsyncRepository<FinancialIncomeRecord>, IFinancialIncomeRecordRepository
     {
         private readonly IAccountingDocumentRepository accountingDocumentRepository;
+        private readonly IAccountingBookRepository accountingBookRepository;
         private readonly IProjectRepository projectRepository;
 
         public FinancialIncomeRecordRepository(
             DbContext context,
             IAccountingDocumentRepository accountingDocumentRepository,
+            IAccountingBookRepository accountingBookRepository,
             IProjectRepository projectRepository) : base(context)
         {
             this.accountingDocumentRepository = accountingDocumentRepository;
+            this.accountingBookRepository = accountingBookRepository;
             this.projectRepository = projectRepository;
         }
 
@@ -39,7 +42,10 @@ namespace GroupBy.Data.Repositories
         public override async Task<FinancialIncomeRecord> UpdateAsync(FinancialIncomeRecord domain)
         {
             var record = await GetAsync(domain);
-            
+
+            if (record.Book.Locked)
+                throw new BadRequestException("Cannot update record in locked book");
+
             record.Date = domain.Date;
             record.Description = domain.Description;
             record.MembershipFee = domain.MembershipFee;
@@ -59,6 +65,11 @@ namespace GroupBy.Data.Repositories
         }
         public override async Task<FinancialIncomeRecord> CreateAsync(FinancialIncomeRecord domain)
         {
+            domain.Book = await accountingBookRepository.GetAsync(new AccountingBook { BookId = domain.BookId, BookOrderNumberId = domain.BookOrderNumberId });
+
+            if (domain.Book.Locked)
+                throw new BadRequestException("Cannot add record to locked book");
+
             domain.RelatedDocument = await accountingDocumentRepository.GetAsync(domain.RelatedDocument);
 
             if (domain.RelatedProject != null)
@@ -69,6 +80,15 @@ namespace GroupBy.Data.Repositories
             var newRecord = await context.Set<FinancialIncomeRecord>().AddAsync(domain);
             await context.SaveChangesAsync();
             return newRecord.Entity;
+        }
+        public async override Task DeleteAsync(FinancialIncomeRecord domain)
+        {
+            domain = await GetAsync(domain);
+
+            if (domain.Book.Locked)
+                throw new BadRequestException("Cannot remove record from locked book");
+
+            await base.DeleteAsync(domain);
         }
     }
 }

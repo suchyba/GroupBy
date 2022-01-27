@@ -3,7 +3,7 @@ using GroupBy.Application.DTO.AccountingBook;
 
 namespace GroupBy.Application.Validators.AccountingBook
 {
-    public class AccountingBookUpdateValidator : AbstractValidator<AccountingBookDTO>
+    public class AccountingBookUpdateValidator : AbstractValidator<AccountingBookSimpleDTO>
     {
         public AccountingBookUpdateValidator()
         {

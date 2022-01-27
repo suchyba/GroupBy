@@ -30,7 +30,10 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<AccountingBook> GetAsync(AccountingBook domain)
         {
-            var book = await context.Set<AccountingBook>().FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
+            var book = await context.Set<AccountingBook>()
+                .Include(b => b.RelatedGroup)
+                .Include(b => b.Records)
+                .FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
             if (book == null)
                 throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
             return book;
@@ -54,7 +57,7 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<AccountingBook> UpdateAsync(AccountingBook domain)
         {
-            var book = await context.Set<AccountingBook>().FirstOrDefaultAsync(ab => ab.BookId == domain.BookId && ab.BookOrderNumberId == domain.BookOrderNumberId);
+            var book = await GetAsync(domain);
             if (book == null)
                 throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
 
@@ -66,9 +69,9 @@ namespace GroupBy.Data.Repositories
             return book;
         }
 
-        public Task<IEnumerable<FinancialRecord>> GetFinancialRecords()
+        public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain)
         {
-            throw new NotImplementedException();
+            return (await GetAsync(domain)).Records;
         }
     }
 }
