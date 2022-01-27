@@ -71,7 +71,7 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<GroupCreateDTO>, GroupCreateValidator>();
             services.AddScoped<IValidator<GroupUpdateDTO>, GroupUpdateValidator>();
 
-            services.AddScoped<IValidator<AccountingBookDTO>, AccountingBookUpdateValidator>();
+            services.AddScoped<IValidator<AccountingBookSimpleDTO>, AccountingBookUpdateValidator>();
             services.AddScoped<IValidator<AccountingBookCreateDTO>, AccountingBookCreateValidator>();
 
             services.AddScoped<IValidator<VolunteerDTO>, VolunteerValidator>();

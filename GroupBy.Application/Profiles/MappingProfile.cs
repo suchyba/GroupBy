@@ -5,6 +5,7 @@ using GroupBy.Application.DTO.Agreement;
 using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.FinancialIncomeRecord;
 using GroupBy.Application.DTO.FinancialOutcomeRecord;
+using GroupBy.Application.DTO.FinancialRecord;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryBookRecord;
@@ -24,7 +25,8 @@ namespace GroupBy.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<AccountingBook, AccountingBookDTO>().ReverseMap();
+            CreateMap<AccountingBook, AccountingBookSimpleDTO>().ReverseMap();
+            CreateMap<AccountingBook, AccountingBookDTO>();
             CreateMap<AccountingBook, AccountingBookCreateDTO>().ReverseMap();
 
             CreateMap<Group, GroupDTO>();
@@ -129,6 +131,13 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Legislator, opt => opt.MapFrom(
                     src => new Volunteer { Id = src.LegislatorId }));
             CreateMap<ResolutionUpdateDTO, Resolution>();
+
+            CreateMap<FinancialIncomeRecord, FinancialRecordDTO>()
+                .ForMember(dest => dest.OtherIncome, opt => opt.MapFrom(
+                    src => src.Other));
+            CreateMap<FinancialOutcomeRecord, FinancialRecordDTO>()
+                .ForMember(dest => dest.OtherOutcome, opt => opt.MapFrom(
+                    src => src.Other));
 
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>().ReverseMap();
             CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()

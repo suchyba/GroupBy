@@ -10,6 +10,6 @@ namespace GroupBy.Application.Design.Repositories
     public interface IAccountingBookRepository : IAsyncRepository<AccountingBook>
     {
         public Task<bool> IsIdUnique(int bookNumber, int orderNumber);
-        public Task<IEnumerable<FinancialRecord>> GetFinancialRecords();
+        public Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain);
     }
 }

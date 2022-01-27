@@ -63,11 +63,16 @@ namespace GroupBy.Web.API.Controllers
             {
                 return BadRequest(e.ValidationErrors);
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpDelete("delete/{id}", Name = "DeleteFinancialIncomeRecord")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -79,6 +84,10 @@ namespace GroupBy.Web.API.Controllers
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = e.Key, e.Message });
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
             }
         }
         [HttpPut("edit", Name = "EditFinancialIncomeRecord")]
@@ -99,6 +108,10 @@ namespace GroupBy.Web.API.Controllers
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = e.Key, e.Message });
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }

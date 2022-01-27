@@ -38,5 +38,21 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         [Required]
         public virtual Group RelatedGroup { get; set; }
+        /// <summary>
+        /// Balance.
+        /// </summary>
+        /// <returns>Sum of values.</returns>
+        public decimal GetBalance()
+        {
+            decimal balance = 0;
+            foreach (FinancialRecord record in Records)
+            {
+                if (record is FinancialIncomeRecord)
+                    balance += record.GetTotal();
+                else if (record is FinancialOutcomeRecord)
+                    balance -= record.GetTotal();
+            }
+            return balance;
+        }
     }
 }
