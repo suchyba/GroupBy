@@ -1,4 +1,5 @@
-﻿using GroupBy.Application.DTO.Project;
+﻿using GroupBy.Application.DTO.InventoryBook;
+using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,6 @@ namespace GroupBy.Application.DTO.Group
         public VolunteerSimpleDTO Owner { get; set; }
         public GroupSimpleDTO ParentGroup { get; set; }
         public ProjectDTO RelatedProject { get; set; }
+        public InventoryBookDTO InventoryBook { get; set; }
     }
 }

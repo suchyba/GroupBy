@@ -71,6 +71,7 @@ namespace GroupBy.Data.Repositories
                 .Include(g => g.Permissions)
                 .Include(g => g.ParentGroup)
                 .Include(g => g.ChildGroups)
+                .Include(g => g.InventoryBook)
                 .FirstOrDefaultAsync(g => g.Id == domain.Id);
             if (g == null)
                 throw new NotFoundException("Group", domain.Id);
