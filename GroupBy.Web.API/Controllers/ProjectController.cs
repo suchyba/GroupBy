@@ -1,4 +1,5 @@
 ﻿using GroupBy.Application.Design.Services;
+using GroupBy.Application.DTO.FinancialRecord;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectDTO>> getAsync(int id)
+        public async Task<ActionResult<ProjectDTO>> GetAsync(int id)
         {
             try
             {
@@ -99,6 +100,20 @@ namespace GroupBy.Web.API.Controllers
             catch (DeleteNotPermittedException e)
             {
                 return Conflict(e.Message);
+            }
+        }
+        [HttpGet("{id}/financialRecords", Name = "GetFinancialRecordsRelatedToProject")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetRelatedFinancialRecordsAsync(int id)
+        {
+            try
+            {
+                return Ok(await service.GetRelatedFinancialRecordsAsync(new ProjectDTO { Id = id }));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
     }

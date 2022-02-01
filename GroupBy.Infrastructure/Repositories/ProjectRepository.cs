@@ -46,7 +46,9 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<Project> GetAsync(Project domain)
         {
-            var project = await context.Set<Project>().FirstOrDefaultAsync(p => p.Id == domain.Id);
+            var project = await context.Set<Project>()
+                .Include(p => p.RelatedFinnancialRecords)
+                .FirstOrDefaultAsync(p => p.Id == domain.Id);
             if (project == null)
                 throw new NotFoundException("Project", domain.Id);
             return project;

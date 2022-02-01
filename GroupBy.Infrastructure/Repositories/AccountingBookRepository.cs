@@ -33,6 +33,9 @@ namespace GroupBy.Data.Repositories
             var book = await context.Set<AccountingBook>()
                 .Include(b => b.RelatedGroup)
                 .Include(b => b.Records)
+                .ThenInclude(r => r.RelatedProject)
+                .Include(r => r.Records)
+                .ThenInclude(r => r.RelatedDocument)
                 .FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
             if (book == null)
                 throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });

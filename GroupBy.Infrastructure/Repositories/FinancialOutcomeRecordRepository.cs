@@ -74,11 +74,15 @@ namespace GroupBy.Data.Repositories
                 throw new BadRequestException("Cannot add record to locked book");
 
             domain.RelatedDocument = await accountingDocumentRepository.GetAsync(domain.RelatedDocument);
+            if (domain.RelatedDocument.Group != domain.Book.RelatedGroup)
+                throw new BadRequestException("Document and accounting book must be related with the same group");
 
             if (domain.RelatedProject != null)
+            {
                 domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
-            else
-                domain.RelatedProject = null;
+                if (domain.RelatedProject.ParentGroup != domain.Book.RelatedGroup)
+                    throw new BadRequestException("Project and accounting book must be related with the same group");
+            }
 
             var newRecord = await context.Set<FinancialOutcomeRecord>().AddAsync(domain);
             await context.SaveChangesAsync();
