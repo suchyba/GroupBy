@@ -132,6 +132,13 @@ namespace GroupBy.Application.Profiles
                     src => new Volunteer { Id = src.LegislatorId }));
             CreateMap<ResolutionUpdateDTO, Resolution>();
 
+            CreateMap<FinancialIncomeRecord, FinancialRecordSimpleDTO>()
+                .ForMember(dest => dest.OtherIncome, opt => opt.MapFrom(
+                    src => src.Other));
+            CreateMap<FinancialOutcomeRecord, FinancialRecordSimpleDTO>()
+                .ForMember(dest => dest.OtherOutcome, opt => opt.MapFrom(
+                    src => src.Other));
+
             CreateMap<FinancialIncomeRecord, FinancialRecordDTO>()
                 .ForMember(dest => dest.OtherIncome, opt => opt.MapFrom(
                     src => src.Other));
