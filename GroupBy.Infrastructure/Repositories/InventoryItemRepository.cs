@@ -33,7 +33,7 @@ namespace GroupBy.Data.Repositories
 
             item.Name = domain.Name;
             item.Symbol = domain.Symbol;
-            item.Descryption = domain.Descryption;
+            item.Description = domain.Description;
             item.Value = domain.Value;
             await context.SaveChangesAsync();
             return item;

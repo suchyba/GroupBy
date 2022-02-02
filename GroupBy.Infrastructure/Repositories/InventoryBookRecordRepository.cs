@@ -19,9 +19,9 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<InventoryBookRecord> GetAsync(InventoryBookRecord domain)
         {
-            var record = await context.Set<InventoryBookRecord>().FirstOrDefaultAsync(r => r.InventoryBookId == domain.InventoryBookId && r.Id == domain.Id);
+            var record = await context.Set<InventoryBookRecord>().FirstOrDefaultAsync(r => r.Id == domain.Id);
             if (record == null)
-                throw new NotFoundException("InventoryBookRecord", new { domain.Id, domain.InventoryBookId });
+                throw new NotFoundException("InventoryBookRecord", new { domain.Id });
             return record;
         }
 
@@ -55,7 +55,10 @@ namespace GroupBy.Data.Repositories
                 domain.Id = 1;
 
             int bookId = domain.InventoryBookId;
-            domain.Book = await context.Set<InventoryBook>().FirstOrDefaultAsync(i => i.Id == bookId);
+            domain.Book = await context.Set<InventoryBook>()
+                .Include(b => b.Records)
+                .ThenInclude(r => r.Item)
+                .FirstOrDefaultAsync(i => i.Id == bookId);
             if (domain.Book == null)
                 throw new NotFoundException("InventoryBook", bookId);
 
@@ -63,6 +66,9 @@ namespace GroupBy.Data.Repositories
             domain.Item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == itemId);
             if (domain.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
+
+            if (!domain.Income && domain.Book.Records.FirstOrDefault(r => r.Item == domain.Item && r.Income) == null)
+                throw new BadRequestException("You cannot remove item what is not in the inventory book");
 
             int sourceId = domain.Source.Id;
             domain.Source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == sourceId);

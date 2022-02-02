@@ -17,6 +17,6 @@ namespace GroupBy.Application.DTO.Group
         public VolunteerSimpleDTO Owner { get; set; }
         public GroupSimpleDTO ParentGroup { get; set; }
         public ProjectDTO RelatedProject { get; set; }
-        public InventoryBookDTO InventoryBook { get; set; }
+        public InventoryBookSimpleDTO InventoryBook { get; set; }
     }
 }

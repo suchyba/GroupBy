@@ -29,10 +29,38 @@ namespace GroupBy.Data.Repositories
         }
         public override async Task<InventoryBook> GetAsync(InventoryBook domain)
         {
-            var book = await context.Set<InventoryBook>().FirstOrDefaultAsync(b => b.Id == domain.Id);
+            var book = await context.Set<InventoryBook>()
+                .Include(b => b.RelatedGroup)
+                .Include(b => b.Records)
+                .ThenInclude(r => r.Source)
+                .Include(b => b.Records)
+                .ThenInclude(r => r.Item)
+                .Include(b => b.Records)
+                .FirstOrDefaultAsync(b => b.Id == domain.Id);
             if (book == null)
                 throw new NotFoundException("InventoryBook", domain.Id);
             return book;
+        }
+
+        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryBookRecordsAsync(InventoryBook book)
+        {
+            return (await GetAsync(book)).Records;
+        }
+
+        public async Task<IEnumerable<InventoryItem>> GetInventoryItemsAsync(InventoryBook book)
+        {
+            book = await GetAsync(book);
+
+            List<InventoryItem> items = new();
+            foreach (var record in book.Records)
+            {
+                if (record.Income)
+                    items.Add(record.Item);
+                else
+                    items.Remove(record.Item);
+            }
+
+            return items;
         }
 
         public override async Task<InventoryBook> UpdateAsync(InventoryBook domain)

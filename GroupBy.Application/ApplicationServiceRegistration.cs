@@ -90,7 +90,7 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<InventoryItemDTO>, InventoryItemValidator>();
             services.AddScoped<IValidator<InventoryItemCreateDTO>, InventoryItemCreateValidator>();
 
-            services.AddScoped<IValidator<InventoryBookDTO>, InventoryBookValidator>();
+            services.AddScoped<IValidator<InventoryBookSimpleDTO>, InventoryBookValidator>();
             services.AddScoped<IValidator<InventoryBookCreateDTO>, InventoryBookCreateValidator>();
             services.AddScoped<IValidator<InventoryBookUpdateDTO>, InventoryBookUpdateValidator>();
 
@@ -98,7 +98,7 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<DocumentCreateDTO>, DocumentCreateValidator>();
             services.AddScoped<IValidator<DocumentUpdateDTO>, DocumentUpdateValidator>();
 
-            services.AddScoped<IValidator<InventoryBookRecordDTO>, InventoryBookRecordValidator>();
+            services.AddScoped<IValidator<InventoryBookRecordSimpleDTO>, InventoryBookRecordValidator>();
             services.AddScoped<IValidator<InventoryBookRecordCreateDTO>, InventoryBookRecordCreateValidator>();
             services.AddScoped<IValidator<InventoryBookRecordUpdateDTO>, InventoryBookRecordUpdateValidator>();
 

@@ -63,8 +63,9 @@ namespace GroupBy.Application.Profiles
             CreateMap<InventoryItem, InventoryItemDTO>().ReverseMap();
             CreateMap<InventoryItem, InventoryItemCreateDTO>().ReverseMap();
 
+            CreateMap<InventoryBook, InventoryBookSimpleDTO>();
+            CreateMap<InventoryBookSimpleDTO, InventoryBook>();
             CreateMap<InventoryBook, InventoryBookDTO>();
-            CreateMap<InventoryBookDTO, InventoryBook>();
             CreateMap<InventoryBookCreateDTO, InventoryBook>()
                 .ForMember(dest => dest.RelatedGroup, opt => opt.MapFrom(
                     src => new Group { Id = src.RelatedGroupId }));
@@ -85,8 +86,9 @@ namespace GroupBy.Application.Profiles
                  .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
 
-            CreateMap<InventoryBookRecord, InventoryBookRecordDTO>();
-            CreateMap<InventoryBookRecordDTO, InventoryBookRecord>();
+            CreateMap<InventoryBookRecord, InventoryBookRecordSimpleDTO>();
+            CreateMap<InventoryBookRecord, InventoryBookRecordListDTO>();
+            CreateMap<InventoryBookRecordSimpleDTO, InventoryBookRecord>();
             CreateMap<InventoryBookRecordCreateDTO, InventoryBookRecord>()
                 .ForMember(dest => dest.Source, opt => opt.MapFrom(
                     src => new InventoryItemSource { Id = src.SourceId }))

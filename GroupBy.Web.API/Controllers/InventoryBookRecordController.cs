@@ -25,18 +25,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryBookRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetAllAsync()
         {
             return Ok(await InventoryBookRecordService.GetAllAsync());
         }
         [HttpGet("{inventoryBookId}/{id}", Name = "GetInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(int inventoryBookId, int id)
+        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> GetAsync(int inventoryBookId, int id)
         {
             try
             {
-                return Ok(await InventoryBookRecordService.GetAsync(new InventoryBookRecordDTO { Id = id, InventoryBookId = inventoryBookId }));
+                return Ok(await InventoryBookRecordService.GetAsync(new InventoryBookRecordSimpleDTO { Id = id, InventoryBookId = inventoryBookId }));
             }
             catch (NotFoundException e)
             {
@@ -47,7 +47,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookRecordDTO>> CreateAsync([FromBody] InventoryBookRecordCreateDTO model)
+        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> CreateAsync([FromBody] InventoryBookRecordCreateDTO model)
         {
             try
             {
@@ -61,12 +61,16 @@ namespace GroupBy.Web.API.Controllers
             {
                 return NotFound(new { Id = e.Key, e.Message });
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpPut("edit", Name = "UpdateInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookRecordDTO>> UpdateAsync([FromBody] InventoryBookRecordUpdateDTO model)
+        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> UpdateAsync([FromBody] InventoryBookRecordUpdateDTO model)
         {
             try
             {
@@ -81,15 +85,15 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.ValidationErrors);
             }
         }
-        [HttpDelete("delete/{inventoryBookId}/{id}", Name = "DeleteInventoryBookRecord")]
+        [HttpDelete("delete/{id}", Name = "DeleteInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int inventoryBookId, int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
             try
             {
-                await InventoryBookRecordService.DeleteAsync(new InventoryBookRecordDTO { Id = id, InventoryBookId = inventoryBookId });
+                await InventoryBookRecordService.DeleteAsync(new InventoryBookRecordSimpleDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)
