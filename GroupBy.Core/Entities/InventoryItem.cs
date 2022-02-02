@@ -32,7 +32,7 @@ namespace GroupBy.Domain.Entities
         /// <summary>
         /// Description of the item
         /// </summary>
-        public string Descryption { get; set; }
+        public string Description { get; set; }
         /// <summary>
         /// History of the item from all the books <seealso cref="InventoryBook"/> <seealso cref="InventoryBookRecord"/>
         /// </summary>

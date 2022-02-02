@@ -12,6 +12,6 @@ namespace GroupBy.Application.DTO.InventoryItem
         public string Symbol { get; set; }
         public string Name { get; set; }
         public decimal Value { get; set; }
-        public string Descryption { get; set; }
+        public string Description { get; set; }
     }
 }
