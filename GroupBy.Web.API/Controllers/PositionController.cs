@@ -27,7 +27,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionDTO>> CreateAsync([FromBody] PositionCreateDTO model)
+        public async Task<ActionResult<PositionSimpleDTO>> CreateAsync([FromBody] PositionCreateDTO model)
         {
             try
             {
@@ -44,18 +44,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllPositions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<PositionDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<PositionSimpleDTO>>> GetAllAsync()
         {
             return Ok(await positionService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetPosition")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionDTO>> GetAsync(int id)
+        public async Task<ActionResult<PositionSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await positionService.GetAsync(new PositionDTO { Id = id }));
+                return Ok(await positionService.GetAsync(new PositionSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -66,7 +66,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PositionDTO>> UpdateAsync([FromBody] PositionDTO model)
+        public async Task<ActionResult<PositionSimpleDTO>> UpdateAsync([FromBody] PositionSimpleDTO model)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await positionService.DeleteAsync(new PositionDTO { Id = id });
+                await positionService.DeleteAsync(new PositionSimpleDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)

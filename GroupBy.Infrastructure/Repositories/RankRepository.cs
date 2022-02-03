@@ -19,7 +19,9 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<Rank> GetAsync(Rank domain)
         {
-            var r = await context.Set<Rank>().FirstOrDefaultAsync(r => r.Id == domain.Id);
+            var r = await context.Set<Rank>()
+                .Include(r => r.HigherRank)
+                .FirstOrDefaultAsync(r => r.Id == domain.Id);
             if (r == null)
                 throw new NotFoundException("Rank", domain.Id);
 

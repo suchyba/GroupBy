@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IRankService : IAsyncService<RankDTO, RankDTO, RankCreateDTO, RankDTO>
+    public interface IRankService : IAsyncService<RankSimpleDTO, RankDTO, RankCreateDTO, RankSimpleDTO>
     {
     }
 }

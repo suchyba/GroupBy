@@ -1,4 +1,7 @@
-﻿using System;
+﻿using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Application.DTO.Project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,5 +24,8 @@ namespace GroupBy.Application.DTO.FinancialOutcomeRecord
         public decimal Total { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
+        public ProjectSimpleDTO RelatedProject { get; set; }
+        public AccountingDocumentSimpleDTO RelatedDocument { get; set; }
+        public AccountingBookSimpleDTO Book { get; set; }
     }
 }

@@ -48,6 +48,9 @@ namespace GroupBy.Data.Repositories
         {
             var project = await context.Set<Project>()
                 .Include(p => p.RelatedFinnancialRecords)
+                .Include(p => p.ParentGroup)
+                .Include(p => p.ProjectGroup)
+                .Include(p => p.Owner)
                 .FirstOrDefaultAsync(p => p.Id == domain.Id);
             if (project == null)
                 throw new NotFoundException("Project", domain.Id);
@@ -74,10 +77,13 @@ namespace GroupBy.Data.Repositories
             if (project.ParentGroup == null)
                 throw new NotFoundException("Group", parentGroupId);
 
-            int projectGroupId = domain.ProjectGroup.Id;
-            project.ProjectGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == projectGroupId);
-            if (project.ProjectGroup == null)
-                throw new NotFoundException("Group", projectGroupId);
+            if (domain.ProjectGroup != null)
+            {
+                int projectGroupId = domain.ProjectGroup.Id;
+                project.ProjectGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == projectGroupId);
+                if (project.ProjectGroup == null)
+                    throw new NotFoundException("Group", projectGroupId);
+            }
 
             await context.SaveChangesAsync();
             return project;

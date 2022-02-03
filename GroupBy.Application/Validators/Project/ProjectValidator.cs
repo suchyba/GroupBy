@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Project
 {
-    public class ProjectValidator : AbstractValidator<ProjectDTO>
+    public class ProjectValidator : AbstractValidator<ProjectSimpleDTO>
     {
         public ProjectValidator()
         {

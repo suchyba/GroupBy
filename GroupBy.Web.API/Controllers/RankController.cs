@@ -25,18 +25,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllRanks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<RankDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<RankSimpleDTO>>> GetAllAsync()
         {
             return Ok(await rankService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetRank")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RankDTO>> GetAsync(int id)
+        public async Task<ActionResult<RankSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await rankService.GetAsync(new RankDTO { Id = id }));
+                return Ok(await rankService.GetAsync(new RankSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -45,7 +45,7 @@ namespace GroupBy.Web.API.Controllers
             }
         }
         [HttpPost("add", Name = "CreateRank")]
-        public async Task<ActionResult<RankDTO>> CreateAsync([FromBody] RankCreateDTO model)
+        public async Task<ActionResult<RankSimpleDTO>> CreateAsync([FromBody] RankCreateDTO model)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RankDTO>> UpdateAsync([FromBody] RankDTO model)
+        public async Task<ActionResult<RankSimpleDTO>> UpdateAsync([FromBody] RankSimpleDTO model)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await rankService.DeleteAsync(new RankDTO { Id = id });
+                await rankService.DeleteAsync(new RankSimpleDTO { Id = id });
             }
             catch (NotFoundException e)
             {

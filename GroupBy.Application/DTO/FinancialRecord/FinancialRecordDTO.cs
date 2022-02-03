@@ -10,7 +10,7 @@ namespace GroupBy.Application.DTO.FinancialRecord
 {
     public class FinancialRecordDTO : FinancialRecordSimpleDTO
     {
-        public ProjectDTO RelatedProject { get; set; }
+        public ProjectSimpleDTO RelatedProject { get; set; }
         public DocumentDTO RelatedDocument { get; set; }
     }
 }

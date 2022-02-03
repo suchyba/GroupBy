@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IPositionService : IAsyncService<PositionDTO, PositionDTO, PositionCreateDTO, PositionDTO>
+    public interface IPositionService : IAsyncService<PositionSimpleDTO, PositionDTO, PositionCreateDTO, PositionSimpleDTO>
     {
 
     }

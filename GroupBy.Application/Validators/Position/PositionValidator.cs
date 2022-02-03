@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Position
 {
-    public class PositionValidator : AbstractValidator<PositionDTO>
+    public class PositionValidator : AbstractValidator<PositionSimpleDTO>
     {
         public PositionValidator()
         {

@@ -23,7 +23,10 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<AccountingDocument> GetAsync(AccountingDocument domain)
         {
-            AccountingDocument document = await context.Set<AccountingDocument>().FirstOrDefaultAsync(d => d.Id == domain.Id);
+            AccountingDocument document = await context.Set<AccountingDocument>()
+                .Include(d => d.Group)
+                .Include(d => d.RelatedProject)
+                .FirstOrDefaultAsync(d => d.Id == domain.Id);
             if (document == null)
                 throw new NotFoundException("AccountingDocument", domain.Id);
 

@@ -55,11 +55,6 @@ namespace GroupBy.Data.Repositories
             record.EarningAction = domain.EarningAction;
             record.Dotation = domain.Dotation;
 
-            if (domain.RelatedProject != null)
-                domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
-            else
-                domain.RelatedProject = null;
-
             await context.SaveChangesAsync();
             return record;
         }
@@ -73,9 +68,6 @@ namespace GroupBy.Data.Repositories
             domain.RelatedDocument = await accountingDocumentRepository.GetAsync(domain.RelatedDocument);
             if (domain.RelatedDocument.Group != domain.Book.RelatedGroup)
                 throw new BadRequestException("Document and accounting book must be related with the same group");
-
-            if (domain.RelatedProject != null)
-                domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
             
             if (domain.RelatedProject != null)
             {

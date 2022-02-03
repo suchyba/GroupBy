@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.DTO.FinancialOutcomeRecord
 {
-    public class FinancialOutcomeRecordUpdateDTO
+    public class FinancialOutcomeRecordSimpleDTO
     {
         public int Id { get; set; }
         public decimal? Inventory { get; set; }
@@ -18,6 +18,7 @@ namespace GroupBy.Application.DTO.FinancialOutcomeRecord
         public decimal? Salary { get; set; }
         public decimal? Food { get; set; }
         public decimal? Other { get; set; }
+        public decimal Total { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
     }

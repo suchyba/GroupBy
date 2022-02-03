@@ -44,16 +44,18 @@ namespace GroupBy.Application.Profiles
             CreateMap<Agreement, AgreementDTO>().ReverseMap();
             CreateMap<Agreement, AgreementCreateDTO>().ReverseMap();
 
-            CreateMap<Rank, RankDTO>();
-            CreateMap<RankDTO, Rank>()
+            CreateMap<Rank, RankSimpleDTO>();
+            CreateMap<RankSimpleDTO, Rank>()
                 .ForMember(dest => dest.HigherRank, opt => opt.MapFrom(
                     src => src.HigherRankId.HasValue ? new Rank { Id = src.HigherRankId.Value } : null));
+            CreateMap<Rank, RankDTO>();
             CreateMap<RankCreateDTO, Rank>()
                 .ForMember(dest => dest.HigherRank, opt => opt.MapFrom(
                     src => src.HigherRankId.HasValue ? new Rank { Id = src.HigherRankId.Value } : null));
 
+            CreateMap<Position, PositionSimpleDTO>();
             CreateMap<Position, PositionDTO>();
-            CreateMap<PositionDTO, Position>()
+            CreateMap<PositionSimpleDTO, Position>()
                 .ForMember(dest => dest.HigherPosition, opt => opt.MapFrom(
                     src => src.HigherPositionId == null ? null : new Position { Id = src.HigherPositionId.Value }));
             CreateMap<PositionCreateDTO, Position>()
@@ -100,7 +102,8 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
                     src => new InventoryItem { Id = src.ItemId }));
 
-            CreateMap<ProjectDTO, Project>().ReverseMap();
+            CreateMap<ProjectSimpleDTO, Project>().ReverseMap();
+            CreateMap<Project, ProjectDTO>();
             CreateMap<ProjectCreateDTO, Project>()
                 .ForMember(dest => dest.ParentGroup, opt => opt.MapFrom(
                     src => new Group { Id = src.ParentGroupId }))
@@ -119,7 +122,8 @@ namespace GroupBy.Application.Profiles
             CreateMap<InventoryItemSource, InventoryItemSourceDTO>().ReverseMap();
             CreateMap<InventoryItemSource, InventoryItemSourceCreateDTO>().ReverseMap();
 
-            CreateMap<AccountingDocument, AccountingDocumentDTO>().ReverseMap();
+            CreateMap<AccountingDocument, AccountingDocumentSimpleDTO>().ReverseMap();
+            CreateMap<AccountingDocument, AccountingDocumentDTO>();
             CreateMap<AccountingDocumentCreateDTO, AccountingDocument>()
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
@@ -148,25 +152,23 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.OtherOutcome, opt => opt.MapFrom(
                     src => src.Other));
 
-            CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>().ReverseMap();
+            CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordSimpleDTO>().ReverseMap();
+            CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>();
             CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()
                 .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
                     src => new AccountingDocument { Id = src.RelatedDocumentId }))
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
-            CreateMap<FinancialOutcomeRecordUpdateDTO, FinancialOutcomeRecord>()
-                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
-                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<FinancialOutcomeRecordUpdateDTO, FinancialOutcomeRecord>();
 
-            CreateMap<FinancialIncomeRecord, FinancialIncomeRecordDTO>().ReverseMap();
+            CreateMap<FinancialIncomeRecord, FinancialIncomeRecordSimpleDTO>().ReverseMap();
+            CreateMap<FinancialIncomeRecord, FinancialIncomeRecordDTO>();
             CreateMap<FinancialIncomeRecordCreateDTO, FinancialIncomeRecord>()
                 .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
                     src => new AccountingDocument { Id = src.RelatedDocumentId }))
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
-            CreateMap<FinancialIncomeRecordUpdateDTO, FinancialIncomeRecord>()
-                .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
-                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
+            CreateMap<FinancialIncomeRecordUpdateDTO, FinancialIncomeRecord>();
         }
     }
 }

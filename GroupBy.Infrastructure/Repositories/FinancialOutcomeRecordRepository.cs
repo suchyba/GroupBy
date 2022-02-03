@@ -56,12 +56,7 @@ namespace GroupBy.Data.Repositories
             record.Other = domain.Other;
             record.Salary = domain.Salary;
             record.Service = domain.Service;
-            record.Transport = domain.Transport;
-
-            if (domain.RelatedProject != null)
-                domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
-            else
-                domain.RelatedProject = null;
+            record.Transport = domain.Transport;            
 
             await context.SaveChangesAsync();
             return record;

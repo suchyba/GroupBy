@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class ProjectService : AsyncService<Project, ProjectDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>, IProjectService
+    public class ProjectService : AsyncService<Project, ProjectSimpleDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>, IProjectService
     {
         public ProjectService(IProjectRepository repository, IMapper mapper, 
             IValidator<ProjectUpdateDTO> updateValidator, IValidator<ProjectCreateDTO> createValidator) 
@@ -22,7 +22,7 @@ namespace GroupBy.Application.Services
 
         }
 
-        public async Task<IEnumerable<FinancialRecordSimpleDTO>> GetRelatedFinancialRecordsAsync(ProjectDTO project)
+        public async Task<IEnumerable<FinancialRecordSimpleDTO>> GetRelatedFinancialRecordsAsync(ProjectSimpleDTO project)
         {
             return mapper.Map<IEnumerable<FinancialRecordSimpleDTO>>((await repository.GetAsync(mapper.Map<Project>(project))).RelatedFinnancialRecords);
         }

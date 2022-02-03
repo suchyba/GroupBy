@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.AccountingDocument
 {
-    public class AccountingDocumentValidator : AbstractValidator<AccountingDocumentDTO>
+    public class AccountingDocumentValidator : AbstractValidator<AccountingDocumentSimpleDTO>
     {
         public AccountingDocumentValidator()
         {

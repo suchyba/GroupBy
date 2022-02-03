@@ -26,18 +26,18 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllProjects")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProjectDTO>>> getAllAsync()
+        public async Task<ActionResult<IEnumerable<ProjectSimpleDTO>>> getAllAsync()
         {
             return Ok(await service.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectDTO>> GetAsync(int id)
+        public async Task<ActionResult<ProjectSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await service.GetAsync(new ProjectDTO { Id = id }));
+                return Ok(await service.GetAsync(new ProjectSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProjectDTO>> CreateAsync([FromBody] ProjectCreateDTO project)
+        public async Task<ActionResult<ProjectSimpleDTO>> CreateAsync([FromBody] ProjectCreateDTO project)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProjectDTO>> UpdateAsync([FromBody] ProjectUpdateDTO project)
+        public async Task<ActionResult<ProjectSimpleDTO>> UpdateAsync([FromBody] ProjectUpdateDTO project)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await service.DeleteAsync(new ProjectDTO { Id = id });
+                await service.DeleteAsync(new ProjectSimpleDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)
@@ -109,7 +109,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                return Ok(await service.GetRelatedFinancialRecordsAsync(new ProjectDTO { Id = id }));
+                return Ok(await service.GetRelatedFinancialRecordsAsync(new ProjectSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {

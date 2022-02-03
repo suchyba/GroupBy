@@ -14,8 +14,6 @@ namespace GroupBy.Application.Validators.FinancialIncomeRecord
         {
             RuleFor(r => r.Id)
                 .GreaterThan(0).WithMessage("{PropertyName} is required");
-            RuleFor(r => r.RelatedProjectId)
-                .GreaterThan(0).When(r => r.RelatedProjectId.HasValue).WithMessage("{PropertyName} have to be greater then 0");
         }
     }
 }
