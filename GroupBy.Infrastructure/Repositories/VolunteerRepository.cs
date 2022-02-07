@@ -79,5 +79,14 @@ namespace GroupBy.Data.Repositories
 
             return v.OwnedGroups;
         }
+
+        public async Task<IEnumerable<Project>> GetOwnedProjectsAsync(int volunteerId)
+        {
+            Volunteer v = await context.Set<Volunteer>().Include(v => v.OwnedProjects).FirstOrDefaultAsync(v => v.Id == volunteerId);
+            if (v == null)
+                throw new NotFoundException("Volunteer", volunteerId);
+
+            return v.OwnedProjects;
+        }
     }
 }
