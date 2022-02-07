@@ -9,6 +9,8 @@ namespace GroupBy.Application.Design.Repositories
 {
     public interface IVolunteerRepository : IAsyncRepository<Volunteer>
     {
-        Task<IEnumerable<Group>> GetGroupsAsync(int volunteerId);
+        public Task<IEnumerable<Group>> GetGroupsAsync(int volunteerId);
+        public Task<IEnumerable<Group>> GetOwnedGroupsAsync(int volunteerId);
+
     }
 }
