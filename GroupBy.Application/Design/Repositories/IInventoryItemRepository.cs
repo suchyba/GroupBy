@@ -9,6 +9,6 @@ namespace GroupBy.Application.Design.Repositories
 {
     public interface IInventoryItemRepository : IAsyncRepository<InventoryItem>
     {
-
+        public Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(int itemId);
     }
 }

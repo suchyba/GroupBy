@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.InventoryItem
 {
-    public class InventoryItemValidator : AbstractValidator<InventoryItemDTO>
+    public class InventoryItemValidator : AbstractValidator<InventoryItemSimpleDTO>
     {
         public InventoryItemValidator()
         {

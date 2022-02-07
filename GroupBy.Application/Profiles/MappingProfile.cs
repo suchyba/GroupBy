@@ -62,7 +62,7 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.HigherPosition, opt => opt.MapFrom(
                     src => src.HigherPositionId == null ? null : new Position { Id = src.HigherPositionId.Value }));
 
-            CreateMap<InventoryItem, InventoryItemDTO>().ReverseMap();
+            CreateMap<InventoryItem, InventoryItemSimpleDTO>().ReverseMap();
             CreateMap<InventoryItem, InventoryItemCreateDTO>().ReverseMap();
 
             CreateMap<InventoryBook, InventoryBookSimpleDTO>();

@@ -28,9 +28,9 @@ namespace GroupBy.Application.Services
             return mapper.Map<IEnumerable<InventoryBookRecordListDTO>>(await (repository as IInventoryBookRepository).GetInventoryBookRecordsAsync(mapper.Map<InventoryBook>(inventoryBookDTO)));
         }
 
-        public async Task<IEnumerable<InventoryItemDTO>> GetInventoryItemsAsync(InventoryBookSimpleDTO inventoryBookDTO)
+        public async Task<IEnumerable<InventoryItemSimpleDTO>> GetInventoryItemsAsync(InventoryBookSimpleDTO inventoryBookDTO)
         {
-            return mapper.Map<IEnumerable<InventoryItemDTO>>(await (repository as IInventoryBookRepository).GetInventoryItemsAsync(mapper.Map<InventoryBook>(inventoryBookDTO)));
+            return mapper.Map<IEnumerable<InventoryItemSimpleDTO>>(await (repository as IInventoryBookRepository).GetInventoryItemsAsync(mapper.Map<InventoryBook>(inventoryBookDTO)));
         }
     }
 }
