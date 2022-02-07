@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IFinancialIncomeRecordService : IAsyncService<FinancialIncomeRecordDTO, FinancialIncomeRecordDTO, FinancialIncomeRecordCreateDTO, FinancialIncomeRecordUpdateDTO>
+    public interface IFinancialIncomeRecordService : IAsyncService<FinancialIncomeRecordSimpleDTO, FinancialIncomeRecordDTO, FinancialIncomeRecordCreateDTO, FinancialIncomeRecordUpdateDTO>
     {
 
     }

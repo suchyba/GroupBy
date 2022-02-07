@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Design.Services
 {
-    public interface IProjectService : IAsyncService<ProjectDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>
+    public interface IProjectService : IAsyncService<ProjectSimpleDTO, ProjectDTO, ProjectCreateDTO, ProjectUpdateDTO>
     {
-        public Task<IEnumerable<FinancialRecordSimpleDTO>> GetRelatedFinancialRecordsAsync(ProjectDTO project);
+        public Task<IEnumerable<FinancialRecordSimpleDTO>> GetRelatedFinancialRecordsAsync(ProjectSimpleDTO project);
     }
 }

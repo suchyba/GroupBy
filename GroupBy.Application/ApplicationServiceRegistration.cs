@@ -81,10 +81,10 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<AgreementDTO>, AgreementValidator>();
             services.AddScoped<IValidator<AgreementCreateDTO>, AgreementCreateValidator>();
 
-            services.AddScoped<IValidator<RankDTO>, RankValidator>();
+            services.AddScoped<IValidator<RankSimpleDTO>, RankValidator>();
             services.AddScoped<IValidator<RankCreateDTO>, RankCreateValidator>();
 
-            services.AddScoped<IValidator<PositionDTO>, PositionValidator>();
+            services.AddScoped<IValidator<PositionSimpleDTO>, PositionValidator>();
             services.AddScoped<IValidator<PositionCreateDTO>, PositionCreateValidator>();
 
             services.AddScoped<IValidator<InventoryItemDTO>, InventoryItemValidator>();
@@ -102,14 +102,14 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<InventoryBookRecordCreateDTO>, InventoryBookRecordCreateValidator>();
             services.AddScoped<IValidator<InventoryBookRecordUpdateDTO>, InventoryBookRecordUpdateValidator>();
 
-            services.AddScoped<IValidator<ProjectDTO>, ProjectValidator>();
+            services.AddScoped<IValidator<ProjectSimpleDTO>, ProjectValidator>();
             services.AddScoped<IValidator<ProjectCreateDTO>, ProjectCreateValidator>();
             services.AddScoped<IValidator<ProjectUpdateDTO>, ProjectUpdateValidator>();
 
             services.AddScoped<IValidator<InventoryItemSourceDTO>, InventoryItemSourceValidator>();
             services.AddScoped<IValidator<InventoryItemSourceCreateDTO>, InventoryItemSourceCreateValidator>();
 
-            services.AddScoped<IValidator<AccountingDocumentDTO>, AccountingDocumentValidator>();
+            services.AddScoped<IValidator<AccountingDocumentSimpleDTO>, AccountingDocumentValidator>();
             services.AddScoped<IValidator<AccountingDocumentCreateDTO>, AccountingDocumentCreateValidator>();
             
             services.AddScoped<IValidator<ResolutionCreateDTO>, ResolutionCreateValidator>();

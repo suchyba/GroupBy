@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.DTO.Rank
 {
-    public class RankDTO
+    public class RankSimpleDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public RankSimpleDTO HigherRank { get; set; }
+        public int? HigherRankId { get; set; }
     }
 }

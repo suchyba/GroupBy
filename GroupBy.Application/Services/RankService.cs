@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class RankService : AsyncService<Rank, RankDTO, RankDTO, RankCreateDTO, RankDTO>, IRankService
+    public class RankService : AsyncService<Rank, RankSimpleDTO, RankDTO, RankCreateDTO, RankSimpleDTO>, IRankService
     {
         public RankService(IRankRepository repository, IMapper mapper, 
-            IValidator<RankDTO> validator, IValidator<RankCreateDTO> createValidator) : base(repository, mapper, validator, createValidator)
+            IValidator<RankSimpleDTO> validator, IValidator<RankCreateDTO> createValidator) : base(repository, mapper, validator, createValidator)
         {
 
         }

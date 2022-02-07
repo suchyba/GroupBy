@@ -101,6 +101,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("members/add/{groupId}/{volunteerId}", Name = "AddMember")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> AddMemberAsync(int groupId, int volunteerId)
         {
             try
@@ -110,6 +111,10 @@ namespace GroupBy.Web.API.Controllers
             catch (NotFoundException e)
             {
                 return NotFound(new { e.Key, e.Message });
+            }
+            catch(BadRequestException e)
+            {
+                return BadRequest(e.Message);
             }
             return NoContent();
         }

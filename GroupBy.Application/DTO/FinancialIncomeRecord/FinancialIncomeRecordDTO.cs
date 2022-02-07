@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Application.DTO.Project;
+using System;
 
 namespace GroupBy.Application.DTO.FinancialIncomeRecord
 {
@@ -18,5 +17,8 @@ namespace GroupBy.Application.DTO.FinancialIncomeRecord
         public decimal Total { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
+        public ProjectSimpleDTO RelatedProject { get; set; }
+        public AccountingDocumentSimpleDTO RelatedDocument { get; set; }
+        public AccountingBookSimpleDTO Book { get; set; }
     }
 }

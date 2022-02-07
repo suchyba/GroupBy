@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
-    public class AccountingDocumentService : AsyncService<AccountingDocument, AccountingDocumentDTO, AccountingDocumentDTO, AccountingDocumentCreateDTO, AccountingDocumentDTO>, IAccountingDocumentService
+    public class AccountingDocumentService : AsyncService<AccountingDocument, AccountingDocumentSimpleDTO, AccountingDocumentDTO, AccountingDocumentCreateDTO, AccountingDocumentSimpleDTO>, IAccountingDocumentService
     {
         public AccountingDocumentService(
             IAccountingDocumentRepository repository, 
-            IMapper mapper, IValidator<AccountingDocumentDTO> updateValidator, 
+            IMapper mapper, IValidator<AccountingDocumentSimpleDTO> updateValidator, 
             IValidator<AccountingDocumentCreateDTO> createValidator) 
             : base(repository, mapper, updateValidator, createValidator)
         {

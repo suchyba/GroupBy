@@ -26,18 +26,18 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllFinancialIncomeRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<FinancialIncomeRecordDTO>>> GetAllAsync()
+        public async Task<ActionResult<List<FinancialIncomeRecordSimpleDTO>>> GetAllAsync()
         {
             return Ok(await FinancialIncomeRecordService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetFinancialIncomeRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<FinancialIncomeRecordDTO>> GetAsync(int id)
+        public async Task<ActionResult<FinancialIncomeRecordSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                var FinancialIncomeRecord = await FinancialIncomeRecordService.GetAsync(new FinancialIncomeRecordDTO { Id = id });
+                var FinancialIncomeRecord = await FinancialIncomeRecordService.GetAsync(new FinancialIncomeRecordSimpleDTO { Id = id });
                 return Ok(FinancialIncomeRecord);
             }
             catch (NotFoundException e)
@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "AddFinancialIncomeRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<FinancialIncomeRecordDTO>> CreateAsync([FromBody] FinancialIncomeRecordCreateDTO model)
+        public async Task<ActionResult<FinancialIncomeRecordSimpleDTO>> CreateAsync([FromBody] FinancialIncomeRecordCreateDTO model)
         {
             try
             {
@@ -77,7 +77,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await FinancialIncomeRecordService.DeleteAsync(new FinancialIncomeRecordDTO { Id = id });
+                await FinancialIncomeRecordService.DeleteAsync(new FinancialIncomeRecordSimpleDTO { Id = id });
 
                 return NoContent();
             }
@@ -94,7 +94,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<FinancialIncomeRecordDTO>> Edit([FromBody] FinancialIncomeRecordUpdateDTO model)
+        public async Task<ActionResult<FinancialIncomeRecordSimpleDTO>> Edit([FromBody] FinancialIncomeRecordUpdateDTO model)
         {
             try
             {

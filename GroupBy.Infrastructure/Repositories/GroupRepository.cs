@@ -20,13 +20,21 @@ namespace GroupBy.Data.Repositories
 
         public async Task AddMemberAsync(int groupId, int volunteerId)
         {
-            var group = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == groupId);
+            var group = await context.Set<Group>()
+                .Include(g => g.Members)
+                .Include(g => g.RelatedProject)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
             if (group == null)
                 throw new NotFoundException("Group", groupId);
 
             var volunteer = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == volunteerId);
             if (volunteer == null)
                 throw new NotFoundException("Volunteer", volunteer);
+
+            if (group.RelatedProject != null && !group.RelatedProject.Active)
+            {
+                throw new BadRequestException("Cannot add member to the inactive project");
+            }
 
             group.Members.Add(volunteer);
 

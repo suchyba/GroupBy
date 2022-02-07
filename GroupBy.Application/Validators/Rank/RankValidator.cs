@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.Validators.Rank
 {
-    public class RankValidator : AbstractValidator<RankDTO>
+    public class RankValidator : AbstractValidator<RankSimpleDTO>
     {
         public RankValidator()
         {

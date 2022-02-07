@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupBy.Application.DTO.Rank;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,6 @@ namespace GroupBy.Application.DTO.Volunteer
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public bool Confirmed { get; set; }
-        public string RankName { get; set; }
+        public RankSimpleDTO Rank { get; set; }
     }
 }

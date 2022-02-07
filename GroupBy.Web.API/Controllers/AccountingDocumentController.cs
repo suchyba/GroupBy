@@ -25,7 +25,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllAccountingDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccountingDocumentDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAllAsync()
         {
             return Ok(await accountingDocumentService.GetAllAsync());
         }
@@ -33,11 +33,11 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentDTO>> GetAsync(int id)
+        public async Task<ActionResult<AccountingDocumentSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await accountingDocumentService.GetAsync(new AccountingDocumentDTO { Id = id }));
+                return Ok(await accountingDocumentService.GetAsync(new AccountingDocumentSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -52,7 +52,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentDTO>> UpdateAsync(AccountingDocumentDTO DTO)
+        public async Task<ActionResult<AccountingDocumentSimpleDTO>> UpdateAsync(AccountingDocumentSimpleDTO DTO)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentDTO>> CreateAsync(AccountingDocumentCreateDTO DTO)
+        public async Task<ActionResult<AccountingDocumentSimpleDTO>> CreateAsync(AccountingDocumentCreateDTO DTO)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await accountingDocumentService.DeleteAsync(new AccountingDocumentDTO { Id = id });
+                await accountingDocumentService.DeleteAsync(new AccountingDocumentSimpleDTO { Id = id });
             }
             catch (NotFoundException e)
             {
