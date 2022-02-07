@@ -22,5 +22,10 @@ namespace GroupBy.Application.Services
         {
             return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
         }
+
+        public async Task<IEnumerable<GroupSimpleDTO>> GetOwnedGroupsAsync(int volunteerId)
+        {
+            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedGroupsAsync(volunteerId));
+        }
     }
 }
