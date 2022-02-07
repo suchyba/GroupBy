@@ -107,8 +107,6 @@ namespace GroupBy.Application.Profiles
             CreateMap<ProjectCreateDTO, Project>()
                 .ForMember(dest => dest.ParentGroup, opt => opt.MapFrom(
                     src => new Group { Id = src.ParentGroupId }))
-                .ForMember(dest => dest.ProjectGroup, opt => opt.MapFrom(
-                    src => src.ProjectGroupId.HasValue ? new Group { Id = src.ProjectGroupId.Value } : null))
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(
                     src => new Volunteer { Id = src.OwnerId }));
             CreateMap<ProjectUpdateDTO, Project>()

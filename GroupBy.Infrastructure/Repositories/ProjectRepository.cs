@@ -2,6 +2,7 @@
 using GroupBy.Application.Exceptions;
 using GroupBy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace GroupBy.Data.Repositories
 {
     public class ProjectRepository : AsyncRepository<Project>, IProjectRepository
     {
-        public ProjectRepository(DbContext context) : base(context)
-        {
+        private readonly IGroupRepository groupRepository;
 
+        public ProjectRepository(DbContext context, IGroupRepository groupRepository) : base(context)
+        {
+            this.groupRepository = groupRepository;
         }
 
         public override async Task<Project> CreateAsync(Project domain)
@@ -29,18 +32,30 @@ namespace GroupBy.Data.Repositories
             if (domain.ParentGroup == null)
                 throw new NotFoundException("Group", parentGroupId);
 
-            if (domain.Independent)
-            {
-                int projectGroupId = domain.ProjectGroup.Id;
-                domain.ProjectGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == projectGroupId);
-                if (domain.ProjectGroup == null)
-                    throw new NotFoundException("Group", projectGroupId);
-            }
-            else
-                domain.ProjectGroup = null;
+            EntityEntry<Project> project = null;
 
-            var project = await context.Set<Project>().AddAsync(domain);
-            await context.SaveChangesAsync();
+            using (var transaction = context.Database.BeginTransaction())
+            {
+                if (domain.Independent)
+                {
+                    var projectGroup = await groupRepository.CreateAsync(new Group
+                    {
+                        Description = $"This is a group of {domain.Name} project",
+                        Name = domain.Name + " group",
+                        ParentGroup = domain.ParentGroup,
+                        Owner = domain.Owner
+                    });
+
+                    domain.ProjectGroup = projectGroup;
+                }
+                else
+                    domain.ProjectGroup = null;
+
+                project = await context.Set<Project>().AddAsync(domain);
+
+                await context.SaveChangesAsync();
+                transaction.Commit();
+            }
             return project.Entity;
         }
 
@@ -66,7 +81,7 @@ namespace GroupBy.Data.Repositories
             project.EndDate = domain.EndDate;
             project.Independent = domain.Independent;
             project.Name = domain.Name;
-            
+
             int projectOwnerId = domain.Owner.Id;
             project.Owner = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == projectOwnerId);
             if (project.Owner == null)

@@ -48,34 +48,12 @@ namespace GroupBy.Application.Validators.Project
                 .OverridePropertyName("OwnerId")
                 .WithMessage("Owner must be a member of the parent group.");
 
-            RuleFor(p => p)
-                .MustAsync(OwnerInProjectGroup)
-                .When(p => p.ProjectGroupId.HasValue && p.OwnerId > 0)
-                .WithMessage("Owner must be a member of the project group");
-
             RuleFor(p => p.ParentGroupId)
                 .GreaterThan(0).WithMessage("{PropertyName} is required.");
-
-            RuleFor(p => p.ProjectGroupId)
-                .GreaterThan(0)
-                .When(p => p.ProjectGroupId.HasValue)
-                .WithMessage("{PropertyName} must be greater than 0.")
-                .NotNull()
-                .When(p => p.Independent)
-                .WithMessage("{PropertyName} is required.")
-                .NotEqual(p => p.ParentGroupId)
-                .When(p => p.ProjectGroupId.HasValue)
-                .WithMessage("Project and parent groups cannot be the same ones.");
-
-
         }
         private async Task<bool> OwnerInParentGroup(ProjectCreateDTO project, CancellationToken token)
         {
             return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
-        }
-        private async Task<bool> OwnerInProjectGroup(ProjectCreateDTO project, CancellationToken token)
-        {
-            return await groupRepository.IsMember(project.ProjectGroupId.Value, project.OwnerId);
         }
     }
 }
