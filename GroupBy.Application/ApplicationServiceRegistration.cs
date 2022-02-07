@@ -87,7 +87,7 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<PositionSimpleDTO>, PositionValidator>();
             services.AddScoped<IValidator<PositionCreateDTO>, PositionCreateValidator>();
 
-            services.AddScoped<IValidator<InventoryItemDTO>, InventoryItemValidator>();
+            services.AddScoped<IValidator<InventoryItemSimpleDTO>, InventoryItemValidator>();
             services.AddScoped<IValidator<InventoryItemCreateDTO>, InventoryItemCreateValidator>();
 
             services.AddScoped<IValidator<InventoryBookSimpleDTO>, InventoryBookValidator>();

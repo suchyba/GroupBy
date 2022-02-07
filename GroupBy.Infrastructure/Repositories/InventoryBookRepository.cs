@@ -19,9 +19,12 @@ namespace GroupBy.Data.Repositories
         public override async Task<InventoryBook> CreateAsync(InventoryBook domain)
         {
             var groupId = domain.RelatedGroup.Id;
-            domain.RelatedGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == groupId);
+            domain.RelatedGroup = await context.Set<Group>().Include(g => g.InventoryBook).FirstOrDefaultAsync(g => g.Id == groupId);
             if (domain.RelatedGroup == null)
                 throw new NotFoundException("Group", groupId);
+
+            if (domain.RelatedGroup.InventoryBook != null)
+                throw new BadRequestException("Inventory book exists in this group");
 
             var createdBook = await context.Set<InventoryBook>().AddAsync(domain);
             await context.SaveChangesAsync();

@@ -38,5 +38,16 @@ namespace GroupBy.Data.Repositories
             await context.SaveChangesAsync();
             return item;
         }
+
+        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(int itemId)
+        {
+            InventoryItem item = await context.Set<InventoryItem>()
+                .Include(i => i.History)
+                .FirstOrDefaultAsync(i => i.Id == itemId);
+            if (item == null)
+                throw new NotFoundException("InventoryItem", itemId);
+
+            return item.History;
+        }
     }
 }

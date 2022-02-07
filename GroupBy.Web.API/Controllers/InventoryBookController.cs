@@ -62,7 +62,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/items", Name = "GetInventoryItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryItemDTO>>> GetInventoryItemsAsync(int id)
+        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetInventoryItemsAsync(int id)
         {
             try
             {

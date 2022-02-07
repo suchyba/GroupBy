@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.DTO.InventoryItem
 {
-    public class InventoryItemDTO
+    public class InventoryItemSimpleDTO
     {
         public int Id { get; set; }
         public string Symbol { get; set; }

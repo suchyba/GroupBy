@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using GroupBy.Application.DTO.InventoryBookRecord;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -26,7 +27,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "CreateInventoryItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryItemDTO>> CreateAsync([FromBody] InventoryItemCreateDTO model)
+        public async Task<ActionResult<InventoryItemSimpleDTO>> CreateAsync([FromBody] InventoryItemCreateDTO model)
         {
             try
             {
@@ -36,21 +37,25 @@ namespace GroupBy.Web.API.Controllers
             {
                 return BadRequest(e.ValidationErrors);
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpGet("", Name = "GetAllInventoryItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryItemDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetAllAsync()
         {
             return Ok(await inventoryItemService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetInventoryItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemDTO>> GetAsync(int id)
+        public async Task<ActionResult<InventoryItemSimpleDTO>> GetAsync(int id)
         {
             try
             {
-                return Ok(await inventoryItemService.GetAsync(new InventoryItemDTO { Id = id }));
+                return Ok(await inventoryItemService.GetAsync(new InventoryItemSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {
@@ -61,7 +66,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemDTO>> UpdateAsync([FromBody] InventoryItemDTO model)
+        public async Task<ActionResult<InventoryItemSimpleDTO>> UpdateAsync([FromBody] InventoryItemSimpleDTO model)
         {
             try
             {
@@ -71,7 +76,7 @@ namespace GroupBy.Web.API.Controllers
             {
                 return NotFound(new { Id = e.Key, e.Message });
             }
-            catch(ValidationException e)
+            catch (ValidationException e)
             {
                 return BadRequest(e.ValidationErrors);
             }
@@ -84,7 +89,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await inventoryItemService.DeleteAsync(new InventoryItemDTO { Id = id });
+                await inventoryItemService.DeleteAsync(new InventoryItemSimpleDTO { Id = id });
                 return NoContent();
             }
             catch (NotFoundException e)
@@ -94,6 +99,20 @@ namespace GroupBy.Web.API.Controllers
             catch (DeleteNotPermittedException e)
             {
                 return Conflict(e.Message);
+            }
+        }
+        [HttpGet("{id}/history", Name = "GetInventoryItemHistory")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetHistoryAsync(int id)
+        {
+            try
+            {
+                return Ok(await inventoryItemService.GetInventoryItemHistoryAsync(id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
     }
