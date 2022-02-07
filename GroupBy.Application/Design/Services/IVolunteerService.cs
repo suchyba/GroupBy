@@ -1,4 +1,5 @@
 ﻿using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,5 +10,6 @@ namespace GroupBy.Application.Design.Services
     {
         public Task<IEnumerable<GroupSimpleDTO>> GetGroupsAsync(int volunteerId);
         public Task<IEnumerable<GroupSimpleDTO>> GetOwnedGroupsAsync(int volunteerId);
+        public Task<IEnumerable<ProjectSimpleDTO>> GetOwnedProjectsAsync(int volunteerId);
     }
 }

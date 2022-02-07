@@ -3,6 +3,7 @@ using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
 using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace GroupBy.Application.Services
         public async Task<IEnumerable<GroupSimpleDTO>> GetOwnedGroupsAsync(int volunteerId)
         {
             return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedGroupsAsync(volunteerId));
+        }
+
+        public async Task<IEnumerable<ProjectSimpleDTO>> GetOwnedProjectsAsync(int volunteerId)
+        {
+            return mapper.Map<IEnumerable<ProjectSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedProjectsAsync(volunteerId));
         }
     }
 }

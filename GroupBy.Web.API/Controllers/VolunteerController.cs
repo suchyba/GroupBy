@@ -123,5 +123,19 @@ namespace GroupBy.Web.API.Controllers
                 return NotFound(new { Id = e.Key, e.Message });
             }
         }
+        [HttpGet("{id}/ownedprojects", Name = "GetProjectsOwnedByVolunteer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedProjectsAsync(int id)
+        {
+            try
+            {
+                return Ok(await volunteerService.GetOwnedProjectsAsync(id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
     }
 }
