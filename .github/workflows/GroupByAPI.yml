@@ -48,9 +48,7 @@ jobs:
     - name: Install EntityFramework Tool
       run: dotnet tool install --global dotnet-ef
     - name: Update database
-      run: |
-        dotnet tool restore --tool-manifest dotnet-ef
-        dotnet ef database update -p GroupBy.Data -s GroupBy.Web.API --no-build
+      run: dotnet ef database update -p GroupBy.Data -s GroupBy.Web.API --no-build
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
