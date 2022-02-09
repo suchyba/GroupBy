@@ -45,10 +45,6 @@ jobs:
       working-directory: ${{ env.WORKING_DIRECTORY }}
     - name: Generate Open API Specification Document
       run: swagger tofile --output "${{ env.API_IMPORT_SPECIFICATION_PATH }}" "${{ env.API_IMPORT_DLL }}" "${{ env.API_IMPORT_VERSION }}"
-    - name: Install EntityFramework Tool
-      run: dotnet tool install --global dotnet-ef
-    - name: Update database
-      run: dotnet ef database update -p GroupBy.Data -s GroupBy.Web.API --no-build
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
       with:
