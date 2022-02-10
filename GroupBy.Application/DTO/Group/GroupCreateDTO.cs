@@ -12,6 +12,5 @@ namespace GroupBy.Application.DTO.Group
         public string Description { get; set; }
         public int? ParentGroupId { get; set; }
         public int OwnerId { get; set; }
-        public int? ProjectId { get; set; }
     }
 }

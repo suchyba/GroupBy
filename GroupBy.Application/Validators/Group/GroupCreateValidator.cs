@@ -11,8 +11,6 @@ namespace GroupBy.Application.Validators.Group
                 .NotEmpty().WithMessage("{PropertyName} is reqired.");
             RuleFor(g => g.OwnerId)
                 .GreaterThan(0).WithMessage("{PropertyName} is required.");
-            RuleFor(g => g.ProjectId)
-                .GreaterThan(0).When(g => g.ProjectId != null).WithMessage("{PropertyName} has to be greater than 0.");
             RuleFor(g => g.ParentGroupId)
                 .GreaterThan(0).When(g => g.ParentGroupId != null).WithMessage("{PropertyName} has to be greater than 0.");
             RuleFor(g => g.ParentGroupId)
