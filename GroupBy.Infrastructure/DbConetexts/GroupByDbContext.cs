@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Data.DbContexts
 {
-    public class GroupByDbContext : IdentityDbContext<IdentityModel>
+    public class GroupByDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<FinancialRecord> FinancialRecords { get; set; }
         public DbSet<FinancialIncomeRecord> FinancialIncomeRecords { get; set; }
@@ -33,19 +33,12 @@ namespace GroupBy.Data.DbContexts
         public DbSet<RegistrationCode> RegistrationCodes { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
-        public DbSet<IdentityModel> Identities { get; set; }
-        /*public GroupByDbContext() : base()
-        {
-
-        }*/
+        public DbSet<ApplicationUser> Identities { get; set; }
+        
         public GroupByDbContext(DbContextOptions<GroupByDbContext> options) : base(options)
         {
 
         }
-        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=GroupBy;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-        }*/
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountingBook>()

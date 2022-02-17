@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
-    public class IdentityModel : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         public int VolunteerId { get; set; }
         [Required]

@@ -9,11 +9,7 @@ namespace GroupBy.Domain.Entities
     public class RegistrationCode
     {
         [Key]
-        public int Id { get; set; }
-        /// <summary>
-        /// The cliphered key
-        /// </summary>
-        public string Key { get; set; }
+        public string Code { get; set; }
         /// <summary>
         /// Name for easier identification
         /// </summary>
