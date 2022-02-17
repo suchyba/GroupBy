@@ -2,6 +2,7 @@
 using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.Agreement;
+using GroupBy.Application.DTO.Authentication;
 using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.FinancialIncomeRecord;
 using GroupBy.Application.DTO.FinancialOutcomeRecord;
@@ -14,6 +15,7 @@ using GroupBy.Application.DTO.InventoryItemSource;
 using GroupBy.Application.DTO.Position;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Rank;
+using GroupBy.Application.DTO.RegistrationCode;
 using GroupBy.Application.DTO.Resolution;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
@@ -128,7 +130,7 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(
                     src => new Group { Id = src.GroupId }));
 
-            CreateMap<Resolution, ResolutionDTO>().ReverseMap();                
+            CreateMap<Resolution, ResolutionDTO>().ReverseMap();
             CreateMap<ResolutionCreateDTO, Resolution>()
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(
                     src => new Group { Id = src.GroupId }))
@@ -167,6 +169,32 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
             CreateMap<FinancialIncomeRecordUpdateDTO, FinancialIncomeRecord>();
+
+            CreateMap<RegistrationCode, RegistrationCodeSimpleDTO>().ReverseMap();
+            CreateMap<RegistrationCode, RegistrationCodeFullDTO>();
+            CreateMap<RegistrationCodeCreateDTO, RegistrationCode>()
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(
+                    src => new Volunteer { Id = src.OwnerId }))
+                .ForMember(dest => dest.TargetGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.TargetGroupId }))
+                .ForMember(dest => dest.TargetRank, opt => opt.MapFrom(
+                    src => src.TargetRankId.HasValue ? new Rank { Id = src.TargetRankId.Value } : null));
+            CreateMap<RegistrationCodeUpdateDTO, RegistrationCode>()
+                .ForMember(dest => dest.TargetGroup, opt => opt.MapFrom(
+                    src => new Group { Id = src.TargetGroupId }))
+                .ForMember(dest => dest.TargetRank, opt => opt.MapFrom(
+                    src => src.TargetRankId.HasValue ? new Rank { Id = src.TargetRankId.Value } : null));
+
+            CreateMap<RegisterDTO, ApplicationUser>()
+                .ForMember(dest => dest.RelatedVolunteer, opt => opt.MapFrom(
+                    src => new Volunteer
+                    {
+                        FirstNames = src.RelatedVolunteerFirstNames,
+                        LastName = src.RelatedVolunteerLastName,
+                        Address = src.RelatedVolunteerAddress,
+                        BirthDate = src.RelatedVolunteerBirthDate,
+                        PhoneNumber = src.RelatedVolunteerPhoneNumber                        
+                    }));
         }
     }
 }

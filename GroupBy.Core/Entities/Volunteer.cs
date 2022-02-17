@@ -88,7 +88,7 @@ namespace GroupBy.Domain.Entities
         /// Agreement accepted by this volunteer <seealso cref="Agreement"/>
         /// </summary>
         public virtual IEnumerable<Agreement> Agreements { get; set; }
-        public virtual IdentityModel Identity { get; set; }
+        public virtual ApplicationUser Identity { get; set; }
         public virtual IEnumerable<Remainder> Remainders { get; set; }
     }
 }

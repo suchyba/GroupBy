@@ -8,9 +8,11 @@ using System.Net.Mime;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.AccountingBook;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GroupBy.Web.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]

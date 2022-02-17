@@ -35,6 +35,9 @@ using GroupBy.Application.Validators.FinancialOutcomeRecord;
 using GroupBy.Application.DTO.FinancialOutcomeRecord;
 using GroupBy.Application.Validators.FinancialIncomeRecord;
 using GroupBy.Application.DTO.FinancialIncomeRecord;
+using Microsoft.Extensions.Configuration;
+using GroupBy.Application.DTO.RegistrationCode;
+using GroupBy.Application.Validators.RegistrationCode;
 
 namespace GroupBy.Application
 {
@@ -62,6 +65,9 @@ namespace GroupBy.Application
             services.AddScoped<IResolutionService, ResolutionService>();
             services.AddScoped<IFinancialOutcomeRecordService, FinancialOutcomeRecordService>();
             services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
+            services.AddScoped<IRegistrationCodeService, RegistrationCodeService>();
+            
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             return services;
         }
@@ -120,6 +126,9 @@ namespace GroupBy.Application
             
             services.AddScoped<IValidator<FinancialIncomeRecordCreateDTO>, FinancialIncomeRecordCreateValidator>();
             services.AddScoped<IValidator<FinancialIncomeRecordUpdateDTO>, FinancialIncomeRecordUpdateValidator>();
+
+            services.AddScoped<IValidator<RegistrationCodeCreateDTO>, RegistrationCodeCreateValidator>();
+            services.AddScoped<IValidator<RegistrationCodeUpdateDTO>, RegistrationCodeUpdateValidator>();
         }
     }
 }

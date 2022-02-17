@@ -1,15 +1,12 @@
 using GroupBy.Application;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.Services;
 using GroupBy.Data;
-using GroupBy.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace GroupBy.Web.API
 {
@@ -29,6 +26,7 @@ namespace GroupBy.Web.API
 
             services.AddDataServices(configuration);
             services.AddApplicationServices();
+            services.AddAuthenticationServices(configuration);
             services.AddControllers();
         }
 
@@ -40,6 +38,32 @@ namespace GroupBy.Web.API
                 {
                     Version = "1.0.0",
                     Title = "GroupBy API"
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = @"JWT Authorization header using the Bearer scheme.",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            In = ParameterLocation.Header,
+                            BearerFormat = "JWT"
+                        },
+                        new List<string>()
+                    }
                 });
             });
         }
@@ -55,6 +79,7 @@ namespace GroupBy.Web.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -62,9 +87,11 @@ namespace GroupBy.Web.API
                 c.SwaggerEndpoint("/swagger/groupbydoc/swagger.json", "GroupBy API");
             });
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization();
             });
         }
     }

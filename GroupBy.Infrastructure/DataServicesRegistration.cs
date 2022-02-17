@@ -4,6 +4,8 @@ using GroupBy.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using GroupBy.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace GroupBy.Data
 {
@@ -13,6 +15,17 @@ namespace GroupBy.Data
         {
             services.AddDbContext<DbContext, GroupByDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+            })
+                .AddEntityFrameworkStores<GroupByDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IAccountingBookRepository, AccountingBookRepository>();
@@ -30,6 +43,7 @@ namespace GroupBy.Data
             services.AddScoped<IResolutionRepository, ResolutionRepository>();
             services.AddScoped<IFinancialOutcomeRecordRepository, FinancialOutcomeRecordRepository>();
             services.AddScoped<IFinancialIncomeRecordRepository, FinancialIncomeRecordRepository>();
+            services.AddScoped<IRegistrationCodeRepository, RegistrationCodeRepository>();
 
             return services;
         }
