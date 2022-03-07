@@ -18,7 +18,7 @@ env:
   SWASHBUCKLE_DOTNET_CORE_VERSION: 3.1.x
   API_IMPORT_SPECIFICATION_PATH: GroupBy.Web.API/publish/swagger.json
   API_IMPORT_DLL: GroupBy.Web.API/publish/GroupBy.Web.API.dll
-  API_IMPORT_VERSION: v1
+  API_IMPORT_VERSION: groupbydoc
 jobs:
   build:
     runs-on: ubuntu-latest
