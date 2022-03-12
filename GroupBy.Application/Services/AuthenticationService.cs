@@ -99,7 +99,8 @@ namespace GroupBy.Application.Services
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("VolunteerId", user.VolunteerId.ToString())
             };
             foreach (var role in userRoles)
             {
