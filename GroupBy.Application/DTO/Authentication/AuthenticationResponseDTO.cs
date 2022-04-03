@@ -11,5 +11,6 @@ namespace GroupBy.Application.DTO.Authentication
     {
         public string Email { get; set; }
         public string Token { get; set; }
+        public int VolunteerId { get; set; }
     }
 }
