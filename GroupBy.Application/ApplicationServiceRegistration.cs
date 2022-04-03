@@ -38,6 +38,8 @@ using GroupBy.Application.DTO.FinancialIncomeRecord;
 using Microsoft.Extensions.Configuration;
 using GroupBy.Application.DTO.RegistrationCode;
 using GroupBy.Application.Validators.RegistrationCode;
+using GroupBy.Application.Validators.Authentication;
+using GroupBy.Application.DTO.Authentication;
 
 namespace GroupBy.Application
 {
@@ -129,6 +131,8 @@ namespace GroupBy.Application
 
             services.AddScoped<IValidator<RegistrationCodeCreateDTO>, RegistrationCodeCreateValidator>();
             services.AddScoped<IValidator<RegistrationCodeUpdateDTO>, RegistrationCodeUpdateValidator>();
+
+            services.AddScoped<IValidator<RegisterDTO>, RegisterValidator>();
         }
     }
 }

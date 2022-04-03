@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
 using GroupBy.Application.DTO.Authentication;
@@ -27,6 +28,7 @@ namespace GroupBy.Application.Services
         private readonly IRegistrationCodeRepository registrationCodeRepository;
         private readonly IGroupRepository groupRepository;
         private readonly IRankRepository rankRepository;
+        private readonly IValidator<RegisterDTO> registerValidator;
 
         public AuthenticationService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -35,7 +37,8 @@ namespace GroupBy.Application.Services
             IVolunteerRepository volunteerRepository,
             IRegistrationCodeRepository registrationCodeRepository,
             IGroupRepository groupRepository,
-            IRankRepository rankRepository)
+            IRankRepository rankRepository,
+            IValidator<RegisterDTO> registerValidator)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -45,6 +48,7 @@ namespace GroupBy.Application.Services
             this.registrationCodeRepository = registrationCodeRepository;
             this.groupRepository = groupRepository;
             this.rankRepository = rankRepository;
+            this.registerValidator = registerValidator;
         }
         public async Task<AuthenticationResponseDTO> LoginUserAsync(LoginDTO loginDTO)
         {
@@ -62,12 +66,17 @@ namespace GroupBy.Application.Services
             return new AuthenticationResponseDTO()
             {
                 Email = loginDTO.Email,
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken)
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                VolunteerId = user.VolunteerId
             };
         }
 
         public async Task RegisterUserAsync(RegisterDTO registerDTO)
         {
+            var validationResult = await registerValidator.ValidateAsync(registerDTO);
+            if (!validationResult.IsValid)
+                throw new Exceptions.ValidationException(validationResult);
+
             var user = await userManager.FindByEmailAsync(registerDTO.Email);
             if (user != null)
                 throw new BadRequestException("Account with this email address already exists");

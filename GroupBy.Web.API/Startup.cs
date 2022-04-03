@@ -28,6 +28,8 @@ namespace GroupBy.Web.API
             services.AddApplicationServices();
             services.AddAuthenticationServices(configuration);
             services.AddControllers();
+
+            services.AddCors();
         }
 
         private void AddSwagger(IServiceCollection services)
@@ -77,6 +79,11 @@ namespace GroupBy.Web.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(options =>
+                options.AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyHeader());
 
             app.UseRouting();
             app.UseAuthentication();
