@@ -1,8 +1,6 @@
 name: Build and deploy .NET Core application to linux webapp GroupByWebAPI with API Management Service GroupByWebAPIManagement
 on:
-  push:
-    branches:
-    - master
+  workflow_dispatch:
 env:
   AZURE_WEBAPP_NAME: GroupByWebAPI
   DOTNET_CORE_VERSION: 6.0.x
