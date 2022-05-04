@@ -12,6 +12,7 @@ namespace GroupBy.Application.DTO.FinancialRecord
         public DateTime Date { get; set; }
         public string Description { get; set; }
         public string RelatedDocumentName { get; set; }
+        public string RelatedProjectName { get; set; }
         public decimal? MembershipFee { get; set; }
         public decimal? ProgramFee { get; set; }
         public decimal? Dotation { get; set; }

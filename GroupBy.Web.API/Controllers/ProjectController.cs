@@ -33,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<ProjectDTO>> GetAsync(int id)
         {
             try
             {

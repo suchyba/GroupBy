@@ -7,6 +7,6 @@ namespace GroupBy.Application.Design.Services
 {
     public interface IAccountingBookService : IAsyncService<AccountingBookSimpleDTO, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookSimpleDTO>
     {
-        public Task<IEnumerable<FinancialRecordDTO>> GetFinancialRecordsAsync(AccountingBookSimpleDTO domain);
+        public Task<IEnumerable<FinancialRecordSimpleDTO>> GetFinancialRecordsAsync(AccountingBookSimpleDTO domain);
     }
 }

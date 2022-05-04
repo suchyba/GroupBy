@@ -9,6 +9,8 @@ using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.AccountingBook;
 using Microsoft.AspNetCore.Authorization;
+using GroupBy.Application.DTO.Project;
+using GroupBy.Application.DTO.AccountingDocument;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -47,7 +49,7 @@ namespace GroupBy.Web.API.Controllers
             }
             return Ok(group);
         }
-        [HttpGet("members/{id}", Name = "GetMembers")]
+        [HttpGet("{id}/members", Name = "GetMembers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<VolunteerSimpleDTO>>> GetMembersAsync(int id)
@@ -114,7 +116,7 @@ namespace GroupBy.Web.API.Controllers
             {
                 return NotFound(new { e.Key, e.Message });
             }
-            catch(BadRequestException e)
+            catch (BadRequestException e)
             {
                 return BadRequest(e.Message);
             }
@@ -180,6 +182,34 @@ namespace GroupBy.Web.API.Controllers
             try
             {
                 return Ok(await groupService.GetAccountingBooksAsync(id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+        [HttpGet("{id}/projects")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<ProjectSimpleDTO>>> GetProjectsAsync(int id)
+        {
+            try
+            {
+                return Ok(await groupService.GetProjectsAsync(id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+        [HttpGet("{id}/accountingDocuments")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id)
+        {
+            try
+            {
+                return Ok(await groupService.GetAccountingDocumentsAsync(id));
             }
             catch (NotFoundException e)
             {

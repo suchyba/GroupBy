@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{bookId}/{bookOrderNumberId}/records", Name = "GetFinancialRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<FinancialRecordDTO>>> GetFinancialRecordsAsync(int bookId, int bookOrderNumberId)
+        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetFinancialRecordsAsync(int bookId, int bookOrderNumberId)
         {
             try
             {

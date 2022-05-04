@@ -19,9 +19,9 @@ namespace GroupBy.Application.Services
 
         }
 
-        public async Task<IEnumerable<FinancialRecordDTO>> GetFinancialRecordsAsync(AccountingBookSimpleDTO domain)
+        public async Task<IEnumerable<FinancialRecordSimpleDTO>> GetFinancialRecordsAsync(AccountingBookSimpleDTO domain)
         {
-            return mapper.Map<IEnumerable<FinancialRecordDTO>>(await (repository as IAccountingBookRepository).GetFinancialRecordsAsync(mapper.Map<AccountingBook>(domain)));
+            return mapper.Map<IEnumerable<FinancialRecordSimpleDTO>>(await (repository as IAccountingBookRepository).GetFinancialRecordsAsync(mapper.Map<AccountingBook>(domain)));
         }
     }
 }

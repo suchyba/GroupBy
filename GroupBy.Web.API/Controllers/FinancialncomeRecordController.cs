@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("add", Name = "AddFinancialIncomeRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<FinancialIncomeRecordSimpleDTO>> CreateAsync([FromBody] FinancialIncomeRecordCreateDTO model)
+        public async Task<ActionResult<FinancialIncomeRecordDTO>> CreateAsync([FromBody] FinancialIncomeRecordCreateDTO model)
         {
             try
             {

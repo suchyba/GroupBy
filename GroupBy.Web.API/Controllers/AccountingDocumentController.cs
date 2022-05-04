@@ -33,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<AccountingDocumentDTO>> GetAsync(int id)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentSimpleDTO>> CreateAsync(AccountingDocumentCreateDTO DTO)
+        public async Task<ActionResult<AccountingDocumentSimpleDTO>> CreateAsync([FromBody] AccountingDocumentCreateDTO DTO)
         {
             try
             {

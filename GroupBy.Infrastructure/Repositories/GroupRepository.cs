@@ -64,6 +64,11 @@ namespace GroupBy.Data.Repositories
             return createdGroup.Entity;
         }
 
+        public async Task<IEnumerable<AccountingDocument>> GetAccountingDocumentsAsync(int groupId)
+        {
+            return (await GetAsync(new Group { Id = groupId })).Elements.Where(e => e is AccountingDocument).Select(e => (AccountingDocument)e);
+        }
+
         public override async Task<Group> GetAsync(Group domain)
         {
             Group g = await context.Set<Group>()
@@ -85,6 +90,11 @@ namespace GroupBy.Data.Repositories
                 throw new NotFoundException("Group", domain.Id);
 
             return g;
+        }
+
+        public async Task<IEnumerable<Project>> GetProjectsAsync(int groupId)
+        {
+            return (await GetAsync(new Group { Id = groupId })).ProjectsRealisedInGroup;
         }
 
         public async Task<IEnumerable<Group>> GetSubgroupsAsync(int groupId)

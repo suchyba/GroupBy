@@ -3,7 +3,9 @@ using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
 using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.Group;
+using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 using System.Collections.Generic;
@@ -32,6 +34,16 @@ namespace GroupBy.Application.Services
         public async Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(int groupId)
         {
             return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
+        }
+
+        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId)
+        {
+            return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await(repository as IGroupRepository).GetAccountingDocumentsAsync(groupId)));
+        }
+
+        public async Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId)
+        {
+            return mapper.Map<IEnumerable<ProjectSimpleDTO>>((await (repository as IGroupRepository).GetProjectsAsync(groupId)));
         }
 
         public async Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId)
