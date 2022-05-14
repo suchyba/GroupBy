@@ -16,6 +16,6 @@ namespace GroupBy.Application.Design.Services
         public Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId);
         public Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(int groupId);
         public Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId);
-        public Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId);
+        public Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId, int? projectId);
     }
 }

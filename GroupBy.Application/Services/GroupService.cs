@@ -36,9 +36,9 @@ namespace GroupBy.Application.Services
             return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
         }
 
-        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId)
+        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId, int? projectId)
         {
-            return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await(repository as IGroupRepository).GetAccountingDocumentsAsync(groupId)));
+            return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await(repository as IGroupRepository).GetAccountingDocumentsAsync(groupId, projectId)));
         }
 
         public async Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId)

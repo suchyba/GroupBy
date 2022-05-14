@@ -205,11 +205,11 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/accountingDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id)
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id, [FromQuery(Name = "project-id")] int? projectId)
         {
             try
             {
-                return Ok(await groupService.GetAccountingDocumentsAsync(id));
+                return Ok(await groupService.GetAccountingDocumentsAsync(id, projectId));
             }
             catch (NotFoundException e)
             {

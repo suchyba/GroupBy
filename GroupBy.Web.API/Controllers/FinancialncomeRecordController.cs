@@ -33,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetFinancialIncomeRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<FinancialIncomeRecordSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<FinancialIncomeRecordDTO>> GetAsync(int id)
         {
             try
             {

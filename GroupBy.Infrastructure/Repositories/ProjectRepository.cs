@@ -63,6 +63,7 @@ namespace GroupBy.Data.Repositories
         {
             var project = await context.Set<Project>()
                 .Include(p => p.RelatedFinnancialRecords)
+                    .ThenInclude(r => r.RelatedDocument)
                 .Include(p => p.ParentGroup)
                 .Include(p => p.ProjectGroup)
                 .Include(p => p.Owner)
