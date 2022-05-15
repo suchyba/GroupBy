@@ -69,13 +69,16 @@ namespace GroupBy.Data.Repositories
             Group group = await context.Set<Group>()
                 .Include(g => g.Elements)
                     .ThenInclude(e => e.RelatedProject)
+                .Include(g => g.ProjectsRealisedInGroup)
+                .Include(g => g.RelatedProject)
                 .FirstOrDefaultAsync(g => g.Id == groupId);
             if (group == null)
                 throw new NotFoundException("Group", groupId);
 
-            var documents = group.Elements
+            List<AccountingDocument> documents = group.Elements
                 .Where(e => e is AccountingDocument)
-                .Select(e => (AccountingDocument)e);
+                .Select(e => (AccountingDocument)e)
+                .ToList();
 
             if (projectId.HasValue)
             {
@@ -84,7 +87,9 @@ namespace GroupBy.Data.Repositories
                     .Contains(projectId.Value)
                     || group.RelatedProject.Id == projectId)
                 {
-                    documents = documents.Where(d => d.RelatedProject == null || d.RelatedProject.Id == projectId);
+                    documents = documents
+                        .Where(d => d.RelatedProject == null || d.RelatedProject.Id == projectId)
+                        .ToList();
                 }
                 else
                 {
