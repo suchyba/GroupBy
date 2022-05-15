@@ -56,7 +56,7 @@ namespace GroupBy.Data.Repositories
             record.Other = domain.Other;
             record.Salary = domain.Salary;
             record.Service = domain.Service;
-            record.Transport = domain.Transport;            
+            record.Transport = domain.Transport;
 
             await context.SaveChangesAsync();
             return record;
@@ -75,7 +75,8 @@ namespace GroupBy.Data.Repositories
             if (domain.RelatedProject != null)
             {
                 domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
-                if (domain.RelatedProject.ParentGroup != domain.Book.RelatedGroup)
+                if (domain.RelatedProject.ParentGroup != domain.Book.RelatedGroup
+                    && domain.RelatedProject.ProjectGroup != domain.Book.RelatedGroup)
                     throw new BadRequestException("Project and accounting book must be related with the same group");
             }
 
