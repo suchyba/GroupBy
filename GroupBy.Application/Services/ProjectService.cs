@@ -2,6 +2,7 @@
 using FluentValidation;
 using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
+using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.FinancialRecord;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Domain.Entities;
@@ -20,6 +21,11 @@ namespace GroupBy.Application.Services
             : base(repository, mapper, updateValidator, createValidator)
         {
 
+        }
+
+        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetRelatedAccountingDocumentsAsync(ProjectSimpleDTO project)
+        {
+            return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await (repository as IProjectRepository).GetRelatedAccountingDocumentsAsync(mapper.Map<Project>(project))));
         }
 
         public async Task<IEnumerable<FinancialRecordSimpleDTO>> GetRelatedFinancialRecordsAsync(ProjectSimpleDTO project)

@@ -73,6 +73,23 @@ namespace GroupBy.Data.Repositories
             return project;
         }
 
+        public async Task<IEnumerable<AccountingDocument>> GetRelatedAccountingDocumentsAsync(Project domain)
+        {
+            Project project = await context.Set<Project>()
+                .Include(p => p.RelatedElements)
+                .FirstOrDefaultAsync(p => p.Id == domain.Id);
+
+            if (project == null)
+                throw new NotFoundException("Project", domain.Id);
+
+            List<AccountingDocument> documents = project.RelatedElements
+                .Where(e => e is AccountingDocument)
+                .Select(e => (AccountingDocument)e)
+                .ToList();
+            
+            return documents;
+        }
+
         public override async Task<Project> UpdateAsync(Project domain)
         {
             Project project = await GetAsync(domain);

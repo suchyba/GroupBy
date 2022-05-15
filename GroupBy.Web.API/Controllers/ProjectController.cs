@@ -1,4 +1,5 @@
 ﻿using GroupBy.Application.Design.Services;
+using GroupBy.Application.DTO.AccountingDocument;
 using GroupBy.Application.DTO.FinancialRecord;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.Exceptions;
@@ -110,6 +111,20 @@ namespace GroupBy.Web.API.Controllers
             try
             {
                 return Ok(await service.GetRelatedFinancialRecordsAsync(new ProjectSimpleDTO { Id = id }));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+        [HttpGet("{id}/accountingDocuments", Name = "GetAccountingDocumentsRelatedToProject")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id)
+        {
+            try
+            {
+                return Ok(await service.GetRelatedAccountingDocumentsAsync(new ProjectSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {

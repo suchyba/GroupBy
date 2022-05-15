@@ -63,5 +63,9 @@ namespace GroupBy.Domain.Entities
         /// The list of financial records related with this project <seealso cref="FinancialRecord"/>
         /// </summary>
         public virtual IEnumerable<FinancialRecord> RelatedFinnancialRecords { get; set; }
+        /// <summary>
+        /// The list of elements related with this project <seealso cref="Element"/>
+        /// </summary>
+        public virtual IEnumerable<Element> RelatedElements { get; set; }
     }
 }

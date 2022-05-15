@@ -34,7 +34,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("VolunteersAcceptedId");
 
-                    b.ToTable("AgreementVolunteer");
+                    b.ToTable("AgreementVolunteer", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.AccountingBook", b =>
@@ -58,7 +58,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("RelatedGroupId");
 
-                    b.ToTable("AccountingBooks");
+                    b.ToTable("AccountingBooks", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Agreement", b =>
@@ -74,7 +74,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Agreements");
+                    b.ToTable("Agreements", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.ApplicationUser", b =>
@@ -176,7 +176,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("RelatedProjectId");
 
-                    b.ToTable("Elements");
+                    b.ToTable("Elements", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Element");
                 });
@@ -219,7 +219,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("BookId", "BookOrderNumberId");
 
-                    b.ToTable("FinancialRecords");
+                    b.ToTable("FinancialRecords", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("FinancialRecord");
                 });
@@ -251,7 +251,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("ParentGroupId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.GroupsPermissions", b =>
@@ -290,7 +290,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("PositionId");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBook", b =>
@@ -313,7 +313,7 @@ namespace GroupBy.Data.Migrations
                     b.HasIndex("GroupId")
                         .IsUnique();
 
-                    b.ToTable("InventoryBooks");
+                    b.ToTable("InventoryBooks", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBookRecord", b =>
@@ -346,7 +346,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("SourceId");
 
-                    b.ToTable("InventoryBookRecords");
+                    b.ToTable("InventoryBookRecords", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItem", b =>
@@ -372,7 +372,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InventoryItems");
+                    b.ToTable("InventoryItems", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItemSource", b =>
@@ -389,7 +389,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InventoryItemSources");
+                    b.ToTable("InventoryItemSources", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InvitationToGroup", b =>
@@ -417,7 +417,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("TargetGroupId");
 
-                    b.ToTable("InvitationToGroups");
+                    b.ToTable("InvitationToGroups", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Position", b =>
@@ -439,7 +439,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("HigherPositionId");
 
-                    b.ToTable("Positions");
+                    b.ToTable("Positions", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.PositionRecord", b =>
@@ -478,7 +478,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("RelatedGroupId");
 
-                    b.ToTable("PositionRecords");
+                    b.ToTable("PositionRecords", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Project", b =>
@@ -527,7 +527,7 @@ namespace GroupBy.Data.Migrations
                         .IsUnique()
                         .HasFilter("[ProjectGroupId] IS NOT NULL");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Rank", b =>
@@ -549,7 +549,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("HigherRankId");
 
-                    b.ToTable("Ranks");
+                    b.ToTable("Ranks", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.RegistrationCode", b =>
@@ -577,7 +577,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("TargetRankId");
 
-                    b.ToTable("RegistrationCodes");
+                    b.ToTable("RegistrationCodes", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Resolution", b =>
@@ -611,7 +611,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("LegislatorId");
 
-                    b.ToTable("Resolutions");
+                    b.ToTable("Resolutions", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.TODOListElement", b =>
@@ -649,7 +649,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("TODOListId");
 
-                    b.ToTable("TODOListElements");
+                    b.ToTable("TODOListElements", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Volunteer", b =>
@@ -687,7 +687,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("RankId");
 
-                    b.ToTable("Volunteers");
+                    b.ToTable("Volunteers", (string)null);
                 });
 
             modelBuilder.Entity("GroupVolunteer", b =>
@@ -702,7 +702,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("MembersId");
 
-                    b.ToTable("GroupVolunteer");
+                    b.ToTable("GroupVolunteer", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -850,7 +850,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasIndex("VolunteersAcceptedId");
 
-                    b.ToTable("RemainderVolunteer");
+                    b.ToTable("RemainderVolunteer", (string)null);
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Document", b =>
