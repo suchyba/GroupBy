@@ -41,7 +41,10 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Rank, opt => opt.MapFrom(
                     src => src.RankId.HasValue ? new Rank { Id = src.RankId.Value } : null));
             CreateMap<Volunteer, VolunteerUpdateDTO>().ReverseMap();
-            CreateMap<Volunteer, VolunteerSimpleDTO>().ReverseMap();
+            CreateMap<Volunteer, VolunteerSimpleDTO>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(
+                    src => src.Identity == null ? null : src.Identity.Email))
+                .ReverseMap();
 
             CreateMap<Agreement, AgreementDTO>().ReverseMap();
             CreateMap<Agreement, AgreementCreateDTO>().ReverseMap();

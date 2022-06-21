@@ -11,5 +11,6 @@ namespace GroupBy.Application.DTO.Volunteer
         public int Id { get; set; }
         public string FirstNames { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
     }
 }

@@ -18,7 +18,10 @@ namespace GroupBy.Data.Repositories
         {
             this.rankRepository = rankRepository;
         }
-
+        public override async Task<IEnumerable<Volunteer>> GetAllAsync()
+        {
+            return await context.Set<Volunteer>().Include(v => v.Identity).ToListAsync();
+        }
         public override async Task<Volunteer> GetAsync(Volunteer domain)
         {
             Volunteer v = await context.Set<Volunteer>()

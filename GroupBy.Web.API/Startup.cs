@@ -83,7 +83,7 @@ namespace GroupBy.Web.API
             app.UseCors(options =>
                 options.AllowAnyHeader()
                 .AllowAnyOrigin()
-                .AllowAnyHeader());
+                .AllowAnyMethod());
 
             app.UseRouting();
             app.UseAuthentication();
