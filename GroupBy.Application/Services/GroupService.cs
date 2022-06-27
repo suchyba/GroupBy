@@ -4,6 +4,7 @@ using GroupBy.Application.Design.Repositories;
 using GroupBy.Application.Design.Services;
 using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
@@ -39,6 +40,11 @@ namespace GroupBy.Application.Services
         public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId, int? projectId)
         {
             return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await(repository as IGroupRepository).GetAccountingDocumentsAsync(groupId, projectId)));
+        }
+
+        public async Task<IEnumerable<DocumentDTO>> GetDocumentsAsync(int groupId, int? projectId)
+        {
+            return mapper.Map<IEnumerable<DocumentDTO>>((await (repository as IGroupRepository).GetDocumentsAsync(groupId, projectId)));
         }
 
         public async Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId)

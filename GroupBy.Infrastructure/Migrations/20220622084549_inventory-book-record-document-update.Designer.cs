@@ -4,6 +4,7 @@ using GroupBy.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    partial class GroupByDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220622084549_inventory-book-record-document-update")]
+    partial class inventorybookrecorddocumentupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,11 +320,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBookRecord", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("InventoryBookId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -333,20 +335,15 @@ namespace GroupBy.Data.Migrations
                     b.Property<bool>("Income")
                         .HasColumnType("bit");
 
-                    b.Property<int>("InventoryBookId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("SourceId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("InventoryBookId", "Id");
 
                     b.HasIndex("DocumentId");
-
-                    b.HasIndex("InventoryBookId");
 
                     b.HasIndex("ItemId");
 

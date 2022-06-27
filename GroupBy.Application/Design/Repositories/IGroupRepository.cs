@@ -16,5 +16,6 @@ namespace GroupBy.Application.Design.Repositories
         public Task<bool> IsMember(int groupId, int volunteerId);
         public Task<IEnumerable<Project>> GetProjectsAsync(int groupId);
         public Task<IEnumerable<AccountingDocument>> GetAccountingDocumentsAsync(int groupId, int? projectId);
+        public Task<IEnumerable<Document>> GetDocumentsAsync(int groupId, int? projectId);
     }
 }

@@ -115,5 +115,11 @@ namespace GroupBy.Web.API.Controllers
                 return NotFound(new { Id = e.Key, e.Message });
             }
         }
+        [HttpGet("noHistory", Name = "GetInventoryItemsWithoutHistory")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetInventoryItemsWithoutHistoryAsync()
+        {
+            return Ok(await inventoryItemService.GetInventoryItemsWithoutHistoryAsync());
+        }
     }
 }

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.DTO.InventoryBookRecord
 {
-    public class InventoryBookRecordUpdateDTO
+    public class InventoryBookRecordTransferDTO
     {
-        public int Id { get; set; }
-        public int InventoryBookId { get; set; }
+        public int InventoryBookFromId { get; set; }
+        public int InventoryBookToId { get; set; }
         public int ItemId { get; set; }
         public DateTime Date { get; set; }
         public int DocumentId { get; set; }
-        public bool Income { get; set; }
-        public int SourceId { get; set; }
+        public int SourceFromId { get; set; }
+        public int SourceToId { get; set; }
     }
 }

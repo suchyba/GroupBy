@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/records", Name = "GetInventoryBookRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetInventoryBookRecordsAsync(int id)
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordListDTO>>> GetInventoryBookRecordsAsync(int id)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.ValidationErrors);
             }
         }
-        [HttpDelete("delete", Name = "DeleteInventoryBook")]
+        [HttpDelete("{id}/delete", Name = "DeleteInventoryBook")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

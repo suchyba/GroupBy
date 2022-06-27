@@ -1,5 +1,6 @@
 ﻿using GroupBy.Application.DTO.AccountingBook;
 using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Application.DTO.Document;
 using GroupBy.Application.DTO.Group;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.Volunteer;
@@ -17,5 +18,6 @@ namespace GroupBy.Application.Design.Services
         public Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(int groupId);
         public Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId);
         public Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId, int? projectId);
+        public Task<IEnumerable<DocumentDTO>> GetDocumentsAsync(int groupId, int? projectId);
     }
 }

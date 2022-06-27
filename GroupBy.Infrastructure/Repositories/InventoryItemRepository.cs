@@ -49,5 +49,12 @@ namespace GroupBy.Data.Repositories
 
             return item.History;
         }
+
+        public async Task<IEnumerable<InventoryItem>> GetInventoryItemWithoutHistory()
+        {
+            return context.Set<InventoryItem>()
+                .Include(i => i.History)
+                .Where(i => i.History == null || i.History.Count() == 0);
+        }
     }
 }

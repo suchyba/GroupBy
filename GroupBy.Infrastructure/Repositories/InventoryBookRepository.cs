@@ -35,10 +35,11 @@ namespace GroupBy.Data.Repositories
             var book = await context.Set<InventoryBook>()
                 .Include(b => b.RelatedGroup)
                 .Include(b => b.Records)
-                .ThenInclude(r => r.Source)
+                    .ThenInclude(r => r.Source)
                 .Include(b => b.Records)
-                .ThenInclude(r => r.Item)
+                    .ThenInclude(r => r.Item)
                 .Include(b => b.Records)
+                    .ThenInclude(r => r.Document)
                 .FirstOrDefaultAsync(b => b.Id == domain.Id);
             if (book == null)
                 throw new NotFoundException("InventoryBook", domain.Id);

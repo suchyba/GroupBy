@@ -11,6 +11,7 @@ using GroupBy.Application.DTO.AccountingBook;
 using Microsoft.AspNetCore.Authorization;
 using GroupBy.Application.DTO.Project;
 using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Application.DTO.Document;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -210,6 +211,20 @@ namespace GroupBy.Web.API.Controllers
             try
             {
                 return Ok(await groupService.GetAccountingDocumentsAsync(id, projectId));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+        [HttpGet("{id}/documents")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocumentsAsync(int id, [FromQuery(Name = "project-id")] int? projectId)
+        {
+            try
+            {
+                return Ok(await groupService.GetDocumentsAsync(id, projectId));
             }
             catch (NotFoundException e)
             {

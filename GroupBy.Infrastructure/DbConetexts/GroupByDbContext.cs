@@ -47,8 +47,6 @@ namespace GroupBy.Data.DbContexts
                 .HasKey(p => new { p.GroupId, p.PositionId });
             modelBuilder.Entity<PositionRecord>()
                 .HasKey(p => new { p.VolunteerId, p.Id });
-            modelBuilder.Entity<InventoryBookRecord>()
-                .HasKey(i => new { i.InventoryBookId, i.Id });
 
             modelBuilder.Entity<Element>()
                 .HasOne(e => e.Group)

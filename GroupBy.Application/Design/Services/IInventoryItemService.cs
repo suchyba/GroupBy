@@ -11,5 +11,6 @@ namespace GroupBy.Application.Design.Services
     public interface IInventoryItemService : IAsyncService<InventoryItemSimpleDTO, InventoryItemSimpleDTO, InventoryItemCreateDTO, InventoryItemSimpleDTO>
     {
         public Task<IEnumerable<InventoryBookRecordSimpleDTO>> GetInventoryItemHistoryAsync(int inventoryItemId);
+        public Task<IEnumerable<InventoryItemSimpleDTO>> GetInventoryItemsWithoutHistoryAsync();
     }
 }

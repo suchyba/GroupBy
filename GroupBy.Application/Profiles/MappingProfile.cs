@@ -100,12 +100,16 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.Source, opt => opt.MapFrom(
                     src => new InventoryItemSource { Id = src.SourceId }))
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
-                    src => new InventoryItem { Id = src.ItemId }));
+                    src => new InventoryItem { Id = src.ItemId }))
+                .ForMember(dest => dest.Document, opt => opt.MapFrom(
+                    src => new Document { Id = src.DocumentId }));
             CreateMap<InventoryBookRecordUpdateDTO, InventoryBookRecord>()
                 .ForMember(dest => dest.Source, opt => opt.MapFrom(
                     src => new InventoryItemSource { Id = src.SourceId }))
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
-                    src => new InventoryItem { Id = src.ItemId }));
+                    src => new InventoryItem { Id = src.ItemId }))
+                .ForMember(dest => dest.Document, opt => opt.MapFrom(
+                    src => new Document { Id = src.DocumentId }));
 
             CreateMap<ProjectSimpleDTO, Project>().ReverseMap();
             CreateMap<Project, ProjectDTO>();
@@ -196,7 +200,7 @@ namespace GroupBy.Application.Profiles
                         LastName = src.RelatedVolunteerLastName,
                         Address = src.RelatedVolunteerAddress,
                         BirthDate = src.RelatedVolunteerBirthDate,
-                        PhoneNumber = src.RelatedVolunteerPhoneNumber                        
+                        PhoneNumber = src.RelatedVolunteerPhoneNumber
                     }));
         }
     }

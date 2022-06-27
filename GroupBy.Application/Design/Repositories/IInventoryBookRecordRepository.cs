@@ -9,6 +9,6 @@ namespace GroupBy.Application.Design.Repositories
 {
     public interface IInventoryBookRecordRepository : IAsyncRepository<InventoryBookRecord>
     {
-
+        public Task<IEnumerable<InventoryBookRecord>> TransferItemAsync(InventoryBookRecord inventoryBookFromRecord, InventoryBookRecord inventoryBookToRecord);
     }
 }

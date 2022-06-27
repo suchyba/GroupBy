@@ -109,6 +109,7 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<InventoryBookRecordSimpleDTO>, InventoryBookRecordValidator>();
             services.AddScoped<IValidator<InventoryBookRecordCreateDTO>, InventoryBookRecordCreateValidator>();
             services.AddScoped<IValidator<InventoryBookRecordUpdateDTO>, InventoryBookRecordUpdateValidator>();
+            services.AddScoped<IValidator<InventoryBookRecordTransferDTO>, InventoryBookRecordTransferValidator>();
 
             services.AddScoped<IValidator<ProjectSimpleDTO>, ProjectValidator>();
             services.AddScoped<IValidator<ProjectCreateDTO>, ProjectCreateValidator>();

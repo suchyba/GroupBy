@@ -1,4 +1,5 @@
-﻿using GroupBy.Application.DTO.InventoryBook;
+﻿using GroupBy.Application.DTO.Document;
+using GroupBy.Application.DTO.InventoryBook;
 using GroupBy.Application.DTO.InventoryItem;
 using GroupBy.Application.DTO.InventoryItemSource;
 using System;
@@ -13,7 +14,7 @@ namespace GroupBy.Application.DTO.InventoryBookRecord
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public string Document { get; set; }
+        public DocumentDTO Document { get; set; }
         public bool Income { get; set; }
         public InventoryItemSimpleDTO Item { get; set; }
         public InventoryItemSourceDTO Source { get; set; }

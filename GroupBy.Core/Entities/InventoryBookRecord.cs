@@ -14,8 +14,9 @@ namespace GroupBy.Domain.Entities
     public class InventoryBookRecord
     {
         /// <summary>
-        /// Identificator of the record in the book
+        /// Identificator of the record
         /// </summary>
+        [Key]
         public int Id { get; set; }
         public int InventoryBookId { get; set; }
         /// <summary>
@@ -28,10 +29,10 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public DateTime Date { get; set; }
         /// <summary>
-        /// Name of related document
+        /// Related document <seealso cref="Document"/>
         /// </summary>
         [Required]
-        public string Document { get; set; }
+        public virtual Document Document { get; set; }
         /// <summary>
         /// Describes if the record is the income 
         /// </summary>

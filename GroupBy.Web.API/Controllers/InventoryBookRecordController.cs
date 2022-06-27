@@ -32,7 +32,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{inventoryBookId}/{id}", Name = "GetInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> GetAsync(int inventoryBookId, int id)
+        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(int inventoryBookId, int id)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> CreateAsync([FromBody] InventoryBookRecordCreateDTO model)
+        public async Task<ActionResult<InventoryBookRecordDTO>> CreateAsync([FromBody] InventoryBookRecordCreateDTO model)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<InventoryBookRecordSimpleDTO>> UpdateAsync([FromBody] InventoryBookRecordUpdateDTO model)
+        public async Task<ActionResult<InventoryBookRecordDTO>> UpdateAsync([FromBody] InventoryBookRecordUpdateDTO model)
         {
             try
             {
@@ -103,6 +103,29 @@ namespace GroupBy.Web.API.Controllers
             catch (DeleteNotPermittedException e)
             {
                 return Conflict(e.Message);
+            }
+        }
+        [HttpPost("transfer", Name = "TransferInventoryItemBetweenBooks")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<InventoryBookRecordDTO>> TransferItemAsync([FromBody] InventoryBookRecordTransferDTO model)
+        {
+            try
+            {
+                return Ok(await InventoryBookRecordService.TransferItemAsync(model));
+            }
+            catch (ValidationException e)
+            {
+                return BadRequest(e.ValidationErrors);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }

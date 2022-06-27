@@ -99,6 +99,41 @@ namespace GroupBy.Data.Repositories
             return documents;
         }
 
+        public async Task<IEnumerable<Document>> GetDocumentsAsync(int groupId, int? projectId)
+        {
+            Group group = await context.Set<Group>()
+                .Include(g => g.Elements)
+                    .ThenInclude(e => e.RelatedProject)
+                .Include(g => g.ProjectsRealisedInGroup)
+                .Include(g => g.RelatedProject)
+                .FirstOrDefaultAsync(g => g.Id == groupId);
+            if (group == null)
+                throw new NotFoundException("Group", groupId);
+
+            List<Document> documents = group.Elements
+                .Where(e => e is Document)
+                .Select(e => (Document)e)
+                .ToList();
+
+            if (projectId.HasValue)
+            {
+                if (group.ProjectsRealisedInGroup
+                    .Select(p => p.Id)
+                    .Contains(projectId.Value)
+                    || group.RelatedProject.Id == projectId)
+                {
+                    documents = documents
+                        .Where(d => d.RelatedProject == null || d.RelatedProject.Id == projectId)
+                        .ToList();
+                }
+                else
+                {
+                    throw new NotFoundException("Project", projectId.Value);
+                }
+            }
+            return documents;
+        }
+
         public override async Task<Group> GetAsync(Group domain)
         {
             Group g = await context.Set<Group>()

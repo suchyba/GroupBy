@@ -18,8 +18,6 @@ namespace GroupBy.Application.Validators.InventoryBookRecord
                 .GreaterThan(0).WithMessage("{PropertyName} is required.");
             RuleFor(r => r.Date)
                 .GreaterThan(DateTime.MinValue).WithMessage("{PropertyName} is required.");
-            RuleFor(r => r.Document)
-                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
     }
 }
