@@ -20,6 +20,7 @@ using GroupBy.Application.DTO.Resolution;
 using GroupBy.Application.DTO.Volunteer;
 using GroupBy.Domain.Entities;
 using System;
+using System.Linq;
 
 namespace GroupBy.Application.Profiles
 {
@@ -32,7 +33,11 @@ namespace GroupBy.Application.Profiles
             CreateMap<AccountingBook, AccountingBookCreateDTO>().ReverseMap();
 
             CreateMap<Group, GroupDTO>();
-            CreateMap<Group, GroupSimpleDTO>().ReverseMap();
+            CreateMap<Group, GroupSimpleDTO>()
+                .ForMember(dest => dest.HasInventoryBook, opt => opt.MapFrom(
+                    src => src.InventoryBook != null));
+            CreateMap<GroupSimpleDTO, Group>();
+
             CreateMap<Group, GroupCreateDTO>().ReverseMap();
             CreateMap<Group, GroupUpdateDTO>().ReverseMap();
 
@@ -80,20 +85,22 @@ namespace GroupBy.Application.Profiles
                 .ForMember(dest => dest.RelatedGroup, opt => opt.MapFrom(
                     src => new Group { Id = src.RelatedGroupId }));
 
+            CreateMap<Document, DocumentSimpleDTO>().ReverseMap();
             CreateMap<Document, DocumentDTO>();
             CreateMap<DocumentDTO, Document>();
             CreateMap<DocumentCreateDTO, Document>()
-                .ForMember(dest => dest.Group, opt => opt.MapFrom(
-                    src => new Group { Id = src.GroupId }))
+                .ForMember(dest => dest.Groups, opt => opt.MapFrom(
+                    src => src.GroupsId.Select(gId => new Group { Id = gId })))
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
             CreateMap<DocumentUpdateDTO, Document>()
-                .ForMember(dest => dest.Group, opt => opt.MapFrom(
-                    src => new Group { Id = src.GroupId }))
                  .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
 
             CreateMap<InventoryBookRecord, InventoryBookRecordSimpleDTO>();
+            CreateMap<InventoryBookRecord, InventoryBookRecordDTO>()
+                .ForMember(dest => dest.InventoryBook, opt => opt.MapFrom(
+                    src => src.Book));
             CreateMap<InventoryBookRecord, InventoryBookRecordListDTO>();
             CreateMap<InventoryBookRecordSimpleDTO, InventoryBookRecord>();
             CreateMap<InventoryBookRecordCreateDTO, InventoryBookRecord>()
@@ -133,9 +140,9 @@ namespace GroupBy.Application.Profiles
             CreateMap<AccountingDocument, AccountingDocumentDTO>();
             CreateMap<AccountingDocumentCreateDTO, AccountingDocument>()
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
-                    src => src.ProjectId.HasValue ? new Project { Id = src.ProjectId.Value } : null))
-                .ForMember(dest => dest.Group, opt => opt.MapFrom(
-                    src => new Group { Id = src.GroupId }));
+                    src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null))
+                .ForMember(dest => dest.Groups, opt => opt.MapFrom(
+                    src => src.GroupsId.Select(gId => new Group { Id = gId })));
 
             CreateMap<Resolution, ResolutionDTO>().ReverseMap();
             CreateMap<ResolutionCreateDTO, Resolution>()

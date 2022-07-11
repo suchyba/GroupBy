@@ -18,7 +18,7 @@ namespace GroupBy.Data.Repositories
         }
         public override async Task<Document> CreateAsync(Document domain)
         {
-            // add checking if the file pointed by FilePath exists
+            // TODO add checking if the file pointed by FilePath exists
 
             var projectId = domain.RelatedProject?.Id;
             Project project = null;
@@ -30,11 +30,19 @@ namespace GroupBy.Data.Repositories
             }
             domain.RelatedProject = project;
 
-            int groupId = domain.Group.Id;
-            domain.Group = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == groupId);
-            if (domain.Group == null)
-                throw new NotFoundException("Group", groupId);
+            var tempGroups = new List<Group>();
+            foreach (var group in domain.Groups)
+            {
+                Group g = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == group.Id);
 
+                if (g == null)
+                    throw new NotFoundException("Group", group.Id);
+
+                tempGroups.Add(g);
+            }
+
+            domain.Groups = tempGroups;
+            
             var newDocument = await context.Set<Document>().AddAsync(domain);
             await context.SaveChangesAsync();
             return newDocument.Entity;
@@ -42,7 +50,10 @@ namespace GroupBy.Data.Repositories
 
         public override async Task<Document> GetAsync(Document domain)
         {
-            var d = await context.Set<Document>().FirstOrDefaultAsync(d => d.Id == domain.Id);
+            var d = await context.Set<Document>()
+                .Include(d => d.Groups)
+                .Include(d => d.RelatedProject)
+                .FirstOrDefaultAsync(d => d.Id == domain.Id);
             if (d == null)
                 throw new NotFoundException("Document", domain.Id);
             return d;
@@ -65,11 +76,6 @@ namespace GroupBy.Data.Repositories
                     throw new NotFoundException("Project", projectId);
             }
             toModify.RelatedProject = project;
-
-            int groupId = domain.Group.Id;
-            toModify.Group = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == groupId);
-            if (toModify.Group == null)
-                throw new NotFoundException("Group", groupId);
 
             await context.SaveChangesAsync();
             return toModify;

@@ -14,7 +14,7 @@ namespace GroupBy.Application.DTO.InventoryBookRecord
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public DocumentDTO Document { get; set; }
+        public DocumentSimpleDTO Document { get; set; }
         public bool Income { get; set; }
         public InventoryItemSimpleDTO Item { get; set; }
         public InventoryItemSourceDTO Source { get; set; }

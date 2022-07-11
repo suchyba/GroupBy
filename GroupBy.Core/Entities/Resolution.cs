@@ -31,7 +31,7 @@ namespace GroupBy.Domain.Entities
         [Required]
         public virtual Volunteer Legislator { get; set; }
         /// <summary>
-        /// Group where that resolution has been adopted <seealso cref="Group"/>
+        /// Groups where that resolution has been adopted <seealso cref="Group"/>
         /// </summary>
         [Required]
         public virtual Group Group { get; set; }

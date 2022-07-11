@@ -10,7 +10,7 @@ namespace GroupBy.Application.DTO.Document
     {
         public string Name { get; set; }
         public string FilePath { get; set; }
-        public int GroupId { get; set; }
+        public IEnumerable<int> GroupsId { get; set; }
         public int? RelatedProjectId { get; set; }
     }
 }

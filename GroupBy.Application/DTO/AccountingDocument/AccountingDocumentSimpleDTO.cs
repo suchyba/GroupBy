@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupBy.Application.DTO.Document;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace GroupBy.Application.DTO.AccountingDocument
 {
-    public class AccountingDocumentSimpleDTO
+    public class AccountingDocumentSimpleDTO : DocumentSimpleDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string FilePath { get; set; }
+        
     }
 }

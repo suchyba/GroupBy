@@ -15,7 +15,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Group where the volunteer will be added <seealso cref="Group"/>
+        /// Groups where the volunteer will be added <seealso cref="Group"/>
         /// </summary>
         [Required]
         public virtual Group TargetGroup { get; set; }

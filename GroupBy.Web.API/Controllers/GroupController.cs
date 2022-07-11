@@ -15,7 +15,6 @@ using GroupBy.Application.DTO.Document;
 
 namespace GroupBy.Web.API.Controllers
 {
-    [Authorize]
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
@@ -30,14 +29,15 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<GroupDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetAllAsync()
         {
             return Ok(await groupService.GetAllAsync());
         }
+
         [HttpGet("{id}", Name = "GetGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GroupSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<GroupDTO>> GetAsync(int id)
         {
             GroupDTO group;
             try
@@ -50,6 +50,7 @@ namespace GroupBy.Web.API.Controllers
             }
             return Ok(group);
         }
+
         [HttpGet("{id}/members", Name = "GetMembers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

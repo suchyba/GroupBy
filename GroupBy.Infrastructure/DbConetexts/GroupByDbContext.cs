@@ -48,11 +48,6 @@ namespace GroupBy.Data.DbContexts
             modelBuilder.Entity<PositionRecord>()
                 .HasKey(p => new { p.VolunteerId, p.Id });
 
-            modelBuilder.Entity<Element>()
-                .HasOne(e => e.Group)
-                .WithMany(g => g.Elements)
-                .OnDelete(DeleteBehavior.ClientCascade);
-
             modelBuilder.Entity<Group>()
                 .HasOne(g => g.Owner)
                 .WithMany(v => v.OwnedGroups)

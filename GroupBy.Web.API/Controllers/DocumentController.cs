@@ -25,7 +25,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<DocumentSimpleDTO>>> GetAllAsync()
         {
             return Ok(await documentService.GetAllAsync());
         }

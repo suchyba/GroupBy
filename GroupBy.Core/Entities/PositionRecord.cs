@@ -33,7 +33,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public virtual Resolution DismissingResolution { get; set; }
         /// <summary>
-        /// Group where the person has been appointed on a position
+        /// Groups where the person has been appointed on a position
         /// </summary>
         [Required]
         public virtual Group RelatedGroup { get; set; }

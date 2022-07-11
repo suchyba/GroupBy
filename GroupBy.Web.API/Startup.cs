@@ -45,9 +45,9 @@ namespace GroupBy.Web.API
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = @"JWT Authorization header using the Bearer scheme.",
-                    Name = "Authorization",
+                    Name = "Bearer",
                     In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer"
                 });
 
@@ -62,6 +62,8 @@ namespace GroupBy.Web.API
                                 Id = "Bearer"
                             },
                             In = ParameterLocation.Header,
+                            Name = "Bearer",
+                            Scheme = "oauth2",
                             BearerFormat = "JWT"
                         },
                         new List<string>()
@@ -80,21 +82,21 @@ namespace GroupBy.Web.API
 
             app.UseHttpsRedirection();
 
-            app.UseCors(options =>
-                options.AllowAnyHeader()
-                .AllowAnyOrigin()
-                .AllowAnyMethod());
-
             app.UseRouting();
+
+            app.UseCors(options => options
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/groupbydoc/swagger.json", "GroupBy API");
             });
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

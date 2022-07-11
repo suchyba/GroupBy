@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GroupBy.Domain.Entities
@@ -14,10 +15,10 @@ namespace GroupBy.Domain.Entities
         [Key]
         public int Id { get; set; }
         /// <summary>
-        /// Group in which this element is added <seealso cref="Models.Group"/>
+        /// Groups in which this element is added <seealso cref="Models.Group"/>
         /// </summary>
         [Required]
-        public Group Group { get; set; }
+        public IEnumerable<Group> Groups { get; set; }
         /// <summary>
         /// Name of this element
         /// </summary>

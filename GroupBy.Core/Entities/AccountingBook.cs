@@ -34,7 +34,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public virtual IEnumerable<FinancialRecord> Records { get; set; }
         /// <summary>
-        /// Group which is owner of this book <seealso cref="Group"/>
+        /// Groups which is owner of this book <seealso cref="Group"/>
         /// </summary>
         [Required]
         public virtual Group RelatedGroup { get; set; }

@@ -33,7 +33,7 @@ namespace GroupBy.Application.Services
             if (!validationResult.IsValid)
                 throw new Exceptions.ValidationException(validationResult);
 
-            return mapper.Map<IEnumerable<InventoryBookRecordDTO>>((repository as IInventoryBookRecordRepository).TransferItemAsync(new InventoryBookRecord
+            return mapper.Map<IEnumerable<InventoryBookRecordDTO>>(await (repository as IInventoryBookRecordRepository).TransferItemAsync(new InventoryBookRecord
             {
                 Book = new InventoryBook { Id = record.InventoryBookFromId },
                 Item = new InventoryItem { Id = record.ItemId },
@@ -41,7 +41,7 @@ namespace GroupBy.Application.Services
                 InventoryBookId = record.InventoryBookFromId,
                 Source = new InventoryItemSource { Id = record.SourceFromId },
                 Date = record.Date,
-                Document = new Document { Id = record.DocumentId }
+                Document = new Document { Name = record.DocumentName }
             },
             new InventoryBookRecord
             {
@@ -51,7 +51,7 @@ namespace GroupBy.Application.Services
                 InventoryBookId = record.InventoryBookToId,
                 Source = new InventoryItemSource { Id = record.SourceToId },
                 Date = record.Date,
-                Document = new Document { Id = record.DocumentId }
+                Document = new Document { Name = record.DocumentName }
             }));
         }
 

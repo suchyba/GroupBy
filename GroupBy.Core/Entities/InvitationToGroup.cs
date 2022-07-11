@@ -18,7 +18,7 @@ namespace GroupBy.Domain.Entities
         [Key]
         public int Id { get; set; }
         /// <summary>
-        /// Group from this invitation came from <seealso cref="Group"/>
+        /// Groups from this invitation came from <seealso cref="Group"/>
         /// </summary>
         public virtual Group TargetGroup { get; set; }
         /// <summary>

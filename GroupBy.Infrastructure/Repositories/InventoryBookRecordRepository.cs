@@ -66,7 +66,11 @@ namespace GroupBy.Data.Repositories
             if (domain.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
 
-            if (!domain.Income && domain.Book.Records.FirstOrDefault(r => r.Item == domain.Item && r.Income) == null)
+            if (!domain.Income 
+                && domain.Book.Records
+                .OrderBy(r => r.Date)
+                .Where(r => r.Item == domain.Item)
+                .LastOrDefault()?.Income != true)
                 throw new BadRequestException("You cannot remove item what is not in the inventory book");
 
             int sourceId = domain.Source.Id;
@@ -93,6 +97,7 @@ namespace GroupBy.Data.Repositories
             inventoryBookFromRecord.Book = await context.Set<InventoryBook>()
                 .Include(b => b.Records)
                 .ThenInclude(r => r.Item)
+                .Include(b => b.RelatedGroup)
                 .FirstOrDefaultAsync(i => i.Id == bookFromId);
             if (inventoryBookFromRecord.Book == null)
                 throw new NotFoundException("InventoryFromBook", bookFromId);
@@ -102,6 +107,7 @@ namespace GroupBy.Data.Repositories
             inventoryBookToRecord.Book = await context.Set<InventoryBook>()
                 .Include(b => b.Records)
                 .ThenInclude(r => r.Item)
+                .Include(b => b.RelatedGroup)
                 .FirstOrDefaultAsync(i => i.Id == bookToId);
             if (inventoryBookToRecord.Book == null)
                 throw new NotFoundException("InventoryToBook", bookToId);
@@ -113,7 +119,10 @@ namespace GroupBy.Data.Repositories
             if (inventoryBookFromRecord.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
 
-            if (inventoryBookFromRecord.Book.Records.FirstOrDefault(r => r.Item == inventoryBookFromRecord.Item && r.Income) == null)
+            if (inventoryBookFromRecord.Book.Records
+                .OrderBy(r => r.Date)
+                .Where(r => r.Item == inventoryBookFromRecord.Item)
+                .LastOrDefault()?.Income != true)
                 throw new BadRequestException("You cannot remove item what is not in the inventory book");
 
             // Source from
@@ -129,11 +138,20 @@ namespace GroupBy.Data.Repositories
                 throw new NotFoundException("InventoryItemToSource", sourceToId);
 
             // Document
-            int documentId = inventoryBookFromRecord.Document.Id;
-            inventoryBookFromRecord.Document = await context.Set<Document>().FirstOrDefaultAsync(s => s.Id == documentId);
-            inventoryBookToRecord.Document = await context.Set<Document>().FirstOrDefaultAsync(s => s.Id == documentId);
-            if (inventoryBookFromRecord.Document == null)
-                throw new NotFoundException("Document", documentId);
+            var document = await context.Set<Document>()
+                .AddAsync(new Document { 
+                    Name = inventoryBookFromRecord.Document.Name,
+                    FilePath = "",
+                    Groups = new List<Group>() { inventoryBookFromRecord.Book.RelatedGroup, inventoryBookToRecord.Book.RelatedGroup},
+                    RelatedProject = null
+                });
+
+
+            if (document == null)
+                throw new BadRequestException($"Cannot create document {inventoryBookFromRecord.Document.Name}");
+
+            inventoryBookFromRecord.Document = document.Entity;
+            inventoryBookToRecord.Document = document.Entity;
 
             var createdFrom = await context.Set<InventoryBookRecord>().AddAsync(inventoryBookFromRecord);
             var createdTo = await context.Set<InventoryBookRecord>().AddAsync(inventoryBookToRecord);

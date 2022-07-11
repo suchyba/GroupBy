@@ -18,6 +18,11 @@ namespace GroupBy.Data.Repositories
             this.volunteerRepository = volunteerRepository;
         }
 
+        public override async Task<IEnumerable<Group>> GetAllAsync()
+        {
+            return await context.Set<Group>().Include(g => g.InventoryBook).ToListAsync();
+        }
+
         public async Task AddMemberAsync(int groupId, int volunteerId)
         {
             var group = await context.Set<Group>()

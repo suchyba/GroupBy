@@ -47,7 +47,7 @@ namespace GroupBy.Domain.Entities
         [ForeignKey("ProjectGroupId")]
         public virtual Group ProjectGroup { get; set; }
         /// <summary>
-        /// Group which is organising this project <seealso cref="Group"/>
+        /// Groups which is organising this project <seealso cref="Group"/>
         /// </summary>
         [Required]
         public virtual Group ParentGroup { get; set; }

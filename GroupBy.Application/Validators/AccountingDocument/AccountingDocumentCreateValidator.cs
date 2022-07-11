@@ -16,10 +16,14 @@ namespace GroupBy.Application.Validators.AccountingDocument
                 .NotEmpty().WithMessage("{PropertyName} cannot be empty");
             RuleFor(d => d.FilePath)
                 .NotEmpty().WithMessage("{PropertyName} cannot be empty");
-            RuleFor(d => d.GroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} must be greater then 0");
-            RuleFor(d => d.ProjectId)
-                .GreaterThan(0).When(d => d.ProjectId.HasValue)
+            RuleFor(d => d.GroupsId)
+                .NotNull()
+                .WithMessage("{PropertyName} is required");
+            RuleFor(d => d.GroupsId)
+                .Must(ids => ids?.Count() > 0)
+                .WithMessage("Accounting document must be related to at least 1 group");
+            RuleFor(d => d.RelatedProjectId)
+                .GreaterThan(0).When(d => d.RelatedProjectId.HasValue)
                 .WithMessage("{PropertyName} must be greater than 0");
         }
     }

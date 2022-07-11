@@ -14,8 +14,12 @@ namespace GroupBy.Application.Validators.Document
         {
             RuleFor(d => d.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
-            RuleFor(d => d.GroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+            RuleFor(d => d.GroupsId)
+                .NotNull()
+                .WithMessage("{PropertyName} is required");
+            RuleFor(d => d.GroupsId)
+                .Must(ids => ids?.Count() > 0)
+                .WithMessage("Document must be related to at least 1 group");
             RuleFor(d => d.RelatedProjectId)
                 .GreaterThan(0).When(d => d.RelatedProjectId != null).WithMessage("{PropertyName} has to be greater then 0.");
             RuleFor(d => d.FilePath)

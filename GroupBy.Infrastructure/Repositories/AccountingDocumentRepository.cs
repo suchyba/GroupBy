@@ -24,7 +24,7 @@ namespace GroupBy.Data.Repositories
         public override async Task<AccountingDocument> GetAsync(AccountingDocument domain)
         {
             AccountingDocument document = await context.Set<AccountingDocument>()
-                .Include(d => d.Group)
+                .Include(d => d.Groups)
                 .Include(d => d.RelatedProject)
                 .FirstOrDefaultAsync(d => d.Id == domain.Id);
             if (document == null)
@@ -44,7 +44,13 @@ namespace GroupBy.Data.Repositories
         }
         public override async Task<AccountingDocument> CreateAsync(AccountingDocument domain)
         {
-            domain.Group = await groupRepository.GetAsync(domain.Group);
+            var tempGroups = new List<Group>();
+            foreach (var group in domain.Groups)
+            {
+                tempGroups.Add(await groupRepository.GetAsync(group));
+            }
+
+            domain.Groups = tempGroups;
             if (domain.RelatedProject != null)
                 domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
 

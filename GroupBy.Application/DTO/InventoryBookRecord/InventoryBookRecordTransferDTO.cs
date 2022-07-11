@@ -12,7 +12,7 @@ namespace GroupBy.Application.DTO.InventoryBookRecord
         public int InventoryBookToId { get; set; }
         public int ItemId { get; set; }
         public DateTime Date { get; set; }
-        public int DocumentId { get; set; }
+        public string DocumentName { get; set; }
         public int SourceFromId { get; set; }
         public int SourceToId { get; set; }
     }

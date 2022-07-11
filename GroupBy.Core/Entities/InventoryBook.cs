@@ -28,7 +28,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public virtual IEnumerable<InventoryBookRecord> Records { get; set; }
         /// <summary>
-        /// Group which is owner of the items in this book
+        /// Groups which is owner of the items in this book
         /// </summary>
         [Required, ForeignKey("GroupId")]
         public virtual Group RelatedGroup { get; set; }

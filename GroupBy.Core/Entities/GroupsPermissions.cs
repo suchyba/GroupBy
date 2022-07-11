@@ -48,7 +48,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public bool? EditPosition { get; set; }
         /// <summary>
-        /// Group where this permissions are valid <seealso cref="Models.Group"/>
+        /// Groups where this permissions are valid <seealso cref="Models.Group"/>
         /// </summary>
         [Required, ForeignKey("GroupId")]
         public virtual Group Group { get; set; }

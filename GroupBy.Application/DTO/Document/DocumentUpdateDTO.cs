@@ -11,7 +11,6 @@ namespace GroupBy.Application.DTO.Document
         public int Id { get; set; }
         public string Name { get; set; }
         public string FilePath { get; set; }
-        public int GroupId { get; set; }
         public int? RelatedProjectId { get; set; }
     }
 }
