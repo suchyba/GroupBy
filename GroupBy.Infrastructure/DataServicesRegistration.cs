@@ -23,6 +23,8 @@ namespace GroupBy.Data
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                options.SignIn.RequireConfirmedEmail = true;
             })
                 .AddEntityFrameworkStores<GroupByDbContext>()
                 .AddDefaultTokenProviders();

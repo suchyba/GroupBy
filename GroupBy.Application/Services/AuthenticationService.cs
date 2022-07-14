@@ -6,6 +6,7 @@ using GroupBy.Application.DTO.Authentication;
 using GroupBy.Application.Exceptions;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GroupBy.Application.Services
 {
@@ -29,6 +31,7 @@ namespace GroupBy.Application.Services
         private readonly IGroupRepository groupRepository;
         private readonly IRankRepository rankRepository;
         private readonly IValidator<RegisterDTO> registerValidator;
+        private readonly IEmailService emailService;
 
         public AuthenticationService(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -38,7 +41,8 @@ namespace GroupBy.Application.Services
             IRegistrationCodeRepository registrationCodeRepository,
             IGroupRepository groupRepository,
             IRankRepository rankRepository,
-            IValidator<RegisterDTO> registerValidator)
+            IValidator<RegisterDTO> registerValidator,
+            IEmailService emailService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -49,7 +53,38 @@ namespace GroupBy.Application.Services
             this.groupRepository = groupRepository;
             this.rankRepository = rankRepository;
             this.registerValidator = registerValidator;
+            this.emailService = emailService;
         }
+
+        public async Task ConfirmEmailAsync(string email, string token)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                throw new NotFoundException("User", new { Id = email });
+
+            var result = await userManager.ConfirmEmailAsync(user, token);
+
+            if (!result.Succeeded)
+                throw new BadRequestException("Cannot confirm email address");
+        }
+
+        public async Task<UserDTO> GetUserAsync(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                throw new NotFoundException("User", new { Id = email });
+
+            int volunteerId = user.VolunteerId;
+            user.RelatedVolunteer = await volunteerRepository.GetAsync(new Volunteer { Id = user.VolunteerId });
+
+            if (user.RelatedVolunteer == null)
+                throw new NotFoundException("Volunteer", new { Id = volunteerId });
+
+            return mapper.Map<UserDTO>(user); ;
+        }
+
         public async Task<AuthenticationResponseDTO> LoginUserAsync(LoginDTO loginDTO)
         {
             var user = await userManager.FindByEmailAsync(loginDTO.Email);
@@ -60,7 +95,13 @@ namespace GroupBy.Application.Services
             var result = await signInManager.PasswordSignInAsync(user, loginDTO.Password, false, false);
 
             if (!result.Succeeded)
-                throw new BadRequestException($"Credentials for {loginDTO.Email} are not valid");
+            {
+                if (await userManager.IsEmailConfirmedAsync(user))
+                    throw new BadRequestException($"Credentials for {loginDTO.Email} are not valid");
+
+                else
+                    throw new BadRequestException($"You have to verify your email address");
+            }
 
             JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
             return new AuthenticationResponseDTO()
@@ -71,7 +112,7 @@ namespace GroupBy.Application.Services
             };
         }
 
-        public async Task RegisterUserAsync(RegisterDTO registerDTO)
+        public async Task RegisterUserAsync(RegisterDTO registerDTO, IUrlHelper urlHelper)
         {
             var validationResult = await registerValidator.ValidateAsync(registerDTO);
             if (!validationResult.IsValid)
@@ -98,6 +139,14 @@ namespace GroupBy.Application.Services
 
             volunteer.Confirmed = true;
             await volunteerRepository.UpdateAsync(volunteer);
+
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+
+            var urlToConfirm = HttpUtility.ParseQueryString(string.Empty);
+            urlToConfirm.Add("token", token);
+            urlToConfirm.Add("email", applicationUser.Email);
+
+            await emailService.SendEmailAsync(applicationUser.Email, "Confirm email", @"<a href=""" + registerDTO.UrlToVerifyEmail + "?" + urlToConfirm.ToString() + @""">click link </a>");
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)

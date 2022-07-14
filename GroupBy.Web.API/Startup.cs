@@ -25,7 +25,7 @@ namespace GroupBy.Web.API
             AddSwagger(services);
 
             services.AddDataServices(configuration);
-            services.AddApplicationServices();
+            services.AddApplicationServices(configuration);
             services.AddAuthenticationServices(configuration);
             services.AddControllers();
 

@@ -209,6 +209,7 @@ namespace GroupBy.Application.Profiles
                         BirthDate = src.RelatedVolunteerBirthDate,
                         PhoneNumber = src.RelatedVolunteerPhoneNumber
                     }));
+            CreateMap<ApplicationUser, UserDTO>();
         }
     }
 }

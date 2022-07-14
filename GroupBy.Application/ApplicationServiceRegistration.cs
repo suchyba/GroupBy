@@ -40,12 +40,13 @@ using GroupBy.Application.DTO.RegistrationCode;
 using GroupBy.Application.Validators.RegistrationCode;
 using GroupBy.Application.Validators.Authentication;
 using GroupBy.Application.DTO.Authentication;
+using GroupBy.Application.Model.Mail;
 
 namespace GroupBy.Application
 {
     public static class ApplicationServiceRegistration
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -68,8 +69,11 @@ namespace GroupBy.Application
             services.AddScoped<IFinancialOutcomeRecordService, FinancialOutcomeRecordService>();
             services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
             services.AddScoped<IRegistrationCodeService, RegistrationCodeService>();
-            
+
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IEmailService, EmailService>();
+
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
             return services;
         }
@@ -120,13 +124,13 @@ namespace GroupBy.Application
 
             services.AddScoped<IValidator<AccountingDocumentSimpleDTO>, AccountingDocumentValidator>();
             services.AddScoped<IValidator<AccountingDocumentCreateDTO>, AccountingDocumentCreateValidator>();
-            
+
             services.AddScoped<IValidator<ResolutionCreateDTO>, ResolutionCreateValidator>();
             services.AddScoped<IValidator<ResolutionUpdateDTO>, ResolutionUpdateValidator>();
 
             services.AddScoped<IValidator<FinancialOutcomeRecordCreateDTO>, FinancialOutcomeRecordCreateValidator>();
             services.AddScoped<IValidator<FinancialOutcomeRecordUpdateDTO>, FinancialOutcomeRecordUpdateValidator>();
-            
+
             services.AddScoped<IValidator<FinancialIncomeRecordCreateDTO>, FinancialIncomeRecordCreateValidator>();
             services.AddScoped<IValidator<FinancialIncomeRecordUpdateDTO>, FinancialIncomeRecordUpdateValidator>();
 

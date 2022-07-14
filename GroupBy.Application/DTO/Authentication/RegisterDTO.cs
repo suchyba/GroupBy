@@ -17,5 +17,6 @@ namespace GroupBy.Application.DTO.Authentication
         public string RelatedVolunteerPhoneNumber { get; set; }
         public string RelatedVolunteerAddress { get; set; }
         public string RegistrationCode { get; set; }
+        public string UrlToVerifyEmail { get; set; } = "testowanie";
     }
 }

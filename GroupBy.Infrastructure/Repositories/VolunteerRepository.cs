@@ -26,6 +26,7 @@ namespace GroupBy.Data.Repositories
         {
             Volunteer v = await context.Set<Volunteer>()
                 .Include(v => v.Rank)
+                    .ThenInclude(r => r.HigherRank)
                 .FirstOrDefaultAsync(v => v.Id == domain.Id);
             if (v == null)
                 throw new NotFoundException("Volunteer", domain.Id);

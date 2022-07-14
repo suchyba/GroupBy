@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -15,7 +16,6 @@ namespace GroupBy.Web.API.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
     [Route("api/[controller]")]
-    [AllowAnonymous]
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticationService authenticationService;
@@ -25,6 +25,7 @@ namespace GroupBy.Web.API.Controllers
             this.authenticationService = authenticationService;
         }
 
+        [AllowAnonymous]
         [HttpPost("login", Name = "LoginUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,6 +40,8 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [AllowAnonymous]
         [HttpPost("register", Name = "RegisterNewUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -47,7 +50,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await authenticationService.RegisterUserAsync(model);
+                await authenticationService.RegisterUserAsync(model, Url);
                 return NoContent();
             }
             catch (BadRequestException e)
@@ -62,6 +65,43 @@ namespace GroupBy.Web.API.Controllers
             {
                 return NotFound(new { Id = e.Key, e.Message });
             }
+        }
+
+        [HttpGet("user", Name = "GetUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDTO>> GetUserAsync([FromQuery] string email)
+        {
+            try
+            {
+                return Ok(await authenticationService.GetUserAsync(email));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("verify", Name = "ConfirmEmailAddress")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ConfirmEmailAsync([FromQuery] string email, [FromQuery] string token)
+        {
+            try
+            {
+                await authenticationService.ConfirmEmailAsync(email, HttpUtility.UrlDecode(token));
+            }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+            return NoContent();
         }
     }
 }
