@@ -23,4 +23,10 @@
     <ProjectReference Include="..\GroupBy.Core\GroupBy.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\Email\confirmationEmailTemplate.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -146,7 +147,13 @@ namespace GroupBy.Application.Services
             urlToConfirm.Add("token", token);
             urlToConfirm.Add("email", applicationUser.Email);
 
-            await emailService.SendEmailAsync(applicationUser.Email, "Confirm email", @"<a href=""" + registerDTO.UrlToVerifyEmail + "?" + urlToConfirm.ToString() + @""">click link </a>");
+            var templatePath = configuration.GetValue<string>("ConfirmEmailTemplatePath");
+
+            string emailTemplate = File.ReadAllText(templatePath);
+
+            emailTemplate = emailTemplate.Replace(@"{CONFIRM_URL}", registerDTO.UrlToVerifyEmail + "?" + urlToConfirm.ToString());
+
+            await emailService.SendEmailAsync(applicationUser.Email, "Confirm email", emailTemplate);
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
