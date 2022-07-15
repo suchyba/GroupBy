@@ -94,5 +94,19 @@ namespace GroupBy.Data.Repositories
 
             return v.OwnedProjects;
         }
+
+        public async Task<IEnumerable<RegistrationCode>> GetOwnedRegistrationCodesAsync(int volunteerId)
+        {
+            Volunteer v = await context.Set<Volunteer>()
+                .Include(v => v.RegistrationCodes)
+                    .ThenInclude(c => c.TargetGroup)
+                .Include(v => v.RegistrationCodes)
+                    .ThenInclude(c => c.TargetRank)
+                .FirstOrDefaultAsync(v => v.Id == volunteerId);
+            if (v == null)
+                throw new NotFoundException("Volunteer", volunteerId);
+
+            return v.RegistrationCodes;
+        }
     }
 }

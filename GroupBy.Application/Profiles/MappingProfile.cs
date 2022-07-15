@@ -186,6 +186,7 @@ namespace GroupBy.Application.Profiles
 
             CreateMap<RegistrationCode, RegistrationCodeSimpleDTO>().ReverseMap();
             CreateMap<RegistrationCode, RegistrationCodeFullDTO>();
+            CreateMap<RegistrationCode, RegistrationCodeListDTO>();
             CreateMap<RegistrationCodeCreateDTO, RegistrationCode>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(
                     src => new Volunteer { Id = src.OwnerId }))

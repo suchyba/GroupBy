@@ -137,5 +137,20 @@ namespace GroupBy.Web.API.Controllers
                 return NotFound(new { Id = e.Key, e.Message });
             }
         }
+
+        [HttpGet("{id}/registrationcodes", Name = "GetRegistrationCodesOwnedByVolunteer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedRegistrationCodesAsync(int id)
+        {
+            try
+            {
+                return Ok(await volunteerService.GetOwnedRegistrationCodesAsync(id));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
+            }
+        }
     }
 }

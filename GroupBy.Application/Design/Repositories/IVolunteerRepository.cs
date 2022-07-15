@@ -12,6 +12,7 @@ namespace GroupBy.Application.Design.Repositories
         public Task<IEnumerable<Group>> GetGroupsAsync(int volunteerId);
         public Task<IEnumerable<Group>> GetOwnedGroupsAsync(int volunteerId);
         public Task<IEnumerable<Project>> GetOwnedProjectsAsync(int volunteerId);
+        public Task<IEnumerable<RegistrationCode>> GetOwnedRegistrationCodesAsync(int volunteerId);
 
     }
 }
