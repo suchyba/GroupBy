@@ -46,6 +46,8 @@ namespace GroupBy.Data
             services.AddScoped<IFinancialOutcomeRecordRepository, FinancialOutcomeRecordRepository>();
             services.AddScoped<IFinancialIncomeRecordRepository, FinancialIncomeRecordRepository>();
             services.AddScoped<IRegistrationCodeRepository, RegistrationCodeRepository>();
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 
             return services;
         }

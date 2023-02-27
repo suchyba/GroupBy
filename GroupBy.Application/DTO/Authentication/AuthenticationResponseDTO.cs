@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace GroupBy.Application.DTO.Authentication
 {
@@ -12,5 +7,7 @@ namespace GroupBy.Application.DTO.Authentication
         public string Email { get; set; }
         public string Token { get; set; }
         public int VolunteerId { get; set; }
+        [JsonIgnore]
+        public string RefreshToken { get; set; }
     }
 }
