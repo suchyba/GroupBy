@@ -30,9 +30,10 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: .\GroupBy.Web.API\Dockerfile
           load: true
-          tags: myimage:latest
+          tags: GroupByApi:latest
       -
         name: Inspect
         run: |
-          docker image inspect myimage:latest
+          docker image inspect GroupByApi:latest
