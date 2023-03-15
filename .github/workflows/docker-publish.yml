@@ -32,8 +32,8 @@ jobs:
           context: .
           file: .\GroupBy.Web.API\Dockerfile
           load: true
-          tags: GroupByApi:latest
+          tags: groupbyapi:latest
       -
         name: Inspect
         run: |
-          docker image inspect GroupByApi:latest
+          docker image inspect groupbyapi:latest
