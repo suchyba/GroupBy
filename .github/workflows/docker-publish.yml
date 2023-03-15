@@ -30,7 +30,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: .\GroupBy.Web.API\Dockerfile
+          file: ./GroupBy.Web.API/Dockerfile
           load: true
           tags: groupbyapi:latest
       -
