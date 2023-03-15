@@ -54,4 +54,4 @@ jobs:
       -
         name: Inspect
         run: |
-          docker image inspect groupbyapi:latest
+          docker image inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
