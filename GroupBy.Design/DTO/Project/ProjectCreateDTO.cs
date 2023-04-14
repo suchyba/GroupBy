@@ -1,0 +1,14 @@
+﻿namespace GroupBy.Design.TO.Project
+{
+    public class ProjectCreateDTO
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime? BeginDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public bool Active { get; set; }
+        public bool Independent { get; set; }
+        public Guid ParentGroupId { get; set; }
+        public Guid OwnerId { get; set; }
+    }
+}

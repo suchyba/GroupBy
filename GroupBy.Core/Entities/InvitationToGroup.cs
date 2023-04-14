@@ -16,7 +16,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of the invitation
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Groups from this invitation came from <seealso cref="Group"/>
         /// </summary>

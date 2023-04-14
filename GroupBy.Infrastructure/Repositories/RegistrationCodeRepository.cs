@@ -1,11 +1,8 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -16,25 +13,15 @@ namespace GroupBy.Data.Repositories
         private readonly IRankRepository rankRepository;
         private readonly IVolunteerRepository volunteerRepository;
 
-        public RegistrationCodeRepository(DbContext context, IGroupRepository groupRepository, IRankRepository rankRepository, IVolunteerRepository volunteerRepository) : base(context)
+        public RegistrationCodeRepository(
+            IDbContextLocator<GroupByDbContext> dBcontextLocator,
+            IGroupRepository groupRepository,
+            IRankRepository rankRepository,
+            IVolunteerRepository volunteerRepository) : base(dBcontextLocator)
         {
             this.groupRepository = groupRepository;
             this.rankRepository = rankRepository;
             this.volunteerRepository = volunteerRepository;
-        }
-
-        public override async Task<RegistrationCode> GetAsync(RegistrationCode domain)
-        {
-            RegistrationCode registrationCode = await context.Set<RegistrationCode>()
-                .Include(c => c.TargetGroup)
-                .Include(c => c.TargetRank)
-                .Include(c => c.Owner)
-                .FirstOrDefaultAsync(c => c.Code == domain.Code);
-
-            if (registrationCode == null)
-                throw new NotFoundException("RegistrationCode", domain.Code);
-
-            return registrationCode;
         }
 
         public override Task<RegistrationCode> UpdateAsync(RegistrationCode domain)
@@ -53,7 +40,6 @@ namespace GroupBy.Data.Repositories
 
             var newCode = await context.Set<RegistrationCode>().AddAsync(domain);
 
-            await context.SaveChangesAsync();
             return newCode.Entity;
         }
     }

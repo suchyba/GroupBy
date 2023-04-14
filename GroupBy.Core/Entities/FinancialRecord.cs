@@ -10,9 +10,9 @@ namespace GroupBy.Domain.Entities
     public abstract class FinancialRecord
     {
         [Key]
-        public int Id { get; set; }
-        public int BookId { get; set; }
-        public int BookOrderNumberId { get; set; }
+        public Guid Id { get; set; }
+        public int BookId { get => Book?.BookId ?? -1; }
+        public int BookOrderNumberId { get => Book?.BookOrderNumberId ?? -1; }
         /// <summary>
         /// Total value.
         /// </summary>
@@ -29,7 +29,7 @@ namespace GroupBy.Domain.Entities
         /// <summary>
         /// Accounting book where this record is located (it is also part of primary key: <see cref="BookId"/>, <see cref="BookOrderNumber"/>)<seealso cref="AccountingBook"/>
         /// </summary>
-        [Required, ForeignKey("BookId, BookOrderNumberId")]
+        [Required]
         public virtual AccountingBook Book { get; set; }
         /// <summary>
         /// If this record is associated with the project, here is the tag <seealso cref="Project"/>

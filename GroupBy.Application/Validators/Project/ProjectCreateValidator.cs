@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.DTO.Project;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.TO.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,16 +40,16 @@ namespace GroupBy.Application.Validators.Project
                 .WithMessage("{PropertyName} must be greater or equal to begin date.");
 
             RuleFor(p => p.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
 
             RuleFor(p => p)
                 .MustAsync(OwnerInParentGroup)
-                .When(p => p.OwnerId > 0)
+                .When(p => p.OwnerId != Guid.Empty)
                 .OverridePropertyName("OwnerId")
                 .WithMessage("Owner must be a member of the parent group.");
 
             RuleFor(p => p.ParentGroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
         private async Task<bool> OwnerInParentGroup(ProjectCreateDTO project, CancellationToken token)
         {

@@ -17,7 +17,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of book
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the book
         /// </summary>

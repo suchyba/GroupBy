@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryItemSource;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.InventoryItemSource;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,14 +25,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryItemSources")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryItemSourceDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryItemSourceDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await inventoryItemSourceService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetInventoryItemSource")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemSourceDTO>> GetAsync(int id)
+        public async Task<ActionResult<InventoryItemSourceDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpDelete("delete", Name = "DeleteIntentoryItemSource")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

@@ -1,21 +1,22 @@
-﻿using GroupBy.Domain.Entities;
-using GroupBy.Application.Design.Repositories;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
+using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using GroupBy.Data.DbContexts;
-using Microsoft.EntityFrameworkCore;
-using GroupBy.Application.Exceptions;
 
 namespace GroupBy.Data.Repositories
 {
     public class AccountingBookRepository : AsyncRepository<AccountingBook>, IAccountingBookRepository
     {
-        public AccountingBookRepository(DbContext context) : base(context)
-        {
+        private readonly IGroupRepository groupRepository;
 
+        public AccountingBookRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator, IGroupRepository groupRepository) : base(dBcontextLocator)
+        {
+            this.groupRepository = groupRepository;
         }
 
         public override async Task DeleteAsync(AccountingBook domain)
@@ -28,23 +29,10 @@ namespace GroupBy.Data.Repositories
             await context.SaveChangesAsync();
         }
 
-        public override async Task<AccountingBook> GetAsync(AccountingBook domain)
-        {
-            var book = await context.Set<AccountingBook>()
-                .Include(b => b.RelatedGroup)
-                .Include(b => b.Records)
-                .ThenInclude(r => r.RelatedProject)
-                .Include(r => r.Records)
-                .ThenInclude(r => r.RelatedDocument)
-                .FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
-            if (book == null)
-                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
-            return book;
-        }
         public override async Task<AccountingBook> CreateAsync(AccountingBook domain)
         {
-            int key = domain.RelatedGroup.Id;
-            domain.RelatedGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.RelatedGroup.Id);
+            Guid key = domain.RelatedGroup.Id;
+            domain.RelatedGroup = await groupRepository.GetAsync(domain.RelatedGroup);
             if (domain.RelatedGroup == null)
                 throw new NotFoundException("Group", key);
 
@@ -54,10 +42,10 @@ namespace GroupBy.Data.Repositories
         }
         public async Task<bool> IsIdUnique(int bookNumber, int orderNumber)
         {
-            if (!(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber).AnyAsync()))
+            if (!(await GetAllAsync()).Any(book => book.BookId == bookNumber))
                 return true;
 
-            return !(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber && book.BookOrderNumberId == orderNumber).AnyAsync());
+            return !(await GetAllAsync()).Any(book => book.BookId == bookNumber && book.BookOrderNumberId == orderNumber);
         }
 
         public override async Task<AccountingBook> UpdateAsync(AccountingBook domain)
@@ -69,14 +57,12 @@ namespace GroupBy.Data.Repositories
             book.Locked = domain.Locked;
             book.Name = domain.Name;
 
-            await context.SaveChangesAsync();
-
             return book;
         }
 
-        public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain)
+        public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain, bool includeLocal = false)
         {
-            return (await GetAsync(domain)).Records;
+            return (await GetAsync(domain, includeLocal, "Records")).Records;
         }
     }
 }

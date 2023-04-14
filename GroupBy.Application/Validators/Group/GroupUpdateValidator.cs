@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Group;
+using GroupBy.Design.TO.Group;
 
 namespace GroupBy.Application.Validators.Group
 {
@@ -8,11 +8,11 @@ namespace GroupBy.Application.Validators.Group
         public GroupUpdateValidator()
         {
             RuleFor(g => g.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(g => g.Name)
                 .NotEmpty().WithMessage("{PropertyName} is reqired.");
             RuleFor(g => g.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
     }
 }

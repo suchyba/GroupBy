@@ -1,25 +1,25 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
     public class InventoryBookRepository : AsyncRepository<InventoryBook>, IInventoryBookRepository
     {
-        public InventoryBookRepository(DbContext context) : base(context)
-        {
+        private readonly IGroupRepository groupRepository;
 
+        public InventoryBookRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator, IGroupRepository groupRepository) : base(dBcontextLocator)
+        {
+            this.groupRepository = groupRepository;
         }
         public override async Task<InventoryBook> CreateAsync(InventoryBook domain)
         {
             var groupId = domain.RelatedGroup.Id;
-            domain.RelatedGroup = await context.Set<Group>().Include(g => g.InventoryBook).FirstOrDefaultAsync(g => g.Id == groupId);
+            domain.RelatedGroup = await groupRepository.GetAsync(domain.RelatedGroup, false, "InventoryBook");
             if (domain.RelatedGroup == null)
                 throw new NotFoundException("Group", groupId);
 
@@ -27,33 +27,17 @@ namespace GroupBy.Data.Repositories
                 throw new BadRequestException("Inventory book exists in this group");
 
             var createdBook = await context.Set<InventoryBook>().AddAsync(domain);
-            await context.SaveChangesAsync();
             return createdBook.Entity;
         }
-        public override async Task<InventoryBook> GetAsync(InventoryBook domain)
+
+        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryBookRecordsAsync(InventoryBook book, bool includeLocal = false)
         {
-            var book = await context.Set<InventoryBook>()
-                .Include(b => b.RelatedGroup)
-                .Include(b => b.Records)
-                    .ThenInclude(r => r.Source)
-                .Include(b => b.Records)
-                    .ThenInclude(r => r.Item)
-                .Include(b => b.Records)
-                    .ThenInclude(r => r.Document)
-                .FirstOrDefaultAsync(b => b.Id == domain.Id);
-            if (book == null)
-                throw new NotFoundException("InventoryBook", domain.Id);
-            return book;
+            return (await GetAsync(book, includeLocal, "Records")).Records;
         }
 
-        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryBookRecordsAsync(InventoryBook book)
+        public async Task<IEnumerable<InventoryItem>> GetInventoryItemsAsync(InventoryBook book, bool includeLocal = false)
         {
-            return (await GetAsync(book)).Records;
-        }
-
-        public async Task<IEnumerable<InventoryItem>> GetInventoryItemsAsync(InventoryBook book)
-        {
-            book = await GetAsync(book);
+            book = await GetAsync(book, includeLocal, "Records.Item");
 
             List<InventoryItem> items = new();
             foreach (var record in book.Records)
@@ -72,12 +56,11 @@ namespace GroupBy.Data.Repositories
             var toModify = await GetAsync(domain);
             var groupId = domain.RelatedGroup.Id;
             Group relatedGroup = null;
-            relatedGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == groupId);
+            relatedGroup = await groupRepository.GetAsync(domain.RelatedGroup);
             if (relatedGroup == null)
                 throw new NotFoundException("Group", groupId);
             toModify.RelatedGroup = relatedGroup;
 
-            await context.SaveChangesAsync();
             return toModify;
         }
     }

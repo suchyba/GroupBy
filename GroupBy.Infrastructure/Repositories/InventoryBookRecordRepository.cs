@@ -1,28 +1,33 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
     public class InventoryBookRecordRepository : AsyncRepository<InventoryBookRecord>, IInventoryBookRecordRepository
     {
-        public InventoryBookRecordRepository(DbContext context) : base(context)
-        {
+        private readonly IDocumentRepository documentRepository;
+        private readonly IInventoryItemRepository inventoryItemRepository;
+        private readonly IInventoryItemSourceRepository inventoryItemSourceRepository;
+        private readonly IInventoryBookRepository inventoryBookRepository;
 
-        }
-
-        public override async Task<InventoryBookRecord> GetAsync(InventoryBookRecord domain)
+        public InventoryBookRecordRepository(
+            IDbContextLocator<GroupByDbContext> dBcontextLocator,
+            IDocumentRepository documentRepository,
+            IInventoryItemRepository inventoryItemRepository,
+            IInventoryItemSourceRepository inventoryItemSourceRepository,
+            IInventoryBookRepository inventoryBookRepository) : base(dBcontextLocator)
         {
-            var record = await context.Set<InventoryBookRecord>().FirstOrDefaultAsync(r => r.Id == domain.Id);
-            if (record == null)
-                throw new NotFoundException("InventoryBookRecord", new { domain.Id });
-            return record;
+            this.documentRepository = documentRepository;
+            this.inventoryItemRepository = inventoryItemRepository;
+            this.inventoryItemSourceRepository = inventoryItemSourceRepository;
+            this.inventoryBookRepository = inventoryBookRepository;
         }
 
         public override async Task<InventoryBookRecord> UpdateAsync(InventoryBookRecord domain)
@@ -31,61 +36,54 @@ namespace GroupBy.Data.Repositories
             record.Date = domain.Date;
             record.Income = domain.Income;
 
-            int documentId = domain.Document.Id;
-            domain.Document = await context.Set<Document>().FirstOrDefaultAsync(d => d.Id == documentId);
+            Guid documentId = domain.Document.Id;
+            domain.Document = await documentRepository.GetAsync(domain.Document);
             if (domain.Document == null)
                 throw new NotFoundException("Document", documentId);
 
-            int itemId = domain.Item.Id;
-            domain.Item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == itemId);
+            Guid itemId = domain.Item.Id;
+            domain.Item = await inventoryItemRepository.GetAsync(domain.Item);
             if (domain.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
 
-            int sourceId = domain.Source.Id;
-            domain.Source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == sourceId);
+            Guid sourceId = domain.Source.Id;
+            domain.Source = await inventoryItemSourceRepository.GetAsync(domain.Source);
             if (domain.Source == null)
                 throw new NotFoundException("InventoryItemSource", sourceId);
-
-            await context.SaveChangesAsync();
 
             return record;
         }
 
         public override async Task<InventoryBookRecord> CreateAsync(InventoryBookRecord domain)
         {
-            int bookId = domain.InventoryBookId;
-            domain.Book = await context.Set<InventoryBook>()
-                .Include(b => b.Records)
-                .ThenInclude(r => r.Item)
-                .FirstOrDefaultAsync(i => i.Id == bookId);
+            Guid bookId = domain.Book.Id;
+            domain.Book = await inventoryBookRepository.GetAsync(domain.Book, false, "Records.Item");
             if (domain.Book == null)
                 throw new NotFoundException("InventoryBook", bookId);
 
-            int itemId = domain.Item.Id;
-            domain.Item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == itemId);
+            Guid itemId = domain.Item.Id;
+            domain.Item = await inventoryItemRepository.GetAsync(domain.Item);
             if (domain.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
 
-            if (!domain.Income 
+            if (!domain.Income
                 && domain.Book.Records
                 .OrderBy(r => r.Date)
                 .Where(r => r.Item == domain.Item)
                 .LastOrDefault()?.Income != true)
                 throw new BadRequestException("You cannot remove item what is not in the inventory book");
 
-            int sourceId = domain.Source.Id;
-            domain.Source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == sourceId);
+            Guid sourceId = domain.Source.Id;
+            domain.Source = await inventoryItemSourceRepository.GetAsync(domain.Source);
             if (domain.Source == null)
                 throw new NotFoundException("InventoryItemSource", sourceId);
 
-            int documentId = domain.Document.Id;
-            domain.Document = await context.Set<Document>().FirstOrDefaultAsync(s => s.Id == documentId);
+            Guid documentId = domain.Document.Id;
+            domain.Document = await documentRepository.GetAsync(domain.Document);
             if (domain.Document == null)
                 throw new NotFoundException("Document", documentId);
 
             var created = await context.Set<InventoryBookRecord>().AddAsync(domain);
-
-            await context.SaveChangesAsync();
 
             return created.Entity;
         }
@@ -93,29 +91,21 @@ namespace GroupBy.Data.Repositories
         public async Task<IEnumerable<InventoryBookRecord>> TransferItemAsync(InventoryBookRecord inventoryBookFromRecord, InventoryBookRecord inventoryBookToRecord)
         {
             // Book from
-            int bookFromId = inventoryBookFromRecord.InventoryBookId;
-            inventoryBookFromRecord.Book = await context.Set<InventoryBook>()
-                .Include(b => b.Records)
-                .ThenInclude(r => r.Item)
-                .Include(b => b.RelatedGroup)
-                .FirstOrDefaultAsync(i => i.Id == bookFromId);
+            Guid bookFromId = inventoryBookFromRecord.Book.Id;
+            inventoryBookFromRecord.Book = await inventoryBookRepository.GetAsync(inventoryBookFromRecord.Book, false, "Records.Item", "RelatedGroup");
             if (inventoryBookFromRecord.Book == null)
                 throw new NotFoundException("InventoryFromBook", bookFromId);
 
             // Book to
-            int bookToId = inventoryBookToRecord.InventoryBookId;
-            inventoryBookToRecord.Book = await context.Set<InventoryBook>()
-                .Include(b => b.Records)
-                .ThenInclude(r => r.Item)
-                .Include(b => b.RelatedGroup)
-                .FirstOrDefaultAsync(i => i.Id == bookToId);
+            Guid bookToId = inventoryBookToRecord.Book.Id;
+            inventoryBookToRecord.Book = await inventoryBookRepository.GetAsync(inventoryBookToRecord.Book, false, "Records.Item", "RelatedGroup");
             if (inventoryBookToRecord.Book == null)
                 throw new NotFoundException("InventoryToBook", bookToId);
 
             // Item
-            int itemId = inventoryBookFromRecord.Item.Id;
-            inventoryBookFromRecord.Item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == itemId);
-            inventoryBookToRecord.Item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == itemId);
+            Guid itemId = inventoryBookFromRecord.Item.Id;
+            inventoryBookFromRecord.Item = await inventoryItemRepository.GetAsync(inventoryBookFromRecord.Item.Id);
+            inventoryBookToRecord.Item = await inventoryItemRepository.GetAsync(inventoryBookFromRecord.Item.Id);
             if (inventoryBookFromRecord.Item == null)
                 throw new NotFoundException("InventoryItem", itemId);
 
@@ -126,23 +116,24 @@ namespace GroupBy.Data.Repositories
                 throw new BadRequestException("You cannot remove item what is not in the inventory book");
 
             // Source from
-            int sourceFromId = inventoryBookFromRecord.Source.Id;
-            inventoryBookFromRecord.Source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == sourceFromId);
+            Guid sourceFromId = inventoryBookFromRecord.Source.Id;
+            inventoryBookFromRecord.Source = await inventoryItemSourceRepository.GetAsync(inventoryBookFromRecord.Source);
             if (inventoryBookFromRecord.Source == null)
                 throw new NotFoundException("InventoryItemFromSource", sourceFromId);
 
             // Source to
-            int sourceToId = inventoryBookToRecord.Source.Id;
-            inventoryBookToRecord.Source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == sourceToId);
+            Guid sourceToId = inventoryBookToRecord.Source.Id;
+            inventoryBookToRecord.Source = await inventoryItemSourceRepository.GetAsync(inventoryBookToRecord.Source);
             if (inventoryBookToRecord.Source == null)
                 throw new NotFoundException("InventoryItemToSource", sourceToId);
 
             // Document
             var document = await context.Set<Document>()
-                .AddAsync(new Document { 
+                .AddAsync(new Document
+                {
                     Name = inventoryBookFromRecord.Document.Name,
                     FilePath = "",
-                    Groups = new List<Group>() { inventoryBookFromRecord.Book.RelatedGroup, inventoryBookToRecord.Book.RelatedGroup},
+                    Groups = new List<Group>() { inventoryBookFromRecord.Book.RelatedGroup, inventoryBookToRecord.Book.RelatedGroup },
                     RelatedProject = null
                 });
 
@@ -155,8 +146,6 @@ namespace GroupBy.Data.Repositories
 
             var createdFrom = await context.Set<InventoryBookRecord>().AddAsync(inventoryBookFromRecord);
             var createdTo = await context.Set<InventoryBookRecord>().AddAsync(inventoryBookToRecord);
-
-            await context.SaveChangesAsync();
 
             return new List<InventoryBookRecord>() { createdFrom.Entity, createdTo.Entity };
         }

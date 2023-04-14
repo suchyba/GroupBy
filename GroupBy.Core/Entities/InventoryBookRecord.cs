@@ -17,8 +17,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of the record
         /// </summary>
         [Key]
-        public int Id { get; set; }
-        public int InventoryBookId { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Related item <seealso cref="InventoryItem"/>
         /// </summary>
@@ -34,7 +33,7 @@ namespace GroupBy.Domain.Entities
         [Required]
         public virtual Document Document { get; set; }
         /// <summary>
-        /// Describes if the record is the income 
+        /// Describes if the record is the income
         /// </summary>
         public bool Income { get; set; }
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Design.TO.AccountingDocument;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace GroupBy.Application.Validators.AccountingDocument
                 .Must(ids => ids?.Count() > 0)
                 .WithMessage("Accounting document must be related to at least 1 group");
             RuleFor(d => d.RelatedProjectId)
-                .GreaterThan(0).When(d => d.RelatedProjectId.HasValue)
+                .NotEmpty().When(d => d.RelatedProjectId.HasValue)
                 .WithMessage("{PropertyName} must be greater than 0");
         }
     }

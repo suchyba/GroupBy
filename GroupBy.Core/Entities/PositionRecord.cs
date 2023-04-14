@@ -9,8 +9,9 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class PositionRecord
     {
-        public int Id { get; set; }
-        public int VolunteerId { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+        public Guid VolunteerId { get; set; }
         /// <summary>
         /// Position which this record references
         /// </summary>

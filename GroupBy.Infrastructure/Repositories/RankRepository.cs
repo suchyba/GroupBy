@@ -1,59 +1,32 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
     public class RankRepository : AsyncRepository<Rank>, IRankRepository
     {
-        public RankRepository(DbContext context) : base(context)
+        public RankRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
 
-        }
-
-        public override async Task<Rank> GetAsync(Rank domain)
-        {
-            var r = await context.Set<Rank>()
-                .Include(r => r.HigherRank)
-                .FirstOrDefaultAsync(r => r.Id == domain.Id);
-            if (r == null)
-                throw new NotFoundException("Rank", domain.Id);
-
-            return r;
-        }
-
-        public async Task<int> GetMaxIdAsync()
-        {
-            try
-            {
-                return await context.Set<Rank>().MaxAsync(r => r.Id);
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
         }
 
         public override async Task<Rank> UpdateAsync(Rank domain)
         {
-            var r = await GetAsync(domain);
+            var r = await GetAsync(domain, false, "HigherRank");
             Rank higherRank = null;
             if (domain.HigherRank != null)
             {
-                higherRank = await context.Set<Rank>().FirstOrDefaultAsync(r => r.Id == domain.HigherRank.Id);
+                higherRank = await GetAsync(domain.HigherRank);
                 if (higherRank == null)
                     throw new NotFoundException("Rank", domain.HigherRank.Id);
             }
             r.HigherRank = higherRank;
             r.Name = domain.Name;
-
-            await context.SaveChangesAsync();
 
             return r;
         }
@@ -61,8 +34,8 @@ namespace GroupBy.Data.Repositories
         {
             if (domain.HigherRank != null)
             {
-                int higherRankId = domain.HigherRank.Id;
-                domain.HigherRank = await context.Set<Rank>().FirstOrDefaultAsync(r => r.Id == higherRankId);
+                Guid higherRankId = domain.HigherRank.Id;
+                domain.HigherRank = await GetAsync(domain.HigherRank);
                 if (domain.HigherRank == null)
                     throw new NotFoundException("Rank", higherRankId);
             }

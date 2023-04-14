@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.Rank;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.TO.Rank;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,14 +25,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllRanks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<RankSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<RankSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await rankService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetRank")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RankSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<RankSimpleDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

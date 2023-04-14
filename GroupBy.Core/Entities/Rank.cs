@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// The rank (some kind of tag 
+    /// The rank (some kind of tag
     /// </summary>
     public class Rank
     {
@@ -13,7 +13,7 @@ namespace GroupBy.Domain.Entities
         /// The identificator
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the rank
         /// </summary>

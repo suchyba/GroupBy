@@ -1,11 +1,10 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.DbContext;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Exceptions;
+using GroupBy.Data.DbContexts;
 using GroupBy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -15,22 +14,13 @@ namespace GroupBy.Data.Repositories
         private readonly IGroupRepository groupRepository;
         private readonly IProjectRepository projectRepository;
 
-        public AccountingDocumentRepository(DbContext context, IGroupRepository groupRepository, IProjectRepository projectRepository) : base(context)
+        public AccountingDocumentRepository(
+            IDbContextLocator<GroupByDbContext> dBcontextLocator,
+            IGroupRepository groupRepository,
+            IProjectRepository projectRepository) : base(dBcontextLocator)
         {
             this.groupRepository = groupRepository;
             this.projectRepository = projectRepository;
-        }
-
-        public override async Task<AccountingDocument> GetAsync(AccountingDocument domain)
-        {
-            AccountingDocument document = await context.Set<AccountingDocument>()
-                .Include(d => d.Groups)
-                .Include(d => d.RelatedProject)
-                .FirstOrDefaultAsync(d => d.Id == domain.Id);
-            if (document == null)
-                throw new NotFoundException("AccountingDocument", domain.Id);
-
-            return document;
         }
 
         public override async Task<AccountingDocument> UpdateAsync(AccountingDocument domain)
@@ -39,7 +29,6 @@ namespace GroupBy.Data.Repositories
             document.Name = domain.Name;
             document.FilePath = domain.FilePath;
 
-            await context.SaveChangesAsync();
             return document;
         }
         public override async Task<AccountingDocument> CreateAsync(AccountingDocument domain)
@@ -55,7 +44,6 @@ namespace GroupBy.Data.Repositories
                 domain.RelatedProject = await projectRepository.GetAsync(domain.RelatedProject);
 
             await context.Set<AccountingDocument>().AddAsync(domain);
-            await context.SaveChangesAsync();
 
             return domain;
         }

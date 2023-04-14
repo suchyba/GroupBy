@@ -15,7 +15,7 @@ namespace GroupBy.Domain.Entities
         /// The identification number of the volunteer
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// The names of the volunteer
         /// </summary>

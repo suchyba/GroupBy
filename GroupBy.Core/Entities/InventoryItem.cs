@@ -14,7 +14,7 @@ namespace GroupBy.Domain.Entities
     public class InventoryItem
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Identification symbol of the item
         /// </summary>

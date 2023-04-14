@@ -1,13 +1,13 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.AccountingBook;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.TO.AccountingBook;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using System.Net;
-using GroupBy.Application.DTO.FinancialRecord;
+using GroupBy.Design.TO.FinancialRecord;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -26,7 +26,7 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllAccountingBooks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<AccountingBookSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<List<AccountingBookSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await accountingBookService.GetAllAsync());
         }

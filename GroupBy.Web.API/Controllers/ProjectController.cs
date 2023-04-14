@@ -1,8 +1,8 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.AccountingDocument;
-using GroupBy.Application.DTO.FinancialRecord;
-using GroupBy.Application.DTO.Project;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.TO.FinancialRecord;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -34,7 +34,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ProjectDTO>> GetAsync(int id)
+        public async Task<ActionResult<ProjectDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/financialRecords", Name = "GetFinancialRecordsRelatedToProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetRelatedFinancialRecordsAsync(int id)
+        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetRelatedFinancialRecordsAsync(Guid id)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/accountingDocuments", Name = "GetAccountingDocumentsRelatedToProject")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id)
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(Guid id)
         {
             try
             {

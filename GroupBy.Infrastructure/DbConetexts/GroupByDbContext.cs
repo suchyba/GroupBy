@@ -1,8 +1,7 @@
-﻿using GroupBy.Application.Design;
-using GroupBy.Domain.Entities;
+﻿using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
+using System.Reflection.Emit;
 
 namespace GroupBy.Data.DbContexts
 {
@@ -34,7 +33,7 @@ namespace GroupBy.Data.DbContexts
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<ApplicationUser> Identities { get; set; }
-        
+
         public GroupByDbContext(DbContextOptions<GroupByDbContext> options) : base(options)
         {
 
@@ -42,11 +41,11 @@ namespace GroupBy.Data.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountingBook>()
-                .HasKey(a => new { a.BookId, a.BookOrderNumberId });
+                .HasAlternateKey(a => new { a.BookId, a.BookOrderNumberId });
             modelBuilder.Entity<GroupsPermissions>()
-                .HasKey(p => new { p.GroupId, p.PositionId });
+                .HasAlternateKey(p => new { p.GroupId, p.PositionId });
             modelBuilder.Entity<PositionRecord>()
-                .HasKey(p => new { p.VolunteerId, p.Id });
+                .HasAlternateKey(p => new { p.VolunteerId, p.Id });
 
             modelBuilder.Entity<Group>()
                 .HasOne(g => g.Owner)

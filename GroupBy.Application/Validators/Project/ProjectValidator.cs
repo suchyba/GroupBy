@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Project;
+using GroupBy.Design.TO.Project;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace GroupBy.Application.Validators.Project
         public ProjectValidator()
         {
             RuleFor(p => p.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.Description)

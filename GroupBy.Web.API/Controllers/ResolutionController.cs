@@ -1,11 +1,12 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.Resolution;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.Resolution;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using System;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -24,14 +25,14 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllResolutions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<ResolutionDTO>>> GetAllAsync()
+        public async Task<ActionResult<List<ResolutionDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await resolutionService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetResolution")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ResolutionDTO>> GetAsync(int id)
+        public async Task<ActionResult<ResolutionDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -71,7 +72,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {

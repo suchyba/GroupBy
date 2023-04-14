@@ -13,7 +13,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of the element
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Groups in which this element is added <seealso cref="Models.Group"/>
         /// </summary>

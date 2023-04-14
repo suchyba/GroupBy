@@ -10,7 +10,7 @@ namespace GroupBy.Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public int VolunteerId { get; set; }
+        public Guid VolunteerId { get; set; }
         [Required]
         public virtual Volunteer RelatedVolunteer { get; set; }
     }

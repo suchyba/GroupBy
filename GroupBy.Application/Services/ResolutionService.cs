@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.Resolution;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.Resolution;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
@@ -18,8 +15,9 @@ namespace GroupBy.Application.Services
             IResolutionRepository repository,
             IMapper mapper,
             IValidator<ResolutionUpdateDTO> updateValidator,
-            IValidator<ResolutionCreateDTO> createValidator)
-            : base(repository, mapper, updateValidator, createValidator)
+            IValidator<ResolutionCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }

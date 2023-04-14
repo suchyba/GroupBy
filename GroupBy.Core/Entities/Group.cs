@@ -14,7 +14,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of the group
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the group
         /// </summary>

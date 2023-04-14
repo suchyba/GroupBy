@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Document;
+using GroupBy.Design.TO.Document;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace GroupBy.Application.Validators.Document
                 .Must(ids => ids?.Count() > 0)
                 .WithMessage("Document must be related to at least 1 group");
             RuleFor(d => d.RelatedProjectId)
-                .GreaterThan(0).When(d => d.RelatedProjectId != null).WithMessage("{PropertyName} has to be greater then 0.");
+                .NotEmpty().When(d => d.RelatedProjectId != null).WithMessage("{PropertyName} has to be greater then 0.");
             RuleFor(d => d.FilePath)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
         }

@@ -1,12 +1,8 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.Model.Mail;
+﻿using GroupBy.Application.Model.Mail;
+using GroupBy.Design.Services;
 using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services

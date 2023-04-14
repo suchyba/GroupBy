@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.RegistrationCode;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllRegistrationCodes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<RegistrationCodeSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<List<RegistrationCodeSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await registrationCodeService.GetAllAsync());
         }

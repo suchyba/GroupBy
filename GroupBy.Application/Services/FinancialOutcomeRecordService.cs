@@ -1,14 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.FinancialOutcomeRecord;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.FinancialOutcomeRecord;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
@@ -18,8 +15,9 @@ namespace GroupBy.Application.Services
             IFinancialOutcomeRecordRepository repository,
             IMapper mapper,
             IValidator<FinancialOutcomeRecordUpdateDTO> updateValidator,
-            IValidator<FinancialOutcomeRecordCreateDTO> createValidator)
-            : base(repository, mapper, updateValidator, createValidator)
+            IValidator<FinancialOutcomeRecordCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }

@@ -16,7 +16,7 @@ namespace GroupBy.Domain.Entities
         /// Primary key
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Content of agreement
         /// </summary>

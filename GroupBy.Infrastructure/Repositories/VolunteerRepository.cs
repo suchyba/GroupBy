@@ -1,11 +1,10 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -14,28 +13,14 @@ namespace GroupBy.Data.Repositories
     {
         private readonly IRankRepository rankRepository;
 
-        public VolunteerRepository(DbContext context, IRankRepository rankRepository) : base(context)
+        public VolunteerRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator, IRankRepository rankRepository) : base(dBcontextLocator)
         {
             this.rankRepository = rankRepository;
         }
-        public override async Task<IEnumerable<Volunteer>> GetAllAsync()
-        {
-            return await context.Set<Volunteer>().Include(v => v.Identity).ToListAsync();
-        }
-        public override async Task<Volunteer> GetAsync(Volunteer domain)
-        {
-            Volunteer v = await context.Set<Volunteer>()
-                .Include(v => v.Rank)
-                    .ThenInclude(r => r.HigherRank)
-                .FirstOrDefaultAsync(v => v.Id == domain.Id);
-            if (v == null)
-                throw new NotFoundException("Volunteer", domain.Id);
-            return v;
-        }
 
-        public async Task<IEnumerable<Group>> GetGroupsAsync(int volunteerId)
+        public async Task<IEnumerable<Group>> GetGroupsAsync(Guid volunteerId, bool includeLocal = false)
         {
-            Volunteer v = await context.Set<Volunteer>().Include(v => v.Groups).FirstOrDefaultAsync(v => v.Id == volunteerId);
+            Volunteer v = await GetAsync(new { Id = volunteerId }, includeLocal, "Groups");
             if (v == null)
                 throw new NotFoundException("Volunteer", volunteerId);
 
@@ -48,13 +33,12 @@ namespace GroupBy.Data.Repositories
                 domain.Rank = await rankRepository.GetAsync(domain.Rank);
 
             var volunteer = await context.Set<Volunteer>().AddAsync(domain);
-            await context.SaveChangesAsync();
             return volunteer.Entity;
         }
 
         public override async Task<Volunteer> UpdateAsync(Volunteer domain)
         {
-            Volunteer v = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == domain.Id);
+            Volunteer v = await GetAsync(new { Id = domain.Id });
             if (v == null)
                 throw new NotFoundException("Volunteer", domain.Id);
 
@@ -64,7 +48,7 @@ namespace GroupBy.Data.Repositories
             v.Address = domain.Address;
             if (domain.Rank != null)
             {
-                Rank r = await context.Set<Rank>().FirstOrDefaultAsync(r => r.Id == domain.Rank.Id);
+                Rank r = await rankRepository.GetAsync(domain.Rank);
                 if (r == null)
                     throw new NotFoundException("Rank", domain.Rank.Id);
                 v.Rank = r;
@@ -72,37 +56,30 @@ namespace GroupBy.Data.Repositories
             else
                 v.Rank = null;
 
-            await context.SaveChangesAsync();
-
             return v;
         }
 
-        public async Task<IEnumerable<Group>> GetOwnedGroupsAsync(int volunteerId)
+        public async Task<IEnumerable<Group>> GetOwnedGroupsAsync(Guid volunteerId, bool includeLocal = false)
         {
-            Volunteer v = await context.Set<Volunteer>().Include(v => v.OwnedGroups).FirstOrDefaultAsync(v => v.Id == volunteerId);
+            Volunteer v = await GetAsync(new { Id = volunteerId }, includeLocal, "OwnedGroups");
             if (v == null)
                 throw new NotFoundException("Volunteer", volunteerId);
 
             return v.OwnedGroups;
         }
 
-        public async Task<IEnumerable<Project>> GetOwnedProjectsAsync(int volunteerId)
+        public async Task<IEnumerable<Project>> GetOwnedProjectsAsync(Guid volunteerId, bool includeLocal = false)
         {
-            Volunteer v = await context.Set<Volunteer>().Include(v => v.OwnedProjects).FirstOrDefaultAsync(v => v.Id == volunteerId);
+            Volunteer v = await GetAsync(new { Id = volunteerId }, includeLocal, "OwnedProjects");
             if (v == null)
                 throw new NotFoundException("Volunteer", volunteerId);
 
             return v.OwnedProjects;
         }
 
-        public async Task<IEnumerable<RegistrationCode>> GetOwnedRegistrationCodesAsync(int volunteerId)
+        public async Task<IEnumerable<RegistrationCode>> GetOwnedRegistrationCodesAsync(Guid volunteerId, bool includeLocal = false)
         {
-            Volunteer v = await context.Set<Volunteer>()
-                .Include(v => v.RegistrationCodes)
-                    .ThenInclude(c => c.TargetGroup)
-                .Include(v => v.RegistrationCodes)
-                    .ThenInclude(c => c.TargetRank)
-                .FirstOrDefaultAsync(v => v.Id == volunteerId);
+            Volunteer v = await GetAsync(new { Id = volunteerId }, includeLocal, "RegistrationCodes.TargetGroup", "RegistrationCodes.TargetRank");
             if (v == null)
                 throw new NotFoundException("Volunteer", volunteerId);
 

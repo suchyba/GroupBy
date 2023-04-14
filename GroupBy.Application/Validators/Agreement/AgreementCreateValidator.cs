@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Agreement;
+using GroupBy.Design.TO.Agreement;
 using System;
 using System.Collections.Generic;
 using System.Linq;

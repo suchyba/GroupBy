@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.RegistrationCode;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,8 +20,9 @@ namespace GroupBy.Application.Services
             IRegistrationCodeRepository repository,
             IMapper mapper,
             IValidator<RegistrationCodeUpdateDTO> updateValidator,
-            IValidator<RegistrationCodeCreateDTO> createValidator)
-            : base(repository, mapper, updateValidator, createValidator)
+            IValidator<RegistrationCodeCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }
@@ -29,14 +32,18 @@ namespace GroupBy.Application.Services
 
             var validationResult = await createValidator.ValidateAsync(model);
             if (!validationResult.IsValid)
-                throw new Exceptions.ValidationException(validationResult);
+                throw new Design.Exceptions.ValidationException(validationResult);
 
             var entity = mapper.Map<RegistrationCode>(model);
 
             entity.Code = code;
-            var domain = await repository.CreateAsync(entity);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var domain = await repository.CreateAsync(entity);
+                await uow.Commit();
 
-            return mapper.Map<RegistrationCodeFullDTO>(domain);
+                return mapper.Map<RegistrationCodeFullDTO>(domain);
+            }
         }
     }
 }

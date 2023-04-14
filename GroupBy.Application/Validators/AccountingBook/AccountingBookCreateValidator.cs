@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.TO.AccountingBook;
 using System.Threading;
 using System.Threading.Tasks;
 

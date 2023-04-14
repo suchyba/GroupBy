@@ -12,7 +12,7 @@ namespace GroupBy.Domain.Entities
         /// Identiicator
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the position
         /// </summary>

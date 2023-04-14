@@ -1,35 +1,45 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryBookRecord;
-using GroupBy.Application.DTO.InventoryItem;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.InventoryBookRecord;
+using GroupBy.Design.TO.InventoryItem;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
     public class InventoryItemService : AsyncService<InventoryItem, InventoryItemSimpleDTO, InventoryItemSimpleDTO, InventoryItemCreateDTO, InventoryItemSimpleDTO>, IInventoryItemService
     {
-        public InventoryItemService(IInventoryItemRepository inventoryItemRepository, IMapper mapper, 
-            IValidator<InventoryItemSimpleDTO> updateValidator, IValidator<InventoryItemCreateDTO> createValidator) 
-            : base(inventoryItemRepository, mapper, updateValidator, createValidator)
+        public InventoryItemService(
+            IInventoryItemRepository inventoryItemRepository,
+            IMapper mapper,
+            IValidator<InventoryItemSimpleDTO> updateValidator,
+            IValidator<InventoryItemCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(inventoryItemRepository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }
 
-        public async Task<IEnumerable<InventoryBookRecordSimpleDTO>> GetInventoryItemHistoryAsync(int inventoryItemId)
+        public async Task<IEnumerable<InventoryBookRecordSimpleDTO>> GetInventoryItemHistoryAsync(Guid inventoryItemId)
         {
-            return mapper.Map<IEnumerable<InventoryBookRecordSimpleDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemHistoryAsync(inventoryItemId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<InventoryBookRecordSimpleDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemHistoryAsync(inventoryItemId));
+            }
         }
 
         public async Task<IEnumerable<InventoryItemSimpleDTO>> GetInventoryItemsWithoutHistoryAsync()
         {
-            return mapper.Map<IEnumerable<InventoryItemSimpleDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemWithoutHistory());
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<InventoryItemSimpleDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemWithoutHistory());
+            }
         }
     }
 }

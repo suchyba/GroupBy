@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// Accounting book 
+    /// Accounting book
     /// </summary>
     public class AccountingBook
     {
+        [Key]
+        public Guid Id { get; set; }
         /// <summary>
         /// Accounting book identification number
         /// </summary>

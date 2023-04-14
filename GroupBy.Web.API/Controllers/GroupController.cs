@@ -1,17 +1,17 @@
-﻿using GroupBy.Application.Design.Services;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using GroupBy.Design.Exceptions;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.TO.Document;
+using GroupBy.Design.TO.Group;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.TO.Volunteer;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using GroupBy.Application.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
 using System.Net.Mime;
-using GroupBy.Application.DTO.Volunteer;
-using GroupBy.Application.DTO.Group;
-using GroupBy.Application.DTO.AccountingBook;
-using Microsoft.AspNetCore.Authorization;
-using GroupBy.Application.DTO.Project;
-using GroupBy.Application.DTO.AccountingDocument;
-using GroupBy.Application.DTO.Document;
+using System.Threading.Tasks;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -29,7 +29,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await groupService.GetAllAsync());
         }
@@ -37,7 +37,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetGroup")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<GroupDTO>> GetAsync(int id)
+        public async Task<ActionResult<GroupDTO>> GetAsync(Guid id)
         {
             GroupDTO group;
             try
@@ -54,7 +54,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/members", Name = "GetMembers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<VolunteerSimpleDTO>>> GetMembersAsync(int id)
+        public async Task<ActionResult<IEnumerable<VolunteerSimpleDTO>>> GetMembersAsync(Guid id)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> AddMemberAsync(int groupId, int volunteerId)
+        public async Task<ActionResult> AddMemberAsync(Guid groupId, Guid volunteerId)
         {
             try
             {
@@ -127,7 +127,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("members/remove/{groupId}/{volunteerId}", Name = "RemoveMember")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> RemoveMemberAsync(int groupId, int volunteerId)
+        public async Task<ActionResult> RemoveMemberAsync(Guid groupId, Guid volunteerId)
         {
             try
             {
@@ -165,7 +165,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{parentGroupId}/subgroups", Name = "GetSubgroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetSubgroupsAsync(int parentGroupId)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetSubgroupsAsync(Guid parentGroupId)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/accountingBooks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<AccountingBookSimpleDTO>>> GetAccountingBooksAsync(int id)
+        public async Task<ActionResult<IEnumerable<AccountingBookSimpleDTO>>> GetAccountingBooksAsync(Guid id)
         {
             try
             {
@@ -193,7 +193,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/projects")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<ProjectSimpleDTO>>> GetProjectsAsync(int id)
+        public async Task<ActionResult<IEnumerable<ProjectSimpleDTO>>> GetProjectsAsync(Guid id)
         {
             try
             {
@@ -207,7 +207,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/accountingDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(int id, [FromQuery(Name = "project-id")] int? projectId)
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAccountingDocumentsAsync(Guid id, [FromQuery(Name = "project-id")] Guid? projectId)
         {
             try
             {
@@ -221,7 +221,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/documents")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocumentsAsync(int id, [FromQuery(Name = "project-id")] int? projectId)
+        public async Task<ActionResult<IEnumerable<DocumentDTO>>> GetDocumentsAsync(Guid id, [FromQuery(Name = "project-id")] Guid? projectId)
         {
             try
             {

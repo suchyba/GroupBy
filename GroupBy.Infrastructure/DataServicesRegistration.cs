@@ -1,11 +1,15 @@
-﻿using GroupBy.Application.Design.Repositories;
+﻿using GroupBy.Data.DbConetexts;
 using GroupBy.Data.DbContexts;
 using GroupBy.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+using GroupBy.Data.UnitOfWork;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace GroupBy.Data
 {
@@ -15,6 +19,13 @@ namespace GroupBy.Data
         {
             services.AddDbContext<DbContext, GroupByDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));
+
+            services.AddSingleton<Design.DbContext.IDbContextFactory<GroupByDbContext>, DbContextFactory>(options =>
+            {
+                return new DbContextFactory(configuration.GetConnectionString("GroupByLocalConnectionString"));
+            });
+            services.AddSingleton<IDbContextLocator<GroupByDbContext>, DbContextLocator>();
+            services.AddSingleton<IUnitOfWorkFactory<GroupByDbContext>, UnitOfWorkFactory>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

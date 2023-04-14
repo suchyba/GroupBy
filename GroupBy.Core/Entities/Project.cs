@@ -17,7 +17,7 @@ namespace GroupBy.Domain.Entities
         /// Identificator of the project
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the project
         /// </summary>
@@ -40,7 +40,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         [Required]
         public virtual Volunteer Owner { get; set; }
-        public int? ProjectGroupId { get; set; }
+        public Guid? ProjectGroupId { get; set; }
         /// <summary>
         /// If the group of target volunteers is diffrent than the group which is organising the project (<see cref="ProjectGroup"/>) or you want to set up the independent project, you could set this property <seealso cref="Group"/>
         /// </summary>

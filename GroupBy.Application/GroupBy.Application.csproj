@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GroupBy.Core\GroupBy.Domain.csproj" />
+    <ProjectReference Include="..\GroupBy.Design\GroupBy.Design.csproj" />
+    <ProjectReference Include="..\GroupBy.Infrastructure\GroupBy.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

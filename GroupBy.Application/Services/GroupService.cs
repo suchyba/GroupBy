@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.AccountingBook;
-using GroupBy.Application.DTO.AccountingDocument;
-using GroupBy.Application.DTO.Document;
-using GroupBy.Application.DTO.Group;
-using GroupBy.Application.DTO.Project;
-using GroupBy.Application.DTO.Volunteer;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.TO.Document;
+using GroupBy.Design.TO.Group;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.TO.Volunteer;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -21,50 +24,94 @@ namespace GroupBy.Application.Services
             IGroupRepository groupRepository,
             IMapper mapper,
             IValidator<GroupCreateDTO> createValidator,
-            IValidator<GroupUpdateDTO> updateValidator)
-            : base(groupRepository, mapper, updateValidator, createValidator)
+            IValidator<GroupUpdateDTO> updateValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(groupRepository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }
 
-        public async Task AddMemberAsync(int groupId, int volunteerId)
+        public override async Task<GroupDTO> CreateAsync(GroupCreateDTO model)
         {
-            await (repository as IGroupRepository).AddMemberAsync(groupId, volunteerId);
+            var validationResult = await createValidator.ValidateAsync(model);
+            if (!validationResult.IsValid)
+                throw new Design.Exceptions.ValidationException(validationResult);
+
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                Group createdGroup = await repository.CreateAsync(mapper.Map<Group>(model));
+
+                await (repository as IGroupRepository).AddMemberAsync(createdGroup.Id, createdGroup.Owner.Id);
+                await uow.Commit();
+
+                return mapper.Map<GroupDTO>(createdGroup);
+            }
         }
 
-        public async Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(int groupId)
+        public async Task AddMemberAsync(Guid groupId, Guid volunteerId)
         {
-            return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                await (repository as IGroupRepository).AddMemberAsync(groupId, volunteerId);
+                await uow.Commit();
+            }
         }
 
-        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(int groupId, int? projectId)
+        public async Task<IEnumerable<AccountingBookSimpleDTO>> GetAccountingBooksAsync(Guid groupId)
         {
-            return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await(repository as IGroupRepository).GetAccountingDocumentsAsync(groupId, projectId)));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
+            }
         }
 
-        public async Task<IEnumerable<DocumentDTO>> GetDocumentsAsync(int groupId, int? projectId)
+        public async Task<IEnumerable<AccountingDocumentSimpleDTO>> GetAccountingDocumentsAsync(Guid groupId, Guid? projectId)
         {
-            return mapper.Map<IEnumerable<DocumentDTO>>((await (repository as IGroupRepository).GetDocumentsAsync(groupId, projectId)));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<AccountingDocumentSimpleDTO>>((await (repository as IGroupRepository).GetAccountingDocumentsAsync(groupId, projectId)));
+            }
         }
 
-        public async Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(int groupId)
+        public async Task<IEnumerable<DocumentDTO>> GetDocumentsAsync(Guid groupId, Guid? projectId)
         {
-            return mapper.Map<IEnumerable<ProjectSimpleDTO>>((await (repository as IGroupRepository).GetProjectsAsync(groupId)));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<DocumentDTO>>((await (repository as IGroupRepository).GetDocumentsAsync(groupId, projectId)));
+            }
         }
 
-        public async Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(int groupId)
+        public async Task<IEnumerable<ProjectSimpleDTO>> GetProjectsAsync(Guid groupId)
         {
-            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IGroupRepository).GetSubgroupsAsync(groupId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<ProjectSimpleDTO>>((await (repository as IGroupRepository).GetProjectsAsync(groupId)));
+            }
         }
 
-        public async Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(int groupId)
+        public async Task<IEnumerable<GroupSimpleDTO>> GetSubgroupsAsync(Guid groupId)
         {
-            return mapper.Map<IEnumerable<VolunteerSimpleDTO>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IGroupRepository).GetSubgroupsAsync(groupId));
+            }
         }
 
-        public async Task RemoveMemberAsync(int groupId, int volunteerId)
+        public async Task<IEnumerable<VolunteerSimpleDTO>> GetVolunteersAsync(Guid groupId)
         {
-            await (repository as IGroupRepository).RemoveMemberAsync(groupId, volunteerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<VolunteerSimpleDTO>>(await (repository as IGroupRepository).GetVolunteersAsync(groupId));
+            }
+        }
+
+        public async Task RemoveMemberAsync(Guid groupId, Guid volunteerId)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                await (repository as IGroupRepository).RemoveMemberAsync(groupId, volunteerId);
+                await uow.Commit();
+            }
         }
     }
 }

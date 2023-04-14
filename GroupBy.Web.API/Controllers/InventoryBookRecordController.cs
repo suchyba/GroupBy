@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryBookRecord;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.InventoryBookRecord;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,14 +25,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryBookRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await InventoryBookRecordService.GetAllAsync());
         }
         [HttpGet("{inventoryBookId}/{id}", Name = "GetInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(int inventoryBookId, int id)
+        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(Guid inventoryBookId, Guid id)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

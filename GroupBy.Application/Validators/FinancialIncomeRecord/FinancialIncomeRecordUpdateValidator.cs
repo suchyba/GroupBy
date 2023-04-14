@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.FinancialIncomeRecord;
+using GroupBy.Design.TO.FinancialIncomeRecord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace GroupBy.Application.Validators.FinancialIncomeRecord
         public FinancialIncomeRecordUpdateValidator()
         {
             RuleFor(r => r.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
         }
     }
 }

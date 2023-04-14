@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO;
-using GroupBy.Application.DTO.Volunteer;
+using GroupBy.Design.TO;
+using GroupBy.Design.TO.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;

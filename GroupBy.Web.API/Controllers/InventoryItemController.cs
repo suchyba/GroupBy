@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.InventoryItem;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.TO.InventoryItem;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using GroupBy.Application.DTO.InventoryBookRecord;
+using GroupBy.Design.TO.InventoryBookRecord;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -44,14 +44,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await inventoryItemService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetInventoryItem")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryItemSimpleDTO>> GetAsync(int id)
+        public async Task<ActionResult<InventoryItemSimpleDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/history", Name = "GetInventoryItemHistory")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetHistoryAsync(int id)
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetHistoryAsync(Guid id)
         {
             try
             {

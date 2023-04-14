@@ -1,24 +1,22 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.AccountingDocument;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
     public class AccountingDocumentService : AsyncService<AccountingDocument, AccountingDocumentSimpleDTO, AccountingDocumentDTO, AccountingDocumentCreateDTO, AccountingDocumentSimpleDTO>, IAccountingDocumentService
     {
         public AccountingDocumentService(
-            IAccountingDocumentRepository repository, 
-            IMapper mapper, IValidator<AccountingDocumentSimpleDTO> updateValidator, 
-            IValidator<AccountingDocumentCreateDTO> createValidator) 
-            : base(repository, mapper, updateValidator, createValidator)
+            IAccountingDocumentRepository repository,
+            IMapper mapper, IValidator<AccountingDocumentSimpleDTO> updateValidator,
+            IValidator<AccountingDocumentCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }

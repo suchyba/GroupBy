@@ -10,7 +10,7 @@ namespace GroupBy.Domain.Entities
     public class Resolution
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// The identification symbol of the resolution
         /// </summary>
