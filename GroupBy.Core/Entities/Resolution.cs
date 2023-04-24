@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GroupBy.Domain.Entities
 {
@@ -26,7 +25,7 @@ namespace GroupBy.Domain.Entities
         [Required]
         public string Content { get; set; }
         /// <summary>
-        /// The legistrator of this resolution <seealso cref="Volunteer"/>
+        /// The legislator of this resolution <seealso cref="Volunteer"/>
         /// </summary>
         [Required]
         public virtual Volunteer Legislator { get; set; }

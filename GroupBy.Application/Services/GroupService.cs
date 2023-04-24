@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GroupBy.Data.DbContexts;
+using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
 using GroupBy.Design.TO.AccountingBook;
@@ -19,32 +20,56 @@ namespace GroupBy.Application.Services
 {
     public class GroupService : AsyncService<Group, GroupSimpleDTO, GroupDTO, GroupCreateDTO, GroupUpdateDTO>, IGroupService
     {
+        private readonly IVolunteerRepository volunteerRepository;
 
         public GroupService(
             IGroupRepository groupRepository,
+            IVolunteerRepository volunteerRepository,
             IMapper mapper,
             IValidator<GroupCreateDTO> createValidator,
             IValidator<GroupUpdateDTO> updateValidator,
             IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
             : base(groupRepository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
-
+            this.volunteerRepository = volunteerRepository;
         }
 
-        public override async Task<GroupDTO> CreateAsync(GroupCreateDTO model)
+        public override async Task<GroupDTO> GetAsync(GroupSimpleDTO model)
         {
-            var validationResult = await createValidator.ValidateAsync(model);
-            if (!validationResult.IsValid)
-                throw new Design.Exceptions.ValidationException(validationResult);
-
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                Group createdGroup = await repository.CreateAsync(mapper.Map<Group>(model));
+                return mapper.Map<GroupDTO>(await repository.GetAsync(mapper.Map<Group>(model).Id, includes: new string[] { "Owner", "AccountingBooks", "ParentGroup", "ChildGroups", "Members", "ProjectsRealisedInGroup" }));
+            }
+        }
 
-                await (repository as IGroupRepository).AddMemberAsync(createdGroup.Id, createdGroup.Owner.Id);
+        protected override async Task<Group> CreateOperationAsync(Group entity)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                entity.Owner = await volunteerRepository.GetAsync(entity.Owner);
+
+                if (entity.ParentGroup != null)
+                    entity.ParentGroup = await repository.GetAsync(entity.ParentGroup.Id);
+
+                Group createdGroup = await repository.CreateAsync(entity);
+
+                await AddMemberAsync(createdGroup.Id, createdGroup.Owner.Id);
                 await uow.Commit();
 
-                return mapper.Map<GroupDTO>(createdGroup);
+                return createdGroup;
+            }
+        }
+
+        protected override async Task<Group> UpdateOperationAsync(Group entity)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                entity.Owner = await volunteerRepository.GetAsync(entity.Owner.Id);
+
+                var updatedGroup = await repository.UpdateAsync(entity);
+                await uow.Commit();
+
+                return updatedGroup;
             }
         }
 
@@ -52,7 +77,16 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                await (repository as IGroupRepository).AddMemberAsync(groupId, volunteerId);
+                var group = await repository.GetAsync(new { Id = groupId }, includeLocal: true, includes: new string[] { "Members", "RelatedProject" });
+                var volunteer = await volunteerRepository.GetAsync(new { Id = volunteerId });
+
+                if (group.Members?.Contains(volunteer) ?? false)
+                    throw new BadRequestException($"Volunteer {volunteer.Id} is already a member of the group {group.Id}");
+
+                if (group.RelatedProject != null && !group.RelatedProject.Active)
+                    throw new BadRequestException("Cannot add member to the inactive project");
+
+                await (repository as IGroupRepository).AddMemberAsync(groupId, volunteer, true);
                 await uow.Commit();
             }
         }
@@ -61,7 +95,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await (repository as IGroupRepository).GetAsync(new Group { Id = groupId })).AccountingBooks);
+                return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await repository.GetAsync(groupId, includeLocal: false, includes: "AccountingBooks")).AccountingBooks);
             }
         }
 
@@ -109,7 +143,15 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                await (repository as IGroupRepository).RemoveMemberAsync(groupId, volunteerId);
+                var volunteer = await volunteerRepository.GetAsync(volunteerId);
+                if (!await (repository as IGroupRepository).IsMember(groupId, volunteer))
+                    throw new BadRequestException("Volunteer is not a member of the group");
+
+                var group = await repository.GetAsync(groupId, includeLocal: false, includes: "Owner");
+                if (group.Owner == volunteer)
+                    throw new BadRequestException("Volunteer cannot be an owner of the group");
+
+                await (repository as IGroupRepository).RemoveMemberAsync(groupId, volunteer);
                 await uow.Commit();
             }
         }

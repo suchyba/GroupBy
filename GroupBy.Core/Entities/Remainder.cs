@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// The reminder that could be setted up in group <seealso cref="Element"/>
+    /// The reminder that could be set up in group <seealso cref="Element"/>
     /// </summary>
     public class Remainder : Element
     {

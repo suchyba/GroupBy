@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// Type representing project which is organised by group <see cref="ParentGroup"/>
+    /// Type representing project which is organized by group <see cref="ParentGroup"/>
     /// </summary>
     public class Project
     {
-        /// <summary>
-        /// Identificator of the project
-        /// </summary>
         [Key]
         public Guid Id { get; set; }
         /// <summary>
@@ -42,12 +36,12 @@ namespace GroupBy.Domain.Entities
         public virtual Volunteer Owner { get; set; }
         public Guid? ProjectGroupId { get; set; }
         /// <summary>
-        /// If the group of target volunteers is diffrent than the group which is organising the project (<see cref="ProjectGroup"/>) or you want to set up the independent project, you could set this property <seealso cref="Group"/>
+        /// If the group of target volunteers is different than the group which is organizing the project (<see cref="ProjectGroup"/>) or you want to set up the independent project, you could set this property <seealso cref="Group"/>
         /// </summary>
         [ForeignKey("ProjectGroupId")]
         public virtual Group ProjectGroup { get; set; }
         /// <summary>
-        /// Groups which is organising this project <seealso cref="Group"/>
+        /// Groups which is organizing this project <seealso cref="Group"/>
         /// </summary>
         [Required]
         public virtual Group ParentGroup { get; set; }
@@ -56,7 +50,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public bool Active { get; set; }
         /// <summary>
-        /// Describes if the project is the inedpendent project (has its own accounting book <see cref="ProjectGroup"/>)
+        /// Describes if the project is the independent project (has its own accounting book <see cref="ProjectGroup"/>)
         /// </summary>
         public bool Independent { get; set; }
         /// <summary>

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    [Migration("20230405143800_CreatedDatabase")]
-    partial class CreatedDatabase
+    [Migration("20230418163503_CreateDatabase")]
+    partial class CreateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.AccountingBook", b =>
                 {
-                    b.Property<int>("BookId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BookIdentificator")
                         .HasColumnType("int");
 
                     b.Property<int>("BookOrderNumberId")
@@ -72,7 +76,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<Guid>("RelatedGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BookId", "BookOrderNumberId");
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("BookIdentificator", "BookOrderNumberId");
 
                     b.HasIndex("RelatedGroupId");
 
@@ -95,8 +101,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -198,11 +205,8 @@ namespace GroupBy.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookOrderNumberId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -222,11 +226,11 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookId");
+
                     b.HasIndex("RelatedDocumentId");
 
                     b.HasIndex("RelatedProjectId");
-
-                    b.HasIndex("BookId", "BookOrderNumberId");
 
                     b.ToTable("FinancialRecords");
 
@@ -265,10 +269,8 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.GroupsPermissions", b =>
                 {
-                    b.Property<Guid>("GroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PositionId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Books")
@@ -283,8 +285,14 @@ namespace GroupBy.Data.Migrations
                     b.Property<bool?>("EditPosition")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool?>("Invitation")
                         .HasColumnType("bit");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Resolutions")
                         .HasColumnType("bit");
@@ -295,7 +303,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<bool?>("Subgroups")
                         .HasColumnType("bit");
 
-                    b.HasKey("GroupId", "PositionId");
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("GroupId", "PositionId");
 
                     b.HasIndex("PositionId");
 
@@ -447,10 +457,8 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.PositionRecord", b =>
                 {
-                    b.Property<Guid>("VolunteerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AppointingResolutionId")
@@ -471,7 +479,12 @@ namespace GroupBy.Data.Migrations
                     b.Property<Guid>("RelatedGroupId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("VolunteerId", "Id");
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("VolunteerId", "Id");
 
                     b.HasIndex("AppointingResolutionId");
 
@@ -698,10 +711,11 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("GroupVolunteer");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -725,7 +739,7 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -739,9 +753,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -750,7 +763,7 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -764,9 +777,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -775,7 +787,7 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -786,9 +798,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -797,13 +808,13 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -812,10 +823,10 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -1009,6 +1020,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
                 {
+                    b.HasOne("GroupBy.Domain.Entities.AccountingBook", "Book")
+                        .WithMany("Records")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GroupBy.Domain.Entities.AccountingDocument", "RelatedDocument")
                         .WithMany("RelatedRecords")
                         .HasForeignKey("RelatedDocumentId")
@@ -1018,12 +1035,6 @@ namespace GroupBy.Data.Migrations
                     b.HasOne("GroupBy.Domain.Entities.Project", "RelatedProject")
                         .WithMany("RelatedFinnancialRecords")
                         .HasForeignKey("RelatedProjectId");
-
-                    b.HasOne("GroupBy.Domain.Entities.AccountingBook", "Book")
-                        .WithMany("Records")
-                        .HasForeignKey("BookId", "BookOrderNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Book");
 
@@ -1300,16 +1311,16 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -1318,7 +1329,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -1327,9 +1338,9 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1342,7 +1353,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()

@@ -2,6 +2,8 @@
 using GroupBy.Design.DbContext;
 using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
+using System;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -19,6 +21,11 @@ namespace GroupBy.Data.Repositories
             toModify.Content = domain.Content;
 
             return toModify;
+        }
+
+        protected override Expression<Func<Agreement, bool>> CompareKeys(object entity)
+        {
+            return a => entity.GetType().GetProperty("Id").GetValue(entity).Equals(a.Id);
         }
     }
 }

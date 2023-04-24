@@ -9,5 +9,6 @@ namespace GroupBy.Design.UnitOfWork
         IDbContextTransaction BeginTransaction();
         void RollbackTransaction();
         void CommitTransaction();
+        Context DbContext { get; }
     }
 }

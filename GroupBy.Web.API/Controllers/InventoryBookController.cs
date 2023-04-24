@@ -102,6 +102,10 @@ namespace GroupBy.Web.API.Controllers
             {
                 return Ok(await inventoryBookService.UpdateAsync(model));
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = e.Key, e.Message });

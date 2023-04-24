@@ -1,11 +1,11 @@
 ﻿using GroupBy.Data.DbContexts;
 using GroupBy.Design.DbContext;
-using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -17,24 +17,9 @@ namespace GroupBy.Data.Repositories
 
         }
 
-        public override async Task<InventoryItem> UpdateAsync(InventoryItem domain)
-        {
-            InventoryItem item = await GetAsync(domain);
-            if (item == null)
-                throw new NotFoundException("InventoryItem", domain.Id);
-
-            item.Name = domain.Name;
-            item.Symbol = domain.Symbol;
-            item.Description = domain.Description;
-            item.Value = domain.Value;
-            return item;
-        }
-
         public async Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(Guid itemId, bool includeLocal = false)
         {
-            InventoryItem item = await GetAsync(new { Id = itemId }, includeLocal, "History");
-            if (item == null)
-                throw new NotFoundException("InventoryItem", itemId);
+            InventoryItem item = await GetAsync(new { Id = itemId }, includeLocal, includes: "History");
 
             return item.History;
         }
@@ -43,6 +28,11 @@ namespace GroupBy.Data.Repositories
         {
             return (await GetAllAsync(includeLocal, "History"))
                 .Where(i => i.History == null || i.History.Count() == 0);
+        }
+
+        protected override Expression<Func<InventoryItem, bool>> CompareKeys(object entity)
+        {
+            return i => entity.GetType().GetProperty("Id").GetValue(entity).Equals(i.Id);
         }
     }
 }

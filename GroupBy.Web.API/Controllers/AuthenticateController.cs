@@ -29,11 +29,16 @@ namespace GroupBy.Web.API.Controllers
         [HttpPost("login", Name = "LoginUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AuthenticationResponseDTO>> LoginAsync([FromBody] LoginDTO model)
         {
             try
             {
                 return Ok(await authenticationService.LoginUserAsync(model));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
             }
             catch (BadRequestException e)
             {

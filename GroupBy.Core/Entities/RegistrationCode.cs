@@ -1,10 +1,9 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// Code that can be generated and when typed in registration form some proporties will be setted
+    /// Code that can be generated and when typed in registration form some properties will be set
     /// </summary>
     public class RegistrationCode
     {

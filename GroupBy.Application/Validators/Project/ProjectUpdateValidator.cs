@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
+using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.TO.Project;
+using GroupBy.Design.UnitOfWork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,11 +12,12 @@ namespace GroupBy.Application.Validators.Project
     public class ProjectUpdateValidator : AbstractValidator<ProjectUpdateDTO>
     {
         private readonly IGroupRepository groupRepository;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public ProjectUpdateValidator(IGroupRepository groupRepository)
+        public ProjectUpdateValidator(IGroupRepository groupRepository, IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.groupRepository = groupRepository;
-
+            this.unitOfWorkFactory = unitOfWorkFactory;
             RuleFor(p => p.Id)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
 
@@ -73,11 +73,17 @@ namespace GroupBy.Application.Validators.Project
         }
         private async Task<bool> OwnerInParentGroup(ProjectUpdateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await groupRepository.IsMember(project.ParentGroupId, new Domain.Entities.Volunteer { Id = project.OwnerId });
+            }
         }
         private async Task<bool> OwnerInProjectGroup(ProjectUpdateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ProjectGroupId.Value, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await groupRepository.IsMember(project.ProjectGroupId.Value, new Domain.Entities.Volunteer { Id = project.OwnerId });
+            }
         }
     }
 }

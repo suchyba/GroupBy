@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
+using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.UnitOfWork;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,12 +11,13 @@ namespace GroupBy.Application.Validators.AccountingBook
     public class AccountingBookCreateValidator : AbstractValidator<AccountingBookCreateDTO>
     {
         private readonly IAccountingBookRepository accountingBookRepository;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public AccountingBookCreateValidator(IAccountingBookRepository accountingBookRepository)
+        public AccountingBookCreateValidator(IAccountingBookRepository accountingBookRepository, IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.accountingBookRepository = accountingBookRepository;
-            
-            RuleFor(a => a.BookId)
+            this.unitOfWorkFactory = unitOfWorkFactory;
+            RuleFor(a => a.BookIdentificator)
                 .GreaterThan(0).WithMessage("{PropertyName} must be grater than 0.")
                 .NotNull();
 
@@ -34,7 +37,10 @@ namespace GroupBy.Application.Validators.AccountingBook
         }
         private async Task<bool> IdUnique(AccountingBookCreateDTO book, CancellationToken token)
         {
-            return await accountingBookRepository.IsIdUnique(book.BookId, book.BookOrderNumberId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await accountingBookRepository.IsIdUnique(book.BookIdentificator, book.BookOrderNumberId);
+            }
         }
     }
 }

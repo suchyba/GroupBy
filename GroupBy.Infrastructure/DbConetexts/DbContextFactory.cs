@@ -14,7 +14,8 @@ namespace GroupBy.Data.DbConetexts
         {
             DbContextOptionsBuilder<GroupByDbContext> optionsBuilder = new DbContextOptionsBuilder<GroupByDbContext>();
 
-            var dbContextOptions = optionsBuilder.UseSqlServer(connectionString);
+            var dbContextOptions = optionsBuilder.UseSqlServer(connectionString)
+                .EnableSensitiveDataLogging();
 
             return new GroupByDbContext(dbContextOptions.Options);
         }

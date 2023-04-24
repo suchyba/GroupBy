@@ -7,64 +7,32 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
     public class GroupRepository : AsyncRepository<Group>, IGroupRepository
     {
-        private readonly IVolunteerRepository volunteerRepository;
-
         public GroupRepository(
-            IDbContextLocator<GroupByDbContext> dBcontextLocator,
-            IVolunteerRepository volunteerRepository) : base(dBcontextLocator)
+            IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
-            this.volunteerRepository = volunteerRepository;
+
         }
 
-        public async Task AddMemberAsync(Guid groupId, Guid volunteerId, bool includeLocal = false)
+        public async Task AddMemberAsync(Guid groupId, Volunteer volunteer, bool includeLocal = false)
         {
-            var group = await GetAsync(new Group { Id = groupId }, includeLocal, "Members", "RelatedProject");
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
+            var group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: "Members");
 
-            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId }, includeLocal);
-            if (volunteer == null)
-                throw new NotFoundException("Volunteer", volunteer);
-
-            if (group.RelatedProject != null && !group.RelatedProject.Active)
-            {
-                throw new BadRequestException("Cannot add member to the inactive project");
-            }
+            if (group.Members == null)
+                group.Members = new List<Volunteer>();
 
             group.Members.Add(volunteer);
         }
 
-        public override async Task<Group> CreateAsync(Group domain)
-        {
-            Guid ownerId = domain.Owner.Id;
-            domain.Owner = await volunteerRepository.GetAsync(domain.Owner);
-            if (domain.Owner == null)
-                throw new NotFoundException("Volunteer", ownerId);
-
-            if (domain.ParentGroup != null)
-            {
-                Guid parentGroupId = domain.ParentGroup.Id;
-                domain.ParentGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == parentGroupId);
-                domain.ParentGroup = await GetAsync(domain.ParentGroup);
-                if (domain.ParentGroup == null)
-                    throw new NotFoundException("Group", parentGroupId);
-            }
-            var createdGroup = await context.Set<Group>().AddAsync(domain);
-
-            return createdGroup.Entity;
-        }
-
         public async Task<IEnumerable<AccountingDocument>> GetAccountingDocumentsAsync(Guid groupId, Guid? projectId, bool includeLocal = false)
         {
-            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject");
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
+            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: new string[] { "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject" });
 
             List<AccountingDocument> documents = group.Elements
                 .Where(e => e is AccountingDocument)
@@ -92,9 +60,7 @@ namespace GroupBy.Data.Repositories
 
         public async Task<IEnumerable<Document>> GetDocumentsAsync(Guid groupId, Guid? projectId, bool includeLocal = false)
         {
-            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject");
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
+            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: new string[] { "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject" });
 
             List<Document> documents = group.Elements
                 .Where(e => e is Document)
@@ -122,60 +88,44 @@ namespace GroupBy.Data.Repositories
 
         public async Task<IEnumerable<Project>> GetProjectsAsync(Guid groupId, bool includeLocal = false)
         {
-            return (await GetAsync(new Group { Id = groupId }, includeLocal, "ProjectsRealisedInGroup")).ProjectsRealisedInGroup;
+            return (await GetAsync(new Group { Id = groupId }, includeLocal, includes: "ProjectsRealisedInGroup")).ProjectsRealisedInGroup;
         }
 
         public async Task<IEnumerable<Group>> GetSubgroupsAsync(Guid groupId, bool includeLocal = false)
         {
-            return (await GetAsync(new Group { Id = groupId }, includeLocal, "ChildGroups")).ChildGroups;
+            return (await GetAsync(new Group { Id = groupId }, includeLocal, includes: "ChildGroups")).ChildGroups;
         }
 
         public async Task<IEnumerable<Volunteer>> GetVolunteersAsync(Guid group, bool includeLocal = false)
         {
-            Group g = await GetAsync(new Group { Id = group }, includeLocal, "Members");
-            if (g == null)
-                throw new NotFoundException("Group", group);
+            Group g = await GetAsync(new Group { Id = group }, includeLocal, includes: "Members");
+
+            if (g.Members == null)
+                return new List<Volunteer>();
 
             return g.Members.Where(v => v.Confirmed);
         }
 
-        public async Task<bool> IsMember(Guid groupId, Guid volunteerId)
+        public async Task<bool> IsMember(Guid groupId, Volunteer volunteer)
         {
-            var group = await GetAsync(new Group { Id = groupId }, false, "Members");
+            var group = await GetAsync(new Group { Id = groupId }, false, includes: "Members");
 
-            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
-            return group.Members.Contains(volunteer);
+            if (group.Members == null)
+                return false;
+
+            return group.Members.Any(m => m.Id == volunteer.Id);
         }
 
-        public async Task RemoveMemberAsync(Guid groupId, Guid volunteerId)
+        public async Task RemoveMemberAsync(Guid groupId, Volunteer volunteer)
         {
-            if (!await IsMember(groupId, volunteerId))
-                throw new BadRequestException("Volunteer is not a member of the group");
-
-            var group = await GetAsync(new Group { Id = groupId }, false, "Members");
-            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
-
-            if (group.Owner == volunteer)
-                throw new BadRequestException("Volunteer cannot be an owner of the group");
+            var group = await GetAsync(new Group { Id = groupId }, false, includes: "Members");
 
             group.Members.Remove(volunteer);
         }
 
-        public override async Task<Group> UpdateAsync(Group domain)
+        protected override Expression<Func<Group, bool>> CompareKeys(object entity)
         {
-            Group g = await GetAsync(domain);
-            if (g == null)
-                throw new NotFoundException("Group", domain.Id);
-
-            Guid ownerId = domain.Owner.Id;
-            domain.Owner = await volunteerRepository.GetAsync(domain.Owner);
-            if (domain.Owner == null)
-                throw new NotFoundException("Volunteer", ownerId);
-
-            g.Name = domain.Name;
-            g.Description = domain.Description;
-            g.Owner = domain.Owner;
-            return g;
+            return g => entity.GetType().GetProperty("Id").GetValue(entity).Equals(g.Id);
         }
     }
 }

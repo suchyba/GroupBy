@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
+using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.TO.Project;
+using GroupBy.Design.UnitOfWork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,10 +12,17 @@ namespace GroupBy.Application.Validators.Project
     public class ProjectCreateValidator : AbstractValidator<ProjectCreateDTO>
     {
         private readonly IGroupRepository groupRepository;
+        private readonly IVolunteerRepository volunteerRepository;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public ProjectCreateValidator(IGroupRepository groupRepository)
+        public ProjectCreateValidator(
+            IGroupRepository groupRepository,
+            IVolunteerRepository volunteerRepository,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.groupRepository = groupRepository;
+            this.volunteerRepository = volunteerRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
 
@@ -53,7 +59,11 @@ namespace GroupBy.Application.Validators.Project
         }
         private async Task<bool> OwnerInParentGroup(ProjectCreateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var volunteer = await volunteerRepository.GetAsync(new Domain.Entities.Volunteer { Id = project.OwnerId });
+                return await groupRepository.IsMember(project.ParentGroupId, volunteer);
+            }
         }
     }
 }

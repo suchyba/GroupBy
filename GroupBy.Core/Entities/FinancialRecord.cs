@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GroupBy.Domain.Entities
 {
@@ -11,7 +10,7 @@ namespace GroupBy.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public int BookId { get => Book?.BookId ?? -1; }
+        public int BookIdentificator { get => Book?.BookIdentificator ?? -1; }
         public int BookOrderNumberId { get => Book?.BookOrderNumberId ?? -1; }
         /// <summary>
         /// Total value.
@@ -27,7 +26,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public string Description { get; set; }
         /// <summary>
-        /// Accounting book where this record is located (it is also part of primary key: <see cref="BookId"/>, <see cref="BookOrderNumber"/>)<seealso cref="AccountingBook"/>
+        /// Accounting book where this record is located (it is also part of primary key: <see cref="BookIdentificator"/>, <see cref="BookOrderNumber"/>)<seealso cref="AccountingBook"/>
         /// </summary>
         [Required]
         public virtual AccountingBook Book { get; set; }

@@ -5,11 +5,10 @@ using GroupBy.Data.UnitOfWork;
 using GroupBy.Design.DbContext;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.UnitOfWork;
-using GroupBy.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace GroupBy.Data
 {
@@ -17,28 +16,15 @@ namespace GroupBy.Data
     {
         public static IServiceCollection AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DbContext, GroupByDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));
-
+            // Only for generating database model
+            /*services.AddDbContext<DbContext, GroupByDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));*/
             services.AddSingleton<Design.DbContext.IDbContextFactory<GroupByDbContext>, DbContextFactory>(options =>
             {
                 return new DbContextFactory(configuration.GetConnectionString("GroupByLocalConnectionString"));
             });
             services.AddSingleton<IDbContextLocator<GroupByDbContext>, DbContextLocator>();
             services.AddSingleton<IUnitOfWorkFactory<GroupByDbContext>, UnitOfWorkFactory>();
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredLength = 8;
-                options.Password.RequireDigit = true;
-                options.Password.RequireNonAlphanumeric = true;
-
-                options.SignIn.RequireConfirmedEmail = true;
-            })
-                .AddEntityFrameworkStores<GroupByDbContext>()
-                .AddDefaultTokenProviders();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IAccountingBookRepository, AccountingBookRepository>();
@@ -57,6 +43,14 @@ namespace GroupBy.Data
             services.AddScoped<IFinancialOutcomeRecordRepository, FinancialOutcomeRecordRepository>();
             services.AddScoped<IFinancialIncomeRecordRepository, FinancialIncomeRecordRepository>();
             services.AddScoped<IRegistrationCodeRepository, RegistrationCodeRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+
+            services.AddScoped<IUserRoleRepository<Guid>, UserRoleRepository>();
+            services.AddScoped<IUserClaimRepository<Guid>, UserClaimRepository>();
+            services.AddScoped<IUserLoginRepository<Guid>, UserLoginRepository>();
+            services.AddScoped<IUserTokenRepository<Guid>, UserTokenRepository>();
+            services.AddScoped<IRoleRepository<Guid>, RoleRepository>();
+            services.AddScoped<IRoleClaimRepository<Guid>, RoleClaimRepository>();
 
             return services;
         }

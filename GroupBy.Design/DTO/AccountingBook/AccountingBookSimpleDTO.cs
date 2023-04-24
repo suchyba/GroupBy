@@ -2,7 +2,8 @@
 {
     public class AccountingBookSimpleDTO
     {
-        public int BookId { get; set; }
+        public Guid Id { get; set; }
+        public int BookIdentificator { get; set; }
         public int BookOrderNumberId { get; set; }
         public string Name { get; set; }
         public bool Locked { get; set; }

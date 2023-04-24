@@ -9,9 +9,6 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class Rank
     {
-        /// <summary>
-        /// The identificator
-        /// </summary>
         [Key]
         public Guid Id { get; set; }
         /// <summary>

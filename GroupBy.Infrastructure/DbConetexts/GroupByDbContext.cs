@@ -1,11 +1,12 @@
 ﻿using GroupBy.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
+using System;
 
 namespace GroupBy.Data.DbContexts
 {
-    public class GroupByDbContext : IdentityDbContext<ApplicationUser>
+    public class GroupByDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public DbSet<FinancialRecord> FinancialRecords { get; set; }
         public DbSet<FinancialIncomeRecord> FinancialIncomeRecords { get; set; }
@@ -41,7 +42,7 @@ namespace GroupBy.Data.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AccountingBook>()
-                .HasAlternateKey(a => new { a.BookId, a.BookOrderNumberId });
+                .HasAlternateKey(a => new { a.BookIdentificator, a.BookOrderNumberId });
             modelBuilder.Entity<GroupsPermissions>()
                 .HasAlternateKey(p => new { p.GroupId, p.PositionId });
             modelBuilder.Entity<PositionRecord>()

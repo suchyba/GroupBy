@@ -9,6 +9,6 @@
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public bool Confirmed { get; set; }
-        public int? RankId { get; set; }
+        public Guid? RankId { get; set; }
     }
 }

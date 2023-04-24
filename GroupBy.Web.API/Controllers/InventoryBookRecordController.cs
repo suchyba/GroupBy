@@ -29,14 +29,14 @@ namespace GroupBy.Web.API.Controllers
         {
             return Ok(await InventoryBookRecordService.GetAllAsync());
         }
-        [HttpGet("{inventoryBookId}/{id}", Name = "GetInventoryBookRecord")]
+        [HttpGet("{id}", Name = "GetInventoryBookRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(Guid inventoryBookId, Guid id)
+        public async Task<ActionResult<InventoryBookRecordDTO>> GetAsync(Guid id)
         {
             try
             {
-                return Ok(await InventoryBookRecordService.GetAsync(new InventoryBookRecordSimpleDTO { Id = id, InventoryBookId = inventoryBookId }));
+                return Ok(await InventoryBookRecordService.GetAsync(new InventoryBookRecordSimpleDTO { Id = id }));
             }
             catch (NotFoundException e)
             {

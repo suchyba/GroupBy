@@ -83,6 +83,10 @@ namespace GroupBy.Web.API.Controllers
             {
                 return BadRequest(e.ValidationErrors);
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("delete/{id}")]

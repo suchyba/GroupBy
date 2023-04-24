@@ -2,7 +2,8 @@
 using GroupBy.Design.DbContext;
 using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using System.Threading.Tasks;
+using System;
+using System.Linq.Expressions;
 
 namespace GroupBy.Data.Repositories
 {
@@ -13,12 +14,9 @@ namespace GroupBy.Data.Repositories
 
         }
 
-        public override async Task<InventoryItemSource> UpdateAsync(InventoryItemSource domain)
+        protected override Expression<Func<InventoryItemSource, bool>> CompareKeys(object entity)
         {
-            var toModify = await GetAsync(domain);
-            toModify.Name = domain.Name;
-
-            return toModify;
+            return s => entity.GetType().GetProperty("Id").GetValue(entity).Equals(s.Id);
         }
     }
 }

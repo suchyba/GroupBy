@@ -3,9 +3,10 @@ using GroupBy.Design.DbContext;
 using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
@@ -22,30 +23,27 @@ namespace GroupBy.Data.Repositories
         }
         public virtual async Task DeleteAsync(Entity domain)
         {
-            var entity = await GetAsync(domain);
-
-            context.Set<Entity>().Remove(entity);
-
-            try
-            {
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateException e)
-            {
-                throw new DeleteNotPermittedException(typeof(Entity).Name);
-            }
-
+            await Task.Run(() => context.Set<Entity>().Remove(domain));
         }
-        public async Task<Entity> GetAsync(object domain, bool includeLocal = false, params string[] includes)
+        public async Task<Entity> GetAsync(object domain, bool includeLocal = false, bool asTracking = true, params string[] includes)
         {
             Entity entity = null;
             if (includeLocal)
             {
-                await LoadToLocalAsync(includes);
-                entity = context.Set<Entity>().Local.FirstOrDefault(e => CompareKeys(e, domain));
+                await LoadToLocalAsync(asTracking, includes);
+                entity = context.Set<Entity>().Local.FirstOrDefault(CompareKeys(domain).Compile());
             }
             else
-                entity = await includes.Aggregate(context.Set<Entity>().AsTracking(), (current, include) => current.Include(include)).FirstOrDefaultAsync(e => CompareKeys(e, domain));
+            {
+                IQueryable<Entity> set = null;
+                if (asTracking)
+                    set = context.Set<Entity>().AsTracking();
+                else
+                    set = context.Set<Entity>().AsNoTracking();
+
+                //entity = (await includes.Aggregate(set, (current, include) => current.Include(include)).ToListAsync()).Find(e => CompareKeys(e, domain));
+                entity = await includes.Aggregate(set, (current, include) => current.Include(include)).FirstOrDefaultAsync(CompareKeys(domain));
+            }
 
             if (entity == null)
                 throw new NotFoundException(typeof(Entity).Name, domain);
@@ -53,39 +51,34 @@ namespace GroupBy.Data.Repositories
             return entity;
 
         }
-        public abstract Task<Entity> UpdateAsync(Entity domain);
+        public virtual async Task<Entity> UpdateAsync(Entity domain)
+        {
+            return await Task.Run(() => context.Set<Entity>().Update(domain).Entity);
+        }
         public virtual async Task<Entity> CreateAsync(Entity domain)
         {
-            await context.Set<Entity>().AddAsync(domain);
-            return domain;
+            return (await context.Set<Entity>().AddAsync(domain)).Entity;
         }
         public virtual async Task<IEnumerable<Entity>> GetAllAsync(bool includeLocal = false, params string[] includes)
         {
             if (includeLocal)
             {
-                await LoadToLocalAsync(includes);
+                await LoadToLocalAsync(true, includes);
                 return context.Set<Entity>().Local;
             }
             else
                 return await includes.Aggregate(context.Set<Entity>().AsTracking(), (current, include) => current.Include(include)).ToListAsync();
         }
-        protected async Task LoadToLocalAsync(params string[] includes)
+        protected async Task LoadToLocalAsync(bool asTracking = true, params string[] includes)
         {
-            await includes.Aggregate(context.Set<Entity>().AsTracking(), (current, include) => current.Include(include)).LoadAsync();
+            IQueryable<Entity> set = null;
+            if (asTracking)
+                set = context.Set<Entity>().AsTracking();
+            else
+                set = context.Set<Entity>().AsNoTracking();
+
+            await includes.Aggregate(set, (current, include) => current.Include(include)).LoadAsync();
         }
-        protected virtual bool CompareKeys(Entity entity, object keys)
-        {
-            var entityKeys = entity.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(KeyAttribute), true).Length > 0);
-            var keysProperties = keys.GetType().GetProperties();
-            foreach (var key in entityKeys)
-            {
-                var keyProperty = keysProperties.FirstOrDefault(p => p.Name == key.Name);
-                if (keyProperty == null)
-                    return false;
-                if (!key.GetValue(entity).Equals(keyProperty.GetValue(keys)))
-                    return false;
-            }
-            return true;
-        }
+        protected abstract Expression<Func<Entity, bool>> CompareKeys(object entity);
     }
 }

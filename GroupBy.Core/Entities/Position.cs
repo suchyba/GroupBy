@@ -4,13 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// Position of the volounteer <seealso cref="Volunteer"/>
+    /// Position of the volunteer <seealso cref="Volunteer"/>
     /// </summary>
     public class Position
     {
-        /// <summary>
-        /// Identiicator
-        /// </summary>
         [Key]
         public Guid Id { get; set; }
         /// <summary>

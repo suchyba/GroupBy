@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GroupBy.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatedDatabase : Migration
+    public partial class CreateDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,7 +27,7 @@ namespace GroupBy.Data.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -106,7 +106,7 @@ namespace GroupBy.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -172,7 +172,7 @@ namespace GroupBy.Data.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     VolunteerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -232,7 +232,7 @@ namespace GroupBy.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -254,7 +254,7 @@ namespace GroupBy.Data.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -271,8 +271,8 @@ namespace GroupBy.Data.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -295,7 +295,7 @@ namespace GroupBy.Data.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -315,7 +315,8 @@ namespace GroupBy.Data.Migrations
                 name: "AccountingBooks",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BookIdentificator = table.Column<int>(type: "int", nullable: false),
                     BookOrderNumberId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Locked = table.Column<bool>(type: "bit", nullable: false),
@@ -323,7 +324,8 @@ namespace GroupBy.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AccountingBooks", x => new { x.BookId, x.BookOrderNumberId });
+                    table.PrimaryKey("PK_AccountingBooks", x => x.Id);
+                    table.UniqueConstraint("AK_AccountingBooks_BookIdentificator_BookOrderNumberId", x => new { x.BookIdentificator, x.BookOrderNumberId });
                     table.ForeignKey(
                         name: "FK_AccountingBooks_Groups_RelatedGroupId",
                         column: x => x.RelatedGroupId,
@@ -408,6 +410,7 @@ namespace GroupBy.Data.Migrations
                 name: "Permissions",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Invitation = table.Column<bool>(type: "bit", nullable: true),
@@ -421,7 +424,8 @@ namespace GroupBy.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Permissions", x => new { x.GroupId, x.PositionId });
+                    table.PrimaryKey("PK_Permissions", x => x.Id);
+                    table.UniqueConstraint("AK_Permissions_GroupId_PositionId", x => new { x.GroupId, x.PositionId });
                     table.ForeignKey(
                         name: "FK_Permissions_Groups_GroupId",
                         column: x => x.GroupId,
@@ -568,7 +572,8 @@ namespace GroupBy.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PositionRecords", x => new { x.VolunteerId, x.Id });
+                    table.PrimaryKey("PK_PositionRecords", x => x.Id);
+                    table.UniqueConstraint("AK_PositionRecords_VolunteerId_Id", x => new { x.VolunteerId, x.Id });
                     table.ForeignKey(
                         name: "FK_PositionRecords_Groups_RelatedGroupId",
                         column: x => x.RelatedGroupId,
@@ -628,10 +633,9 @@ namespace GroupBy.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    BookOrderNumberId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RelatedProjectId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     RelatedDocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -655,10 +659,10 @@ namespace GroupBy.Data.Migrations
                 {
                     table.PrimaryKey("PK_FinancialRecords", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FinancialRecords_AccountingBooks_BookId_BookOrderNumberId",
-                        columns: x => new { x.BookId, x.BookOrderNumberId },
+                        name: "FK_FinancialRecords_AccountingBooks_BookId",
+                        column: x => x.BookId,
                         principalTable: "AccountingBooks",
-                        principalColumns: new[] { "BookId", "BookOrderNumberId" },
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FinancialRecords_Elements_RelatedDocumentId",
@@ -678,12 +682,12 @@ namespace GroupBy.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InventoryBookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DocumentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Income = table.Column<bool>(type: "bit", nullable: false),
-                    SourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InventoryBookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -836,9 +840,9 @@ namespace GroupBy.Data.Migrations
                 column: "RelatedProjectId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_FinancialRecords_BookId_BookOrderNumberId",
+                name: "IX_FinancialRecords_BookId",
                 table: "FinancialRecords",
-                columns: new[] { "BookId", "BookOrderNumberId" });
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FinancialRecords_RelatedDocumentId",

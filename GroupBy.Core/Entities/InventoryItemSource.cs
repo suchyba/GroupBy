@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
@@ -12,9 +8,6 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class InventoryItemSource
     {
-        /// <summary>
-        /// Identificator
-        /// </summary>
         [Key]
         public Guid Id { get; set; }
         /// <summary>

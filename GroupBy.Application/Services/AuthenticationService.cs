@@ -8,6 +8,7 @@ using GroupBy.Design.TO.Authentication;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -86,7 +87,7 @@ namespace GroupBy.Application.Services
 
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                user.RelatedVolunteer = await volunteerRepository.GetAsync(new Volunteer { Id = user.VolunteerId });
+                user.RelatedVolunteer = await volunteerRepository.GetAsync(new Volunteer { Id = user.VolunteerId }, includes: "Rank");
             }
 
             if (user.RelatedVolunteer == null)
@@ -128,7 +129,14 @@ namespace GroupBy.Application.Services
             if (!validationResult.IsValid)
                 throw new Design.Exceptions.ValidationException(validationResult);
 
-            var user = await userManager.FindByEmailAsync(registerDTO.Email);
+            ApplicationUser user = null;
+
+            try
+            {
+                user = await userManager.FindByEmailAsync(registerDTO.Email);
+            }
+            catch (NotFoundException) { }
+
             if (user != null)
                 throw new BadRequestException("Account with this email address already exists");
 
@@ -136,21 +144,26 @@ namespace GroupBy.Application.Services
 
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                var registrationCode = await registrationCodeRepository.GetAsync(new RegistrationCode { Code = registerDTO.RegistrationCode });
+                var registrationCode = await registrationCodeRepository.GetAsync(
+                    new RegistrationCode
+                    {
+                        Code = registerDTO.RegistrationCode
+                    },
+                    includeLocal: false,
+                    includes: new string[] {"TargetRank", "TargetGroup" });
 
-                applicationUser.RelatedVolunteer.Rank = registrationCode.TargetRank;
+                applicationUser.RelatedVolunteer.Rank = await rankRepository.GetAsync(registrationCode.TargetRank);
+                applicationUser.RelatedVolunteer.Confirmed = true;
+
                 var volunteer = await volunteerRepository.CreateAsync(applicationUser.RelatedVolunteer);
 
-                await groupRepository.AddMemberAsync(registrationCode.TargetGroup.Id, volunteer.Id, includeLocal: true);
+                await groupRepository.AddMemberAsync(registrationCode.TargetGroup.Id, volunteer, includeLocal: true);
 
                 applicationUser.UserName = applicationUser.Email;
 
                 var result = await userManager.CreateAsync(applicationUser, registerDTO.Password);
                 if (!result.Succeeded)
                     throw new Exception($"{result.Errors}");
-
-                volunteer.Confirmed = true;
-                await volunteerRepository.UpdateAsync(volunteer);
 
                 var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
 

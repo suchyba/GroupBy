@@ -1,12 +1,10 @@
-﻿using GroupBy.Design.DbContext;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
 using GroupBy.Design.UnitOfWork;
-using GroupBy.Data.DbContexts;
-using System;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace GroupBy.Data.UnitOfWork
 {
@@ -14,7 +12,6 @@ namespace GroupBy.Data.UnitOfWork
     {
         private static readonly object lockObject = new object();
 
-        [ThreadStatic]
         private static Stack<UnitOfWork> unitOfWorks = new Stack<UnitOfWork>();
 
         public static Stack<UnitOfWork> UnitOfWorks
@@ -46,6 +43,8 @@ namespace GroupBy.Data.UnitOfWork
             get => dbContextLocator.GetDbContext();
         }
 
+        public GroupByDbContext DbContext { get => dbContext; }
+
         private IDbContextTransaction transaction
         {
             get => dbContext.Database.CurrentTransaction;
@@ -75,7 +74,10 @@ namespace GroupBy.Data.UnitOfWork
 
         public Task Commit()
         {
-            return dbContext.SaveChangesAsync();
+            if (IsRoot)
+                return dbContext.SaveChangesAsync();
+
+            return Task.CompletedTask;
         }
 
         public void Dispose()
@@ -91,6 +93,9 @@ namespace GroupBy.Data.UnitOfWork
                 {
                     dbContextLocator.RemoveDbContext();
                 }
+
+                UnitOfWorks.Pop();
+                IsDisposed = true;
             }
         }
 

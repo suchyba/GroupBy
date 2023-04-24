@@ -9,9 +9,6 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public abstract class Element
     {
-        /// <summary>
-        /// Identificator of the element
-        /// </summary>
         [Key]
         public Guid Id { get; set; }
         /// <summary>
