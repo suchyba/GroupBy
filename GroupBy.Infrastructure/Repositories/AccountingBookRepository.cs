@@ -1,82 +1,38 @@
-﻿using GroupBy.Domain.Entities;
-using GroupBy.Application.Design.Repositories;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Repositories;
+using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using GroupBy.Data.DbContexts;
-using Microsoft.EntityFrameworkCore;
-using GroupBy.Application.Exceptions;
 
 namespace GroupBy.Data.Repositories
 {
     public class AccountingBookRepository : AsyncRepository<AccountingBook>, IAccountingBookRepository
     {
-        public AccountingBookRepository(DbContext context) : base(context)
+        public AccountingBookRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
 
         }
 
-        public override async Task DeleteAsync(AccountingBook domain)
-        {
-            var book = await GetAsync(domain);
-            if (book == null)
-                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
-
-            context.Set<AccountingBook>().Remove(book);
-            await context.SaveChangesAsync();
-        }
-
-        public override async Task<AccountingBook> GetAsync(AccountingBook domain)
-        {
-            var book = await context.Set<AccountingBook>()
-                .Include(b => b.RelatedGroup)
-                .Include(b => b.Records)
-                .ThenInclude(r => r.RelatedProject)
-                .Include(r => r.Records)
-                .ThenInclude(r => r.RelatedDocument)
-                .FirstOrDefaultAsync(book => book.BookId == domain.BookId && book.BookOrderNumberId == domain.BookOrderNumberId);
-            if (book == null)
-                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
-            return book;
-        }
-        public override async Task<AccountingBook> CreateAsync(AccountingBook domain)
-        {
-            int key = domain.RelatedGroup.Id;
-            domain.RelatedGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.RelatedGroup.Id);
-            if (domain.RelatedGroup == null)
-                throw new NotFoundException("Group", key);
-
-            domain.Records = new List<FinancialRecord>();
-
-            return await base.CreateAsync(domain);
-        }
         public async Task<bool> IsIdUnique(int bookNumber, int orderNumber)
         {
-            if (!(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber).AnyAsync()))
+            if (!(await GetAllAsync()).Any(book => book.BookIdentificator == bookNumber))
                 return true;
 
-            return !(await context.Set<AccountingBook>().Where(book => book.BookId == bookNumber && book.BookOrderNumberId == orderNumber).AnyAsync());
+            return !(await GetAllAsync()).Any(book => book.BookIdentificator == bookNumber && book.BookOrderNumberId == orderNumber);
         }
 
-        public override async Task<AccountingBook> UpdateAsync(AccountingBook domain)
+        public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain, bool includeLocal = false)
         {
-            var book = await GetAsync(domain);
-            if (book == null)
-                throw new NotFoundException("AccountingBook", new { domain.BookId, domain.BookOrderNumberId });
-
-            book.Locked = domain.Locked;
-            book.Name = domain.Name;
-
-            await context.SaveChangesAsync();
-
-            return book;
+            return (await GetAsync(domain, includeLocal: includeLocal, includes: new string[] { "Records.RelatedDocument", "Records.RelatedProject" })).Records;
         }
 
-        public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain)
+        protected override Expression<Func<AccountingBook, bool>> CompareKeys(object entity)
         {
-            return (await GetAsync(domain)).Records;
+            return b => entity.GetType().GetProperty("Id").GetValue(entity).Equals(b.Id);
         }
     }
 }

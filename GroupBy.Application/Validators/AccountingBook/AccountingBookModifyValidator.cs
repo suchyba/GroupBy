@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.AccountingBook;
+using GroupBy.Design.TO.AccountingBook;
 
 namespace GroupBy.Application.Validators.AccountingBook
 {
@@ -7,7 +7,10 @@ namespace GroupBy.Application.Validators.AccountingBook
     {
         public AccountingBookUpdateValidator()
         {
-            RuleFor(a => a.BookId)
+            RuleFor(a => a.Id)
+                .NotEmpty().WithMessage("{PropertyName} is required");
+
+            RuleFor(a => a.BookIdentificator)
                 .GreaterThan(0).WithMessage("{PropertyName} must be grater than 0.")
                 .NotNull();
 

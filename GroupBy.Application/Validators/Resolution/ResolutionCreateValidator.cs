@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Resolution;
+using GroupBy.Design.TO.Resolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,9 +19,9 @@ namespace GroupBy.Application.Validators.Resolution
             RuleFor(r => r.Content)
                 .NotEmpty().WithMessage("{PropertyName} cannot be empty");
             RuleFor(r => r.LegislatorId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
             RuleFor(r => r.GroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 
 namespace GroupBy.Domain.Entities
 {
@@ -11,11 +10,8 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class Volunteer
     {
-        /// <summary>
-        /// The identification number of the volunteer
-        /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// The names of the volunteer
         /// </summary>

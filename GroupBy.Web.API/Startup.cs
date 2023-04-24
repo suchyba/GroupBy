@@ -25,9 +25,11 @@ namespace GroupBy.Web.API
             AddSwagger(services);
 
             services.AddDataServices(configuration);
-            services.AddApplicationServices(configuration);
             services.AddAuthenticationServices(configuration);
-            services.AddControllers();
+            services.AddApplicationServices(configuration);
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddCors();
         }

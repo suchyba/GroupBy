@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.Document;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.Document;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,7 +25,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<DocumentSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<DocumentSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await documentService.GetAllAsync());
         }
@@ -33,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}", Name = "GetDocument")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<DocumentDTO>> GetAsync(int id)
+        public async Task<ActionResult<DocumentDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -83,13 +83,17 @@ namespace GroupBy.Web.API.Controllers
             {
                 return BadRequest(e.ValidationErrors);
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete("delete/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

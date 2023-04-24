@@ -1,42 +1,66 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.RegistrationCode;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
     public class RegistrationCodeService : AsyncService<RegistrationCode, RegistrationCodeSimpleDTO, RegistrationCodeFullDTO, RegistrationCodeCreateDTO, RegistrationCodeUpdateDTO>, IRegistrationCodeService
     {
+        private readonly IVolunteerRepository volunteerRepository;
+        private readonly IGroupRepository groupRepository;
+        private readonly IRankRepository rankRepository;
+
         public RegistrationCodeService(
             IRegistrationCodeRepository repository,
+            IVolunteerRepository volunteerRepository,
+            IGroupRepository groupRepository,
+            IRankRepository rankRepository,
             IMapper mapper,
             IValidator<RegistrationCodeUpdateDTO> updateValidator,
-            IValidator<RegistrationCodeCreateDTO> createValidator)
-            : base(repository, mapper, updateValidator, createValidator)
+            IValidator<RegistrationCodeCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
-
+            this.volunteerRepository = volunteerRepository;
+            this.groupRepository = groupRepository;
+            this.rankRepository = rankRepository;
         }
-        public override async Task<RegistrationCodeFullDTO> CreateAsync(RegistrationCodeCreateDTO model)
+
+        public override async Task<RegistrationCodeFullDTO> GetAsync(RegistrationCodeSimpleDTO model)
         {
-            string code = model.GetHashCode().ToString("X6");
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<RegistrationCodeFullDTO>(await repository.GetAsync(mapper.Map<RegistrationCode>(model), includes: new string[] { "TargetGroup", "TargetRank", "Owner" }));
+            }
+        }
 
-            var validationResult = await createValidator.ValidateAsync(model);
-            if (!validationResult.IsValid)
-                throw new Exceptions.ValidationException(validationResult);
-
-            var entity = mapper.Map<RegistrationCode>(model);
+        protected override async Task<RegistrationCode> CreateOperationAsync(RegistrationCode entity)
+        {
+            string code = entity.GetHashCode().ToString("X6");
 
             entity.Code = code;
-            var domain = await repository.CreateAsync(entity);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                entity.TargetGroup = await groupRepository.GetAsync(entity.TargetGroup);
+                if (entity.TargetRank != null)
+                    entity.TargetRank = await rankRepository.GetAsync(entity.TargetRank);
+                entity.Owner = await volunteerRepository.GetAsync(entity.Owner);
 
-            return mapper.Map<RegistrationCodeFullDTO>(domain);
+                if (!await groupRepository.IsMember(entity.TargetGroup.Id, entity.Owner))
+                    throw new BadRequestException("Creator of registration code must be a member of the target group");
+
+                var createdCode = await repository.CreateAsync(entity);
+                await uow.Commit();
+
+                return createdCode;
+            }
         }
     }
 }

@@ -17,18 +17,18 @@ namespace GroupBy.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "7.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("AgreementVolunteer", b =>
                 {
-                    b.Property<int>("AgreementsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AgreementsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("VolunteersAcceptedId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("VolunteersAcceptedId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("AgreementsId", "VolunteersAcceptedId");
 
@@ -39,11 +39,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("ElementGroup", b =>
                 {
-                    b.Property<int>("ElementsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ElementsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ElementsId", "GroupsId");
 
@@ -54,7 +54,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.AccountingBook", b =>
                 {
-                    b.Property<int>("BookId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("BookIdentificator")
                         .HasColumnType("int");
 
                     b.Property<int>("BookOrderNumberId")
@@ -66,10 +70,12 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RelatedGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RelatedGroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("BookId", "BookOrderNumberId");
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("BookIdentificator", "BookOrderNumberId");
 
                     b.HasIndex("RelatedGroupId");
 
@@ -78,11 +84,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Agreement", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -94,8 +98,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -144,8 +149,8 @@ namespace GroupBy.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("VolunteerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -165,11 +170,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Element", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -179,8 +182,8 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RelatedProjectId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RelatedProjectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -189,21 +192,18 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("Elements");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Element");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookOrderNumberId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -215,32 +215,32 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RelatedDocumentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RelatedDocumentId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("RelatedProjectId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RelatedProjectId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("RelatedDocumentId");
 
                     b.HasIndex("RelatedProjectId");
 
-                    b.HasIndex("BookId", "BookOrderNumberId");
-
                     b.ToTable("FinancialRecords");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("FinancialRecord");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Group", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -249,11 +249,11 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ParentGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ParentGroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -266,11 +266,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.GroupsPermissions", b =>
                 {
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Books")
                         .HasColumnType("bit");
@@ -284,8 +282,14 @@ namespace GroupBy.Data.Migrations
                     b.Property<bool?>("EditPosition")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool?>("Invitation")
                         .HasColumnType("bit");
+
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("Resolutions")
                         .HasColumnType("bit");
@@ -296,7 +300,9 @@ namespace GroupBy.Data.Migrations
                     b.Property<bool?>("Subgroups")
                         .HasColumnType("bit");
 
-                    b.HasKey("GroupId", "PositionId");
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("GroupId", "PositionId");
 
                     b.HasIndex("PositionId");
 
@@ -305,14 +311,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBook", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -328,29 +332,27 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBookRecord", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DocumentId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("DocumentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Income")
                         .HasColumnType("bit");
 
-                    b.Property<int>("InventoryBookId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("InventoryBookId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("SourceId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("SourceId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -367,11 +369,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -384,7 +384,7 @@ namespace GroupBy.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
 
@@ -393,11 +393,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItemSource", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -410,20 +408,18 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InvitationToGroup", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<Guid?>("InvitedId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("InvitedId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("InviterId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("InviterId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TargetGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TargetGroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -438,14 +434,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Position", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("HigherPositionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("HigherPositionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -460,14 +454,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.PositionRecord", b =>
                 {
-                    b.Property<int>("VolunteerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AppointingResolutionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("AppointingResolutionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
@@ -475,16 +467,21 @@ namespace GroupBy.Data.Migrations
                     b.Property<DateTime?>("DismissDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DismissingResolutionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("DismissingResolutionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PositionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PositionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RelatedGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RelatedGroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("VolunteerId", "Id");
+                    b.Property<Guid>("VolunteerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("VolunteerId", "Id");
 
                     b.HasIndex("AppointingResolutionId");
 
@@ -499,11 +496,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Project", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
@@ -524,14 +519,14 @@ namespace GroupBy.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("ParentGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("ParentGroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("ProjectGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ProjectGroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -548,14 +543,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Rank", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("HigherRankId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("HigherRankId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -576,14 +569,14 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TargetGroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("TargetGroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("TargetRankId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TargetRankId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Code");
 
@@ -598,11 +591,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Resolution", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -611,11 +602,11 @@ namespace GroupBy.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("LegislatorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("LegislatorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
@@ -632,14 +623,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.TODOListElement", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("AsigneeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("AsigneeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Deadline")
                         .HasColumnType("datetime2");
@@ -647,11 +636,11 @@ namespace GroupBy.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TODOListElementId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TODOListElementId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("TODOListId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TODOListId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Task")
                         .IsRequired()
@@ -670,11 +659,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Volunteer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -696,8 +683,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RankId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("RankId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -708,11 +695,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupVolunteer", b =>
                 {
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("GroupsId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("MembersId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("MembersId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("GroupsId", "MembersId");
 
@@ -721,10 +708,11 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("GroupVolunteer");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -748,13 +736,13 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -762,9 +750,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -773,13 +760,13 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -787,9 +774,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -798,7 +784,7 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -809,9 +795,8 @@ namespace GroupBy.Data.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -820,13 +805,13 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -835,10 +820,10 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("nvarchar(450)");
@@ -856,11 +841,11 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("RemainderVolunteer", b =>
                 {
-                    b.Property<int>("RemaindersId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("RemaindersId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("VolunteersAcceptedId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("VolunteersAcceptedId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("RemaindersId", "VolunteersAcceptedId");
 
@@ -880,66 +865,6 @@ namespace GroupBy.Data.Migrations
                     b.HasDiscriminator().HasValue("Document");
                 });
 
-            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialIncomeRecord", b =>
-                {
-                    b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
-
-                    b.Property<decimal?>("Dotation")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("EarningAction")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("MembershipFee")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("OnePercent")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Other")
-                        .HasColumnType("decimal(10,2)")
-                        .HasColumnName("FinancialIncomeRecord_Other");
-
-                    b.Property<decimal?>("ProgramFee")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasDiscriminator().HasValue("FinancialIncomeRecord");
-                });
-
-            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialOutcomeRecord", b =>
-                {
-                    b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
-
-                    b.Property<decimal?>("Accommodation")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Food")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Insurance")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Inventory")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Material")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Other")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Salary")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Service")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<decimal?>("Transport")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasDiscriminator().HasValue("FinancialOutcomeRecord");
-                });
-
             modelBuilder.Entity("GroupBy.Domain.Entities.Remainder", b =>
                 {
                     b.HasBaseType("GroupBy.Domain.Entities.Element");
@@ -955,6 +880,71 @@ namespace GroupBy.Data.Migrations
                     b.HasBaseType("GroupBy.Domain.Entities.Element");
 
                     b.HasDiscriminator().HasValue("TODOList");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialIncomeRecord", b =>
+                {
+                    b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
+
+                    b.Property<decimal?>("Dotation")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("EarningAction")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("MembershipFee")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("OnePercent")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Other")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("ProgramFee")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.ToTable("FinancialRecords", t =>
+                        {
+                            t.Property("Other")
+                                .HasColumnName("FinancialIncomeRecord_Other");
+                        });
+
+                    b.HasDiscriminator().HasValue("FinancialIncomeRecord");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialOutcomeRecord", b =>
+                {
+                    b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
+
+                    b.Property<decimal?>("Accommodation")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Food")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Insurance")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Inventory")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Material")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Other")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Service")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<decimal?>("Transport")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.HasDiscriminator().HasValue("FinancialOutcomeRecord");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.AccountingDocument", b =>
@@ -1027,6 +1017,12 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
                 {
+                    b.HasOne("GroupBy.Domain.Entities.AccountingBook", "Book")
+                        .WithMany("Records")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GroupBy.Domain.Entities.AccountingDocument", "RelatedDocument")
                         .WithMany("RelatedRecords")
                         .HasForeignKey("RelatedDocumentId")
@@ -1036,12 +1032,6 @@ namespace GroupBy.Data.Migrations
                     b.HasOne("GroupBy.Domain.Entities.Project", "RelatedProject")
                         .WithMany("RelatedFinnancialRecords")
                         .HasForeignKey("RelatedProjectId");
-
-                    b.HasOne("GroupBy.Domain.Entities.AccountingBook", "Book")
-                        .WithMany("Records")
-                        .HasForeignKey("BookId", "BookOrderNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Book");
 
@@ -1318,16 +1308,16 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -1336,7 +1326,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()
@@ -1345,9 +1335,9 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1360,7 +1350,7 @@ namespace GroupBy.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
                         .WithMany()

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Resolution;
+using GroupBy.Design.TO.Resolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace GroupBy.Application.Validators.Resolution
         public ResolutionUpdateValidator()
         {
             RuleFor(r => r.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
             RuleFor(r => r.Symbol)
                 .NotEmpty().WithMessage("{PropeertyName} cannot be empty");
             RuleFor(r => r.Date)

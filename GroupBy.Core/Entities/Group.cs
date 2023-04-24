@@ -10,11 +10,8 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class Group
     {
-        /// <summary>
-        /// Identificator of the group
-        /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Name of the group
         /// </summary>

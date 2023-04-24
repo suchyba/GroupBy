@@ -1,60 +1,38 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.InventoryItem;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace GroupBy.Data.Repositories
 {
     public class InventoryItemRepository : AsyncRepository<InventoryItem>, IInventoryItemRepository
     {
-        public InventoryItemRepository(DbContext context) : base(context)
+        public InventoryItemRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
 
         }
-        public override async Task<InventoryItem> GetAsync(InventoryItem domain)
-        {
-            InventoryItem item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == domain.Id);
-            if (item == null)
-                throw new NotFoundException("InventoryItem", domain.Id);
-            return item;
-        }
 
-        public override async Task<InventoryItem> UpdateAsync(InventoryItem domain)
+        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(Guid itemId, bool includeLocal = false)
         {
-            InventoryItem item = await context.Set<InventoryItem>().FirstOrDefaultAsync(i => i.Id == domain.Id);
-            if (item == null)
-                throw new NotFoundException("InventoryItem", domain.Id);
-
-            item.Name = domain.Name;
-            item.Symbol = domain.Symbol;
-            item.Description = domain.Description;
-            item.Value = domain.Value;
-            await context.SaveChangesAsync();
-            return item;
-        }
-
-        public async Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(int itemId)
-        {
-            InventoryItem item = await context.Set<InventoryItem>()
-                .Include(i => i.History)
-                .FirstOrDefaultAsync(i => i.Id == itemId);
-            if (item == null)
-                throw new NotFoundException("InventoryItem", itemId);
+            InventoryItem item = await GetAsync(new { Id = itemId }, includeLocal, includes: "History");
 
             return item.History;
         }
 
-        public async Task<IEnumerable<InventoryItem>> GetInventoryItemWithoutHistory()
+        public async Task<IEnumerable<InventoryItem>> GetInventoryItemWithoutHistory(bool includeLocal = false)
         {
-            return context.Set<InventoryItem>()
-                .Include(i => i.History)
+            return (await GetAllAsync(includeLocal, "History"))
                 .Where(i => i.History == null || i.History.Count() == 0);
+        }
+
+        protected override Expression<Func<InventoryItem, bool>> CompareKeys(object entity)
+        {
+            return i => entity.GetType().GetProperty("Id").GetValue(entity).Equals(i.Id);
         }
     }
 }

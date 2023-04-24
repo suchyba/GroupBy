@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.RegistrationCode;
+using GroupBy.Design.TO.RegistrationCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,11 @@ namespace GroupBy.Application.Validators.RegistrationCode
             RuleFor(c => c.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required");
             RuleFor(c => c.TargetGroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
             RuleFor(c => c.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required");
+                .NotEmpty().WithMessage("{PropertyName} is required");
             RuleFor(c => c.TargetRankId)
-                .GreaterThan(0)
+                .NotEmpty()
                 .When(c => c.TargetRankId.HasValue).WithMessage("{PropertyName} is required");
         }
     }

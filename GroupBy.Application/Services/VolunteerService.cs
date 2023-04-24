@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.Group;
-using GroupBy.Application.DTO.Project;
-using GroupBy.Application.DTO.RegistrationCode;
-using GroupBy.Application.DTO.Volunteer;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.Group;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.TO.Volunteer;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,30 +17,84 @@ namespace GroupBy.Application.Services
 {
     public class VolunteerService : AsyncService<Volunteer, VolunteerSimpleDTO, VolunteerDTO, VolunteerCreateDTO, VolunteerUpdateDTO>, IVolunteerService
     {
-        public VolunteerService(IVolunteerRepository volunteerRepository, IMapper mapper,
+        private readonly IRankRepository rankRepository;
+
+        public VolunteerService(
+            IVolunteerRepository volunteerRepository,
+            IRankRepository rankRepository,
+            IMapper mapper,
             IValidator<VolunteerCreateDTO> createValidator,
-            IValidator<VolunteerUpdateDTO> updateValidator) : base(volunteerRepository, mapper, updateValidator, createValidator)
+            IValidator<VolunteerUpdateDTO> updateValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(volunteerRepository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
-
-        }
-        public async Task<IEnumerable<GroupSimpleDTO>> GetGroupsAsync(int volunteerId)
-        {
-            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
+            this.rankRepository = rankRepository;
         }
 
-        public async Task<IEnumerable<GroupSimpleDTO>> GetOwnedGroupsAsync(int volunteerId)
+        public override async Task<VolunteerDTO> GetAsync(VolunteerSimpleDTO model)
         {
-            return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedGroupsAsync(volunteerId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<VolunteerDTO>(await repository.GetAsync(mapper.Map<Volunteer>(model), includes: "Rank"));
+            }
         }
 
-        public async Task<IEnumerable<ProjectSimpleDTO>> GetOwnedProjectsAsync(int volunteerId)
+        protected override async Task<Volunteer> CreateOperationAsync(Volunteer entity)
         {
-            return mapper.Map<IEnumerable<ProjectSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedProjectsAsync(volunteerId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                if (entity.Rank != null)
+                    entity.Rank = await rankRepository.GetAsync(entity.Rank);
+
+                var createdVolunteer = await repository.CreateAsync(entity);
+                await uow.Commit();
+                return createdVolunteer;
+            }
         }
 
-        public async Task<IEnumerable<RegistrationCodeListDTO>> GetOwnedRegistrationCodesAsync(int volunteerId)
+        protected override async Task<Volunteer> UpdateOperationAsync(Volunteer entity)
         {
-            return mapper.Map<IEnumerable<RegistrationCodeListDTO>>(await (repository as IVolunteerRepository).GetOwnedRegistrationCodesAsync(volunteerId));
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                if (entity.Rank != null)
+                    entity.Rank = await rankRepository.GetAsync(entity.Rank);
+
+                var updatedVolunteer = await repository.UpdateAsync(entity);
+                await uow.Commit();
+                return updatedVolunteer;
+            }
+        }
+
+        public async Task<IEnumerable<GroupSimpleDTO>> GetGroupsAsync(Guid volunteerId)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetGroupsAsync(volunteerId));
+            }
+        }
+
+        public async Task<IEnumerable<GroupSimpleDTO>> GetOwnedGroupsAsync(Guid volunteerId)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<GroupSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedGroupsAsync(volunteerId));
+            }
+        }
+
+        public async Task<IEnumerable<ProjectSimpleDTO>> GetOwnedProjectsAsync(Guid volunteerId)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<ProjectSimpleDTO>>(await (repository as IVolunteerRepository).GetOwnedProjectsAsync(volunteerId));
+            }
+        }
+
+        public async Task<IEnumerable<RegistrationCodeListDTO>> GetOwnedRegistrationCodesAsync(Guid volunteerId)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<RegistrationCodeListDTO>>(await (repository as IVolunteerRepository).GetOwnedRegistrationCodesAsync(volunteerId));
+            }
         }
     }
 }

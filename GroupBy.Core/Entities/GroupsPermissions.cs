@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
@@ -13,8 +9,10 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class GroupsPermissions
     {
-        public int GroupId { get; set; }
-        public int PositionId { get; set; }
+        [Key]
+        public Guid Id { get; set; }
+        public Guid GroupId { get; set; }
+        public Guid PositionId { get; set; }
         /// <summary>
         /// Permission to invitate members to group <seealso cref="Invitation"/>
         /// </summary>
@@ -44,7 +42,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public bool? Subgroups { get; set; }
         /// <summary>
-        /// Permission to edit positions of the members 
+        /// Permission to edit positions of the members
         /// </summary>
         public bool? EditPosition { get; set; }
         /// <summary>

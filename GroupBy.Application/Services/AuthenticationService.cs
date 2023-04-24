@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.Authentication;
-using GroupBy.Application.Exceptions;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.Authentication;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,8 +35,10 @@ namespace GroupBy.Application.Services
         private readonly IRankRepository rankRepository;
         private readonly IValidator<RegisterDTO> registerValidator;
         private readonly IEmailService emailService;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public AuthenticationService(UserManager<ApplicationUser> userManager,
+        public AuthenticationService(
+            UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             IMapper mapper,
@@ -43,7 +47,8 @@ namespace GroupBy.Application.Services
             IGroupRepository groupRepository,
             IRankRepository rankRepository,
             IValidator<RegisterDTO> registerValidator,
-            IEmailService emailService)
+            IEmailService emailService,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -55,6 +60,7 @@ namespace GroupBy.Application.Services
             this.rankRepository = rankRepository;
             this.registerValidator = registerValidator;
             this.emailService = emailService;
+            this.unitOfWorkFactory = unitOfWorkFactory;
         }
 
         public async Task ConfirmEmailAsync(string email, string token)
@@ -77,8 +83,12 @@ namespace GroupBy.Application.Services
             if (user == null)
                 throw new NotFoundException("User", new { Id = email });
 
-            int volunteerId = user.VolunteerId;
-            user.RelatedVolunteer = await volunteerRepository.GetAsync(new Volunteer { Id = user.VolunteerId });
+            Guid volunteerId = user.VolunteerId;
+
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                user.RelatedVolunteer = await volunteerRepository.GetAsync(new Volunteer { Id = user.VolunteerId }, includes: "Rank");
+            }
 
             if (user.RelatedVolunteer == null)
                 throw new NotFoundException("Volunteer", new { Id = volunteerId });
@@ -117,43 +127,59 @@ namespace GroupBy.Application.Services
         {
             var validationResult = await registerValidator.ValidateAsync(registerDTO);
             if (!validationResult.IsValid)
-                throw new Exceptions.ValidationException(validationResult);
+                throw new Design.Exceptions.ValidationException(validationResult);
 
-            var user = await userManager.FindByEmailAsync(registerDTO.Email);
+            ApplicationUser user = null;
+
+            try
+            {
+                user = await userManager.FindByEmailAsync(registerDTO.Email);
+            }
+            catch (NotFoundException) { }
+
             if (user != null)
                 throw new BadRequestException("Account with this email address already exists");
 
             var applicationUser = mapper.Map<ApplicationUser>(registerDTO);
 
-            var registrationCode = await registrationCodeRepository.GetAsync(new RegistrationCode { Code = registerDTO.RegistrationCode });
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var registrationCode = await registrationCodeRepository.GetAsync(
+                    new RegistrationCode
+                    {
+                        Code = registerDTO.RegistrationCode
+                    },
+                    includeLocal: false,
+                    includes: new string[] {"TargetRank", "TargetGroup" });
 
-            applicationUser.RelatedVolunteer.Rank = registrationCode.TargetRank;
-            var volunteer = await volunteerRepository.CreateAsync(applicationUser.RelatedVolunteer);
+                applicationUser.RelatedVolunteer.Rank = await rankRepository.GetAsync(registrationCode.TargetRank);
+                applicationUser.RelatedVolunteer.Confirmed = true;
 
-            await groupRepository.AddMemberAsync(registrationCode.TargetGroup.Id, volunteer.Id);
+                var volunteer = await volunteerRepository.CreateAsync(applicationUser.RelatedVolunteer);
 
-            applicationUser.UserName = applicationUser.Email;
+                await groupRepository.AddMemberAsync(registrationCode.TargetGroup.Id, volunteer, includeLocal: true);
 
-            var result = await userManager.CreateAsync(applicationUser, registerDTO.Password);
-            if (!result.Succeeded)
-                throw new Exception($"{result.Errors}");
+                applicationUser.UserName = applicationUser.Email;
 
-            volunteer.Confirmed = true;
-            await volunteerRepository.UpdateAsync(volunteer);
+                var result = await userManager.CreateAsync(applicationUser, registerDTO.Password);
+                if (!result.Succeeded)
+                    throw new Exception($"{result.Errors}");
 
-            var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(applicationUser);
 
-            var urlToConfirm = HttpUtility.ParseQueryString(string.Empty);
-            urlToConfirm.Add("token", token);
-            urlToConfirm.Add("email", applicationUser.Email);
+                var urlToConfirm = HttpUtility.ParseQueryString(string.Empty);
+                urlToConfirm.Add("token", token);
+                urlToConfirm.Add("email", applicationUser.Email);
 
-            var templatePath = configuration.GetValue<string>("ConfirmEmailTemplatePath");
+                var templatePath = configuration.GetValue<string>("ConfirmEmailTemplatePath");
 
-            string emailTemplate = File.ReadAllText(templatePath);
+                string emailTemplate = File.ReadAllText(templatePath);
 
-            emailTemplate = emailTemplate.Replace(@"{CONFIRM_URL}", registerDTO.UrlToVerifyEmail + "?" + urlToConfirm.ToString());
+                emailTemplate = emailTemplate.Replace(@"{CONFIRM_URL}", registerDTO.UrlToVerifyEmail + "?" + urlToConfirm.ToString());
 
-            await emailService.SendEmailAsync(applicationUser.Email, "Confirm email", emailTemplate);
+                await emailService.SendEmailAsync(applicationUser.Email, "Confirm email", emailTemplate);
+                await uow.Commit();
+            }
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)

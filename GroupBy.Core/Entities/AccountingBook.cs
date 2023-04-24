@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
     /// <summary>
-    /// Accounting book 
+    /// Accounting book
     /// </summary>
     public class AccountingBook
     {
+        [Key]
+        public Guid Id { get; set; }
         /// <summary>
         /// Accounting book identification number
         /// </summary>
-        public int BookId { get; set; }
+        public int BookIdentificator { get; set; }
         /// <summary>
         /// Order number of this specific accounting book
         /// </summary>

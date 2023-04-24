@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.InventoryBookRecord;
+using GroupBy.Design.TO.InventoryBookRecord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +13,15 @@ namespace GroupBy.Application.Validators.InventoryBookRecord
         public InventoryBookRecordCreateValidator()
         {
             RuleFor(r => r.InventoryBookId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(r => r.Date)
                 .GreaterThan(DateTime.MinValue).WithMessage("{PropertyName} is required.");
             RuleFor(r => r.DocumentId)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(r => r.ItemId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(r => r.SourceId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
     }
 }

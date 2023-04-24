@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.DTO.Project;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.UnitOfWork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,10 +12,17 @@ namespace GroupBy.Application.Validators.Project
     public class ProjectCreateValidator : AbstractValidator<ProjectCreateDTO>
     {
         private readonly IGroupRepository groupRepository;
+        private readonly IVolunteerRepository volunteerRepository;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public ProjectCreateValidator(IGroupRepository groupRepository)
+        public ProjectCreateValidator(
+            IGroupRepository groupRepository,
+            IVolunteerRepository volunteerRepository,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.groupRepository = groupRepository;
+            this.volunteerRepository = volunteerRepository;
+            this.unitOfWorkFactory = unitOfWorkFactory;
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
 
@@ -40,20 +46,24 @@ namespace GroupBy.Application.Validators.Project
                 .WithMessage("{PropertyName} must be greater or equal to begin date.");
 
             RuleFor(p => p.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
 
             RuleFor(p => p)
                 .MustAsync(OwnerInParentGroup)
-                .When(p => p.OwnerId > 0)
+                .When(p => p.OwnerId != Guid.Empty)
                 .OverridePropertyName("OwnerId")
                 .WithMessage("Owner must be a member of the parent group.");
 
             RuleFor(p => p.ParentGroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
         private async Task<bool> OwnerInParentGroup(ProjectCreateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var volunteer = await volunteerRepository.GetAsync(new Domain.Entities.Volunteer { Id = project.OwnerId });
+                return await groupRepository.IsMember(project.ParentGroupId, volunteer);
+            }
         }
     }
 }

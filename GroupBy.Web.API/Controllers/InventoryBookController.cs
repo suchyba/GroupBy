@@ -1,8 +1,8 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryBook;
-using GroupBy.Application.DTO.InventoryBookRecord;
-using GroupBy.Application.DTO.InventoryItem;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.InventoryBook;
+using GroupBy.Design.TO.InventoryBookRecord;
+using GroupBy.Design.TO.InventoryItem;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -27,14 +27,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllInventoryBooks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<InventoryBookSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<InventoryBookSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await inventoryBookService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetInventoryBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<InventoryBookDTO>> GetAsync(int id)
+        public async Task<ActionResult<InventoryBookDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/records", Name = "GetInventoryBookRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordListDTO>>> GetInventoryBookRecordsAsync(int id)
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordListDTO>>> GetInventoryBookRecordsAsync(Guid id)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/items", Name = "GetInventoryItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetInventoryItemsAsync(int id)
+        public async Task<ActionResult<IEnumerable<InventoryItemSimpleDTO>>> GetInventoryItemsAsync(Guid id)
         {
             try
             {
@@ -102,6 +102,10 @@ namespace GroupBy.Web.API.Controllers
             {
                 return Ok(await inventoryBookService.UpdateAsync(model));
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
             catch (NotFoundException e)
             {
                 return NotFound(new { Id = e.Key, e.Message });
@@ -115,7 +119,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Group;
+using GroupBy.Design.TO.Group;
 
 namespace GroupBy.Application.Validators.Group
 {
@@ -10,9 +10,9 @@ namespace GroupBy.Application.Validators.Group
             RuleFor(g => g.Name)
                 .NotEmpty().WithMessage("{PropertyName} is reqired.");
             RuleFor(g => g.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(g => g.ParentGroupId)
-                .GreaterThan(0).When(g => g.ParentGroupId != null).WithMessage("{PropertyName} has to be greater than 0.");
+                .NotEmpty().When(g => g.ParentGroupId != null).WithMessage("{PropertyName} has to be greater than 0.");
             RuleFor(g => g.ParentGroupId)
                 .NotNull().WithMessage("You have to declare parent group!");
         }

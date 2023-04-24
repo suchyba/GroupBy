@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Rank;
+using GroupBy.Design.TO.Rank;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace GroupBy.Application.Validators.Rank
         public RankValidator()
         {
             RuleFor(r => r.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(r => r.HigherRankId)
                 .NotEqual(r => r.Id).When(r => r.HigherRankId != null).WithMessage("{PropertyName} must be other rank.");
             RuleFor(r => r.Name)

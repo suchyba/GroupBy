@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using GroupBy.Application.Design.Services;
+using GroupBy.Design.Services;
 using System.Net.Mime;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.Volunteer;
-using GroupBy.Application.DTO.Group;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.TO.Volunteer;
+using GroupBy.Design.TO.Group;
+using System;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -24,14 +25,14 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet("", Name = "GetAllVolunteers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<VolunteerDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<VolunteerDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await volunteerService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetVolunteer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<VolunteerDTO>> GetVolunteerAsync(int id)
+        public async Task<ActionResult<VolunteerDTO>> GetVolunteerAsync(Guid id)
         {
             try
             {
@@ -60,7 +61,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -98,7 +99,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/groups", Name = "GetVoluneerGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetGroupsAsync(int id)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetGroupsAsync(Guid id)
         {
             try
             {
@@ -112,7 +113,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/ownedgroups", Name = "GetGroupsOwnedByVolunteer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedGroupsAsync(int id)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedGroupsAsync(Guid id)
         {
             try
             {
@@ -126,7 +127,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/ownedprojects", Name = "GetProjectsOwnedByVolunteer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedProjectsAsync(int id)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedProjectsAsync(Guid id)
         {
             try
             {
@@ -141,7 +142,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/registrationcodes", Name = "GetRegistrationCodesOwnedByVolunteer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedRegistrationCodesAsync(int id)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetOwnedRegistrationCodesAsync(Guid id)
         {
             try
             {

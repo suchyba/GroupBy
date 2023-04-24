@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.InventoryItem;
+using GroupBy.Design.TO.InventoryItem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace GroupBy.Application.Validators.InventoryItem
             RuleFor(i => i.Symbol)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(i => i.Value)
-                .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+                .NotEmpty().WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

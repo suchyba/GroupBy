@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.InventoryBook;
+using GroupBy.Design.TO.InventoryBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace GroupBy.Application.Validators.InventoryBook
             RuleFor(b => b.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(b => b.RelatedGroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
     }
 }

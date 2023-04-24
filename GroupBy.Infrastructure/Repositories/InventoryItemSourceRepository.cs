@@ -1,37 +1,22 @@
-﻿using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace GroupBy.Data.Repositories
 {
     public class InventoryItemSourceRepository : AsyncRepository<InventoryItemSource>, IInventoryItemSourceRepository
     {
-        public InventoryItemSourceRepository(DbContext context) : base(context)
+        public InventoryItemSourceRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
 
         }
 
-        public override async Task<InventoryItemSource> GetAsync(InventoryItemSource domain)
+        protected override Expression<Func<InventoryItemSource, bool>> CompareKeys(object entity)
         {
-            var source = await context.Set<InventoryItemSource>().FirstOrDefaultAsync(s => s.Id == domain.Id);
-            if (source == null)
-                throw new NotFoundException("InventoryItemSource", domain.Id);
-            return source;
-        }
-
-        public override async Task<InventoryItemSource> UpdateAsync(InventoryItemSource domain)
-        {
-            var toModify = await GetAsync(domain);
-            toModify.Name = domain.Name;
-
-            await context.SaveChangesAsync();
-            return toModify;
+            return s => entity.GetType().GetProperty("Id").GetValue(entity).Equals(s.Id);
         }
     }
 }

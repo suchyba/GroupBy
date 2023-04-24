@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Position;
+using GroupBy.Design.TO.Position;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace GroupBy.Application.Validators.Position
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(p => p.HigherPositionId)
-                .GreaterThan(0).When(p => p.HigherPositionId != null).WithMessage("{PropertyName} must be greater than 0.");
+                .NotEmpty().When(p => p.HigherPositionId != null).WithMessage("{PropertyName} must be greater than 0.");
         }
     }
 }

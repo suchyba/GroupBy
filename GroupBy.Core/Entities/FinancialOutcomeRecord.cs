@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GroupBy.Domain.Entities
 {
@@ -63,7 +58,7 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         public override decimal GetTotal()
         {
-            return (Inventory ?? 0) + (Material ?? 0) + (Food ?? 0) + (Service ?? 0) + (Transport ?? 0) + (Insurance ?? 0) + (Accommodation ?? 0) + (Salary ?? 0) + (Other ?? 0); 
+            return (Inventory ?? 0) + (Material ?? 0) + (Food ?? 0) + (Service ?? 0) + (Transport ?? 0) + (Insurance ?? 0) + (Accommodation ?? 0) + (Salary ?? 0) + (Other ?? 0);
         }
     }
 }

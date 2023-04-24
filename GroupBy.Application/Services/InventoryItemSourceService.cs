@@ -1,25 +1,23 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.InventoryItemSource;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.InventoryItemSource;
+using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Application.Services
 {
     public class InventoryItemSourceService : AsyncService<InventoryItemSource, InventoryItemSourceDTO, InventoryItemSourceDTO, InventoryItemSourceCreateDTO, InventoryItemSourceDTO>, IInventoryItemSourceService
     {
         public InventoryItemSourceService(
-            IInventoryItemSourceRepository repository, 
-            IMapper mapper, 
-            IValidator<InventoryItemSourceDTO> updateValidator, 
-            IValidator<InventoryItemSourceCreateDTO> createValidator) 
-            : base(repository, mapper, updateValidator, createValidator)
+            IInventoryItemSourceRepository repository,
+            IMapper mapper,
+            IValidator<InventoryItemSourceDTO> updateValidator,
+            IValidator<InventoryItemSourceCreateDTO> createValidator,
+            IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
+            : base(repository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
 
         }

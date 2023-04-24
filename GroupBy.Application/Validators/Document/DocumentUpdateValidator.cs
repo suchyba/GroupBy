@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Application.DTO.Document;
+using GroupBy.Design.TO.Document;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,11 @@ namespace GroupBy.Application.Validators.Document
         public DocumentUpdateValidator()
         {
             RuleFor(d => d.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(d => d.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
             RuleFor(d => d.RelatedProjectId)
-                .GreaterThan(0)
+                .NotEmpty()
                 .When(d => d.RelatedProjectId != null)
                 .WithMessage("{PropertyName} has to be greater then 0.");
             RuleFor(d => d.FilePath)

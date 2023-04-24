@@ -1,13 +1,13 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.Exceptions;
-using GroupBy.Application.DTO.AccountingBook;
+﻿using GroupBy.Design.Exceptions;
+using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.TO.FinancialRecord;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using System.Net;
-using GroupBy.Application.DTO.FinancialRecord;
 
 namespace GroupBy.Web.API.Controllers
 {
@@ -30,14 +30,14 @@ namespace GroupBy.Web.API.Controllers
         {
             return Ok(await accountingBookService.GetAllAsync());
         }
-        [HttpGet("{bookId}/{bookOrderNumberId}", Name = "GetAccountingBook")]
+        [HttpGet("{id}", Name = "GetAccountingBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<AccountingBookDTO>> GetAsync(int bookId, int bookOrderNumberId)
+        public async Task<ActionResult<AccountingBookDTO>> GetAsync(Guid id)
         {
             try
             {
-                var accountingBook = await accountingBookService.GetAsync(new AccountingBookSimpleDTO { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                var accountingBook = await accountingBookService.GetAsync(new AccountingBookSimpleDTO { Id = id });
                 return Ok(accountingBook);
             }
             catch (NotFoundException e)
@@ -45,14 +45,14 @@ namespace GroupBy.Web.API.Controllers
                 return NotFound(new { Id = e.Key, e.Message });
             }
         }
-        [HttpGet("{bookId}/{bookOrderNumberId}/records", Name = "GetFinancialRecords")]
+        [HttpGet("{id}/records", Name = "GetFinancialRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetFinancialRecordsAsync(int bookId, int bookOrderNumberId)
+        public async Task<ActionResult<IEnumerable<FinancialRecordSimpleDTO>>> GetFinancialRecordsAsync(Guid id)
         {
             try
             {
-                var records = await accountingBookService.GetFinancialRecordsAsync(new AccountingBookSimpleDTO { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                var records = await accountingBookService.GetFinancialRecordsAsync(new AccountingBookSimpleDTO { Id = id });
                 return Ok(records);
             }
             catch (NotFoundException e)
@@ -75,15 +75,15 @@ namespace GroupBy.Web.API.Controllers
                 return BadRequest(e.ValidationErrors);
             }
         }
-        [HttpDelete("delete/{bookId}/{bookOrderNumberId}", Name = "DeleteAccountingBook")]
+        [HttpDelete("delete/{id}", Name = "DeleteAccountingBook")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> Delete(int bookId, int bookOrderNumberId)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                await accountingBookService.DeleteAsync(new AccountingBookSimpleDTO { BookId = bookId, BookOrderNumberId = bookOrderNumberId });
+                await accountingBookService.DeleteAsync(new AccountingBookSimpleDTO { Id = id });
 
                 return NoContent();
             }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GroupBy.Domain.Entities
 {
@@ -13,12 +9,8 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class InventoryBookRecord
     {
-        /// <summary>
-        /// Identificator of the record
-        /// </summary>
         [Key]
-        public int Id { get; set; }
-        public int InventoryBookId { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// Related item <seealso cref="InventoryItem"/>
         /// </summary>
@@ -34,7 +26,7 @@ namespace GroupBy.Domain.Entities
         [Required]
         public virtual Document Document { get; set; }
         /// <summary>
-        /// Describes if the record is the income 
+        /// Describes if the record is the income
         /// </summary>
         public bool Income { get; set; }
         /// <summary>

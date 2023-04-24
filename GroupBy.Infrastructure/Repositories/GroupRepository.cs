@@ -1,84 +1,38 @@
-﻿using GroupBy.Domain.Entities;
+﻿using GroupBy.Data.DbContexts;
+using GroupBy.Design.DbContext;
+using GroupBy.Design.Exceptions;
+using GroupBy.Design.Repositories;
+using GroupBy.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GroupBy.Application.Design.Repositories;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using GroupBy.Application.Exceptions;
 
 namespace GroupBy.Data.Repositories
 {
     public class GroupRepository : AsyncRepository<Group>, IGroupRepository
     {
-        private readonly IVolunteerRepository volunteerRepository;
-
-        public GroupRepository(DbContext context, IVolunteerRepository volunteerRepository) : base(context)
+        public GroupRepository(
+            IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
-            this.volunteerRepository = volunteerRepository;
+
         }
 
-        public override async Task<IEnumerable<Group>> GetAllAsync()
+        public async Task AddMemberAsync(Guid groupId, Volunteer volunteer, bool includeLocal = false)
         {
-            return await context.Set<Group>().Include(g => g.InventoryBook).ToListAsync();
-        }
+            var group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: "Members");
 
-        public async Task AddMemberAsync(int groupId, int volunteerId)
-        {
-            var group = await context.Set<Group>()
-                .Include(g => g.Members)
-                .Include(g => g.RelatedProject)
-                .FirstOrDefaultAsync(g => g.Id == groupId);
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
-
-            var volunteer = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == volunteerId);
-            if (volunteer == null)
-                throw new NotFoundException("Volunteer", volunteer);
-
-            if (group.RelatedProject != null && !group.RelatedProject.Active)
-            {
-                throw new BadRequestException("Cannot add member to the inactive project");
-            }
+            if (group.Members == null)
+                group.Members = new List<Volunteer>();
 
             group.Members.Add(volunteer);
-
-            await context.SaveChangesAsync();
         }
 
-        public override async Task<Group> CreateAsync(Group domain)
+        public async Task<IEnumerable<AccountingDocument>> GetAccountingDocumentsAsync(Guid groupId, Guid? projectId, bool includeLocal = false)
         {
-            int ownerId = domain.Owner.Id;
-            domain.Owner = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == ownerId);
-            if (domain.Owner == null)
-                throw new NotFoundException("Volunteer", ownerId);
-
-            if (domain.ParentGroup != null)
-            {
-                int parentGroupId = domain.ParentGroup.Id;
-                domain.ParentGroup = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == parentGroupId);
-                if (domain.ParentGroup == null)
-                    throw new NotFoundException("Group", parentGroupId);
-            }
-            var createdGroup = await context.Set<Group>().AddAsync(domain);
-
-            await context.SaveChangesAsync();
-
-            await AddMemberAsync(createdGroup.Entity.Id, ownerId);
-
-            return createdGroup.Entity;
-        }
-
-        public async Task<IEnumerable<AccountingDocument>> GetAccountingDocumentsAsync(int groupId, int? projectId)
-        {
-            Group group = await context.Set<Group>()
-                .Include(g => g.Elements)
-                    .ThenInclude(e => e.RelatedProject)
-                .Include(g => g.ProjectsRealisedInGroup)
-                .Include(g => g.RelatedProject)
-                .FirstOrDefaultAsync(g => g.Id == groupId);
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
+            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: new string[] { "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject" });
 
             List<AccountingDocument> documents = group.Elements
                 .Where(e => e is AccountingDocument)
@@ -104,16 +58,9 @@ namespace GroupBy.Data.Repositories
             return documents;
         }
 
-        public async Task<IEnumerable<Document>> GetDocumentsAsync(int groupId, int? projectId)
+        public async Task<IEnumerable<Document>> GetDocumentsAsync(Guid groupId, Guid? projectId, bool includeLocal = false)
         {
-            Group group = await context.Set<Group>()
-                .Include(g => g.Elements)
-                    .ThenInclude(e => e.RelatedProject)
-                .Include(g => g.ProjectsRealisedInGroup)
-                .Include(g => g.RelatedProject)
-                .FirstOrDefaultAsync(g => g.Id == groupId);
-            if (group == null)
-                throw new NotFoundException("Group", groupId);
+            Group group = await GetAsync(new Group { Id = groupId }, includeLocal, includes: new string[] { "Elements.RelatedProject", "ProjectsRealisedInGroup", "RelatedProject" });
 
             List<Document> documents = group.Elements
                 .Where(e => e is Document)
@@ -139,89 +86,46 @@ namespace GroupBy.Data.Repositories
             return documents;
         }
 
-        public override async Task<Group> GetAsync(Group domain)
+        public async Task<IEnumerable<Project>> GetProjectsAsync(Guid groupId, bool includeLocal = false)
         {
-            Group g = await context.Set<Group>()
-                .Include(g => g.Owner)
-                .Include(g => g.ParentGroup)
-                .Include(g => g.Members)
-                .Include(g => g.AccountingBooks)
-                .Include(g => g.Elements)
-                .Include(g => g.ChildGroups)
-                .Include(g => g.RelatedProject)
-                .Include(g => g.Resolutions)
-                .Include(g => g.ProjectsRealisedInGroup)
-                .Include(g => g.Permissions)
-                .Include(g => g.ParentGroup)
-                .Include(g => g.ChildGroups)
-                .Include(g => g.InventoryBook)
-                .FirstOrDefaultAsync(g => g.Id == domain.Id);
-            if (g == null)
-                throw new NotFoundException("Group", domain.Id);
-
-            return g;
+            return (await GetAsync(new Group { Id = groupId }, includeLocal, includes: "ProjectsRealisedInGroup")).ProjectsRealisedInGroup;
         }
 
-        public async Task<IEnumerable<Project>> GetProjectsAsync(int groupId)
+        public async Task<IEnumerable<Group>> GetSubgroupsAsync(Guid groupId, bool includeLocal = false)
         {
-            return (await GetAsync(new Group { Id = groupId })).ProjectsRealisedInGroup;
+            return (await GetAsync(new Group { Id = groupId }, includeLocal, includes: "ChildGroups")).ChildGroups;
         }
 
-        public async Task<IEnumerable<Group>> GetSubgroupsAsync(int groupId)
+        public async Task<IEnumerable<Volunteer>> GetVolunteersAsync(Guid group, bool includeLocal = false)
         {
-            return (await GetAsync(new Group { Id = groupId })).ChildGroups;
-        }
+            Group g = await GetAsync(new Group { Id = group }, includeLocal, includes: "Members");
 
-        public async Task<IEnumerable<Volunteer>> GetVolunteersAsync(int group)
-        {
-            Group g = await context.Set<Group>().Include(g => g.Members).FirstOrDefaultAsync(g => g.Id == group);
-            if (g == null)
-                throw new NotFoundException("Group", group);
+            if (g.Members == null)
+                return new List<Volunteer>();
 
             return g.Members.Where(v => v.Confirmed);
         }
 
-        public async Task<bool> IsMember(int groupId, int volunteerId)
+        public async Task<bool> IsMember(Guid groupId, Volunteer volunteer)
         {
-            var group = await GetAsync(new Group { Id = groupId });
+            var group = await GetAsync(new Group { Id = groupId }, false, includes: "Members");
 
-            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
-            return group.Members.Contains(volunteer);
+            if (group.Members == null)
+                return false;
+
+            return group.Members.Any(m => m.Id == volunteer.Id);
         }
 
-        public async Task RemoveMemberAsync(int groupId, int volunteerId)
+        public async Task RemoveMemberAsync(Guid groupId, Volunteer volunteer)
         {
-            if (!await IsMember(groupId, volunteerId))
-                throw new BadRequestException("Volunteer is not a member of the group");
-
-            var group = await GetAsync(new Group { Id = groupId });
-            var volunteer = await volunteerRepository.GetAsync(new Volunteer { Id = volunteerId });
-
-            if (group.Owner == volunteer)
-                throw new BadRequestException("Volunteer cannot be an owner of the group");
+            var group = await GetAsync(new Group { Id = groupId }, false, includes: "Members");
 
             group.Members.Remove(volunteer);
-
-            await context.SaveChangesAsync();
         }
 
-        public override async Task<Group> UpdateAsync(Group domain)
+        protected override Expression<Func<Group, bool>> CompareKeys(object entity)
         {
-            Group g = await context.Set<Group>().FirstOrDefaultAsync(g => g.Id == domain.Id);
-            if (g == null)
-                throw new NotFoundException("Group", domain.Id);
-
-            int ownerId = domain.Owner.Id;
-            domain.Owner = await context.Set<Volunteer>().FirstOrDefaultAsync(v => v.Id == domain.Owner.Id);
-            if (domain.Owner == null)
-                throw new NotFoundException("Volunteer", ownerId);
-
-            g.Name = domain.Name;
-            g.Description = domain.Description;
-            g.Owner = domain.Owner;
-
-            await context.SaveChangesAsync();
-            return g;
+            return g => entity.GetType().GetProperty("Id").GetValue(entity).Equals(g.Id);
         }
     }
 }

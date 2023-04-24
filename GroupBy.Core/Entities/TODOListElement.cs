@@ -9,11 +9,8 @@ namespace GroupBy.Domain.Entities
     /// </summary>
     public class TODOListElement
     {
-        /// <summary>
-        /// The identificator of the element
-        /// </summary>
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         /// <summary>
         /// The task content
         /// </summary>

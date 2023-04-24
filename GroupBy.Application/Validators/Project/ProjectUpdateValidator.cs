@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using GroupBy.Application.Design.Repositories;
-using GroupBy.Application.DTO.Project;
+using GroupBy.Data.DbContexts;
+using GroupBy.Design.Repositories;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.UnitOfWork;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,13 +12,14 @@ namespace GroupBy.Application.Validators.Project
     public class ProjectUpdateValidator : AbstractValidator<ProjectUpdateDTO>
     {
         private readonly IGroupRepository groupRepository;
+        private readonly IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory;
 
-        public ProjectUpdateValidator(IGroupRepository groupRepository)
+        public ProjectUpdateValidator(IGroupRepository groupRepository, IUnitOfWorkFactory<GroupByDbContext> unitOfWorkFactory)
         {
             this.groupRepository = groupRepository;
-
+            this.unitOfWorkFactory = unitOfWorkFactory;
             RuleFor(p => p.Id)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
 
             RuleFor(p => p.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
@@ -44,22 +44,22 @@ namespace GroupBy.Application.Validators.Project
                 .WithMessage("{PropertyName} must be greater or equal to begin date.");
 
             RuleFor(p => p.OwnerId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
 
             RuleFor(p => p)
                 .MustAsync(OwnerInParentGroup)
-                .When(p => p.OwnerId > 0)
+                .When(p => p.OwnerId != Guid.Empty)
                 .OverridePropertyName("OwnerId")
                 .WithMessage("Owner must be a member of the parent group.")
                 .MustAsync(OwnerInProjectGroup)
-                .When(p => p.ProjectGroupId.HasValue && p.OwnerId > 0)
+                .When(p => p.ProjectGroupId.HasValue && p.OwnerId != Guid.Empty)
                 .WithMessage("Owner must be a member of the project group");
 
             RuleFor(p => p.ParentGroupId)
-                .GreaterThan(0).WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.");
 
             RuleFor(p => p.ProjectGroupId)
-                .GreaterThan(0)
+                .NotEmpty()
                 .When(p => p.ProjectGroupId.HasValue)
                 .WithMessage("{PropertyName} must be greater than 0.")
                 .NotNull()
@@ -73,11 +73,17 @@ namespace GroupBy.Application.Validators.Project
         }
         private async Task<bool> OwnerInParentGroup(ProjectUpdateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ParentGroupId, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await groupRepository.IsMember(project.ParentGroupId, new Domain.Entities.Volunteer { Id = project.OwnerId });
+            }
         }
         private async Task<bool> OwnerInProjectGroup(ProjectUpdateDTO project, CancellationToken token)
         {
-            return await groupRepository.IsMember(project.ProjectGroupId.Value, project.OwnerId);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return await groupRepository.IsMember(project.ProjectGroupId.Value, new Domain.Entities.Volunteer { Id = project.OwnerId });
+            }
         }
     }
 }

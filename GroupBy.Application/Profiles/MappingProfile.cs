@@ -1,23 +1,23 @@
 ﻿using AutoMapper;
-using GroupBy.Application.DTO.AccountingBook;
-using GroupBy.Application.DTO.AccountingDocument;
-using GroupBy.Application.DTO.Agreement;
-using GroupBy.Application.DTO.Authentication;
-using GroupBy.Application.DTO.Document;
-using GroupBy.Application.DTO.FinancialIncomeRecord;
-using GroupBy.Application.DTO.FinancialOutcomeRecord;
-using GroupBy.Application.DTO.FinancialRecord;
-using GroupBy.Application.DTO.Group;
-using GroupBy.Application.DTO.InventoryBook;
-using GroupBy.Application.DTO.InventoryBookRecord;
-using GroupBy.Application.DTO.InventoryItem;
-using GroupBy.Application.DTO.InventoryItemSource;
-using GroupBy.Application.DTO.Position;
-using GroupBy.Application.DTO.Project;
-using GroupBy.Application.DTO.Rank;
-using GroupBy.Application.DTO.RegistrationCode;
-using GroupBy.Application.DTO.Resolution;
-using GroupBy.Application.DTO.Volunteer;
+using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.TO.Agreement;
+using GroupBy.Design.TO.Authentication;
+using GroupBy.Design.TO.Document;
+using GroupBy.Design.TO.FinancialIncomeRecord;
+using GroupBy.Design.TO.FinancialOutcomeRecord;
+using GroupBy.Design.TO.FinancialRecord;
+using GroupBy.Design.TO.Group;
+using GroupBy.Design.TO.InventoryBook;
+using GroupBy.Design.TO.InventoryBookRecord;
+using GroupBy.Design.TO.InventoryItem;
+using GroupBy.Design.TO.InventoryItemSource;
+using GroupBy.Design.TO.Position;
+using GroupBy.Design.TO.Project;
+using GroupBy.Design.TO.Rank;
+using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.TO.Resolution;
+using GroupBy.Design.TO.Volunteer;
 using GroupBy.Domain.Entities;
 using System;
 using System.Linq;
@@ -97,26 +97,34 @@ namespace GroupBy.Application.Profiles
                  .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
                     src => src.RelatedProjectId.HasValue ? new Project { Id = src.RelatedProjectId.Value } : null));
 
-            CreateMap<InventoryBookRecord, InventoryBookRecordSimpleDTO>();
+            CreateMap<InventoryBookRecord, InventoryBookRecordSimpleDTO>()
+                .ForMember(dest => dest.InventoryBookId, opt => opt.MapFrom(
+                    src => src.Book.Id));
             CreateMap<InventoryBookRecord, InventoryBookRecordDTO>()
                 .ForMember(dest => dest.InventoryBook, opt => opt.MapFrom(
                     src => src.Book));
             CreateMap<InventoryBookRecord, InventoryBookRecordListDTO>();
-            CreateMap<InventoryBookRecordSimpleDTO, InventoryBookRecord>();
+            CreateMap<InventoryBookRecordSimpleDTO, InventoryBookRecord>()
+                .ForMember(dest => dest.Book, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.InventoryBookId }));
             CreateMap<InventoryBookRecordCreateDTO, InventoryBookRecord>()
                 .ForMember(dest => dest.Source, opt => opt.MapFrom(
                     src => new InventoryItemSource { Id = src.SourceId }))
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
                     src => new InventoryItem { Id = src.ItemId }))
                 .ForMember(dest => dest.Document, opt => opt.MapFrom(
-                    src => new Document { Id = src.DocumentId }));
+                    src => new Document { Id = src.DocumentId }))
+                .ForMember(dest => dest.Book, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.InventoryBookId }));
             CreateMap<InventoryBookRecordUpdateDTO, InventoryBookRecord>()
                 .ForMember(dest => dest.Source, opt => opt.MapFrom(
                     src => new InventoryItemSource { Id = src.SourceId }))
                 .ForMember(dest => dest.Item, opt => opt.MapFrom(
                     src => new InventoryItem { Id = src.ItemId }))
                 .ForMember(dest => dest.Document, opt => opt.MapFrom(
-                    src => new Document { Id = src.DocumentId }));
+                    src => new Document { Id = src.DocumentId }))
+                .ForMember(dest => dest.Book, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.InventoryBookId }));
 
             CreateMap<ProjectSimpleDTO, Project>().ReverseMap();
             CreateMap<Project, ProjectDTO>();
@@ -169,6 +177,8 @@ namespace GroupBy.Application.Profiles
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordSimpleDTO>().ReverseMap();
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>();
             CreateMap<FinancialOutcomeRecordCreateDTO, FinancialOutcomeRecord>()
+                .ForMember(dest => dest.Book, opt => opt.MapFrom(
+                    src => new AccountingBook { Id = src.BookId }))
                 .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
                     src => new AccountingDocument { Id = src.RelatedDocumentId }))
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(
@@ -178,6 +188,8 @@ namespace GroupBy.Application.Profiles
             CreateMap<FinancialIncomeRecord, FinancialIncomeRecordSimpleDTO>().ReverseMap();
             CreateMap<FinancialIncomeRecord, FinancialIncomeRecordDTO>();
             CreateMap<FinancialIncomeRecordCreateDTO, FinancialIncomeRecord>()
+                .ForMember(dest => dest.Book, opt => opt.MapFrom(
+                    src => new AccountingBook { Id = src.BookId }))
                 .ForMember(dest => dest.RelatedDocument, opt => opt.MapFrom(
                     src => new AccountingDocument { Id = src.RelatedDocumentId }))
                 .ForMember(dest => dest.RelatedProject, opt => opt.MapFrom(

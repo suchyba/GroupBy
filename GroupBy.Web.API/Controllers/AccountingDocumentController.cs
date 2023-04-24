@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.AccountingDocument;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -25,7 +25,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllAccountingDocuments")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<IEnumerable<AccountingDocumentSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await accountingDocumentService.GetAllAsync());
         }
@@ -33,7 +33,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AccountingDocumentDTO>> GetAsync(int id)
+        public async Task<ActionResult<AccountingDocumentDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<ActionResult> DeleteAsync(int id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             try
             {

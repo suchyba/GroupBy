@@ -1,6 +1,6 @@
-﻿using GroupBy.Application.Design.Services;
-using GroupBy.Application.DTO.FinancialOutcomeRecord;
-using GroupBy.Application.Exceptions;
+﻿using GroupBy.Design.Services;
+using GroupBy.Design.TO.FinancialOutcomeRecord;
+using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,14 +26,14 @@ namespace GroupBy.Web.API.Controllers
 
         [HttpGet(Name = "GetAllFinancialOutcomeRecords")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<FinancialOutcomeRecordSimpleDTO>>> GetAllAsync()
+        public async Task<ActionResult<List<FinancialOutcomeRecordSimpleDTO>>> GetAllAsync(bool includeLocal = false)
         {
             return Ok(await FinancialOutcomeRecordService.GetAllAsync());
         }
         [HttpGet("{id}", Name = "GetFinancialOutcomeRecord")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<FinancialOutcomeRecordDTO>> GetAsync(int id)
+        public async Task<ActionResult<FinancialOutcomeRecordDTO>> GetAsync(Guid id)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
