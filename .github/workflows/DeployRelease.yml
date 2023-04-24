@@ -1,7 +1,6 @@
-name: Build docker image
+name: Create release
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - 'v*'
