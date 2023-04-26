@@ -3,7 +3,7 @@ using FluentValidation;
 using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.InventoryItemSource;
+using GroupBy.Design.DTO.InventoryItemSource;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 

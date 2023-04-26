@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Document
+﻿namespace GroupBy.Design.DTO.Document
 {
     public class DocumentSimpleDTO
     {

@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Position
+﻿namespace GroupBy.Design.DTO.Position
 {
     public class PositionCreateDTO
     {

@@ -17,7 +17,7 @@ namespace GroupBy.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -559,6 +559,50 @@ namespace GroupBy.Data.Migrations
                     b.HasIndex("HigherRankId");
 
                     b.ToTable("Ranks");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedByIP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReasonRevoked")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("Revoked")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RevokedByIP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("ReplacedByTokenId");
+
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.RegistrationCode", b =>
@@ -1225,6 +1269,21 @@ namespace GroupBy.Data.Migrations
                     b.Navigation("HigherRank");
                 });
 
+            modelBuilder.Entity("GroupBy.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.ApplicationUser", "Owner")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("OwnerId");
+
+                    b.HasOne("GroupBy.Domain.Entities.RefreshToken", "ReplacedByToken")
+                        .WithMany()
+                        .HasForeignKey("ReplacedByTokenId");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("ReplacedByToken");
+                });
+
             modelBuilder.Entity("GroupBy.Domain.Entities.RegistrationCode", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.Volunteer", "Owner")
@@ -1377,6 +1436,11 @@ namespace GroupBy.Data.Migrations
             modelBuilder.Entity("GroupBy.Domain.Entities.AccountingBook", b =>
                 {
                     b.Navigation("Records");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Group", b =>

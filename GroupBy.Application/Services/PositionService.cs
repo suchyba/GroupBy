@@ -3,7 +3,7 @@ using FluentValidation;
 using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.Position;
+using GroupBy.Design.DTO.Position;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System;

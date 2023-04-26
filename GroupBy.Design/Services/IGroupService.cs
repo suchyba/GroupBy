@@ -1,9 +1,9 @@
-﻿using GroupBy.Design.TO.AccountingBook;
-using GroupBy.Design.TO.AccountingDocument;
-using GroupBy.Design.TO.Document;
-using GroupBy.Design.TO.Group;
-using GroupBy.Design.TO.Project;
-using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.AccountingBook;
+using GroupBy.Design.DTO.AccountingDocument;
+using GroupBy.Design.DTO.Document;
+using GroupBy.Design.DTO.Group;
+using GroupBy.Design.DTO.Project;
+using GroupBy.Design.DTO.Volunteer;
 
 namespace GroupBy.Design.Services
 {

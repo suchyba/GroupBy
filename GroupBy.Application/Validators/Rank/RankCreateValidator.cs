@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using GroupBy.Design.Repositories;
-using GroupBy.Design.TO.Rank;
+using GroupBy.Design.DTO.Rank;
 using System;
 using System.Collections.Generic;
 using System.Linq;

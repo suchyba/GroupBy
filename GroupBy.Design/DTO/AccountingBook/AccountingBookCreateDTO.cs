@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.AccountingBook
+﻿namespace GroupBy.Design.DTO.AccountingBook
 {
     public class AccountingBookCreateDTO
     {

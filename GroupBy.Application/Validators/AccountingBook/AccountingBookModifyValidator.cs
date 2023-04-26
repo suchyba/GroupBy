@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.AccountingBook;
+using GroupBy.Design.DTO.AccountingBook;
 
 namespace GroupBy.Application.Validators.AccountingBook
 {

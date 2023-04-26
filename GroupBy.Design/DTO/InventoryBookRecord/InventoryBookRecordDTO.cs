@@ -1,9 +1,9 @@
-﻿using GroupBy.Design.TO.Document;
-using GroupBy.Design.TO.InventoryBook;
-using GroupBy.Design.TO.InventoryItem;
-using GroupBy.Design.TO.InventoryItemSource;
+﻿using GroupBy.Design.DTO.Document;
+using GroupBy.Design.DTO.InventoryBook;
+using GroupBy.Design.DTO.InventoryItem;
+using GroupBy.Design.DTO.InventoryItemSource;
 
-namespace GroupBy.Design.TO.InventoryBookRecord
+namespace GroupBy.Design.DTO.InventoryBookRecord
 {
     public class InventoryBookRecordDTO
     {

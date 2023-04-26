@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using GroupBy.Data.DbContexts;
 using GroupBy.Design.Repositories;
-using GroupBy.Design.TO.Project;
+using GroupBy.Design.DTO.Project;
 using GroupBy.Design.UnitOfWork;
 using System;
 using System.Threading;

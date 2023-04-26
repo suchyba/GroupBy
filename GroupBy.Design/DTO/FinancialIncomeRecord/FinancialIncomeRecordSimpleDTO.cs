@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.FinancialIncomeRecord
+﻿namespace GroupBy.Design.DTO.FinancialIncomeRecord
 {
     public class FinancialIncomeRecordSimpleDTO
     {

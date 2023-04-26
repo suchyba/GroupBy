@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.FinancialIncomeRecord;
+﻿using GroupBy.Design.DTO.FinancialIncomeRecord;
 
 namespace GroupBy.Design.Services
 {

@@ -1,5 +1,5 @@
 ﻿using GroupBy.Design.Services;
-using GroupBy.Design.TO.InventoryItemSource;
+using GroupBy.Design.DTO.InventoryItemSource;
 using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

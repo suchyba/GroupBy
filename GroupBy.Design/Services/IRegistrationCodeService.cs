@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.RegistrationCode;
+﻿using GroupBy.Design.DTO.RegistrationCode;
 
 namespace GroupBy.Design.Services
 {

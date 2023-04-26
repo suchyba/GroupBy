@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.FinancialIncomeRecord;
+using GroupBy.Design.DTO.FinancialIncomeRecord;
 using System;
 using System.Collections.Generic;
 using System.Linq;

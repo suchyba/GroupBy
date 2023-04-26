@@ -1,7 +1,7 @@
-﻿using GroupBy.Design.TO.Document;
-using GroupBy.Design.TO.Project;
+﻿using GroupBy.Design.DTO.Document;
+using GroupBy.Design.DTO.Project;
 
-namespace GroupBy.Design.TO.FinancialRecord
+namespace GroupBy.Design.DTO.FinancialRecord
 {
     public class FinancialRecordDTO : FinancialRecordSimpleDTO
     {

@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Project
+﻿namespace GroupBy.Design.DTO.Project
 {
     public class ProjectCreateDTO
     {

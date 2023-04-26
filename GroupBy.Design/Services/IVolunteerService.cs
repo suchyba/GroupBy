@@ -1,7 +1,7 @@
-﻿using GroupBy.Design.TO.Group;
-using GroupBy.Design.TO.Project;
-using GroupBy.Design.TO.RegistrationCode;
-using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.Group;
+using GroupBy.Design.DTO.Project;
+using GroupBy.Design.DTO.RegistrationCode;
+using GroupBy.Design.DTO.Volunteer;
 
 namespace GroupBy.Design.Services
 {

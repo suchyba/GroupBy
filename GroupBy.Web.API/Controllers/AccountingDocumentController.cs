@@ -1,5 +1,5 @@
 ﻿using GroupBy.Design.Services;
-using GroupBy.Design.TO.AccountingDocument;
+using GroupBy.Design.DTO.AccountingDocument;
 using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

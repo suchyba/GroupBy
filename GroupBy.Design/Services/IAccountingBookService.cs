@@ -1,5 +1,5 @@
-﻿using GroupBy.Design.TO.AccountingBook;
-using GroupBy.Design.TO.FinancialRecord;
+﻿using GroupBy.Design.DTO.AccountingBook;
+using GroupBy.Design.DTO.FinancialRecord;
 
 namespace GroupBy.Design.Services
 {

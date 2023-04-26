@@ -312,6 +312,36 @@ namespace GroupBy.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Expires = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedByIP = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Revoked = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RevokedByIP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReplacedByTokenId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ReasonRevoked = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_RefreshToken_ReplacedByTokenId",
+                        column: x => x.ReplacedByTokenId,
+                        principalTable: "RefreshToken",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AccountingBooks",
                 columns: table => new
                 {
@@ -963,6 +993,16 @@ namespace GroupBy.Data.Migrations
                 column: "HigherRankId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_OwnerId",
+                table: "RefreshToken",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_ReplacedByTokenId",
+                table: "RefreshToken",
+                column: "ReplacedByTokenId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RegistrationCodes_OwnerId",
                 table: "RegistrationCodes",
                 column: "OwnerId");
@@ -1056,6 +1096,9 @@ namespace GroupBy.Data.Migrations
                 name: "PositionRecords");
 
             migrationBuilder.DropTable(
+                name: "RefreshToken");
+
+            migrationBuilder.DropTable(
                 name: "RegistrationCodes");
 
             migrationBuilder.DropTable(
@@ -1069,9 +1112,6 @@ namespace GroupBy.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "AccountingBooks");
@@ -1090,6 +1130,9 @@ namespace GroupBy.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Resolutions");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Elements");

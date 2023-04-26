@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.Volunteer;
 
-namespace GroupBy.Design.TO.Authentication
+namespace GroupBy.Design.DTO.Authentication
 {
     public class UserDTO
     {

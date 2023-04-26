@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.InventoryBook;
-using GroupBy.Design.TO.InventoryBookRecord;
-using GroupBy.Design.TO.InventoryItem;
+﻿using GroupBy.Design.DTO.InventoryBook;
+using GroupBy.Design.DTO.InventoryBookRecord;
+using GroupBy.Design.DTO.InventoryItem;
 
 namespace GroupBy.Design.Services
 {

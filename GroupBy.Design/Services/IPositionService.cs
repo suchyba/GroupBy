@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.Position;
+﻿using GroupBy.Design.DTO.Position;
 
 namespace GroupBy.Design.Services
 {

@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.InventoryBook
+﻿namespace GroupBy.Design.DTO.InventoryBook
 {
     public class InventoryBookSimpleDTO
     {

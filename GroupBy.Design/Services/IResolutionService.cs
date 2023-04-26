@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.Resolution;
+﻿using GroupBy.Design.DTO.Resolution;
 
 namespace GroupBy.Design.Services
 {

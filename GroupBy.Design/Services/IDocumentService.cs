@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.Document;
+﻿using GroupBy.Design.DTO.Document;
 
 namespace GroupBy.Design.Services
 {

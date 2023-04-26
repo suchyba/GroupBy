@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.Resolution;
+using GroupBy.Design.DTO.Resolution;
 using System;
 using System.Collections.Generic;
 using System.Linq;

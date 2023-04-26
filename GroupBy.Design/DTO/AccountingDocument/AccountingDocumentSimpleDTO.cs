@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.Document;
+﻿using GroupBy.Design.DTO.Document;
 
-namespace GroupBy.Design.TO.AccountingDocument
+namespace GroupBy.Design.DTO.AccountingDocument
 {
     public class AccountingDocumentSimpleDTO : DocumentSimpleDTO
     {

@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.Rank;
+﻿using GroupBy.Design.DTO.Rank;
 
-namespace GroupBy.Design.TO.Volunteer
+namespace GroupBy.Design.DTO.Volunteer
 {
     public class VolunteerDTO
     {

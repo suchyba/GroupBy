@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.Authentication;
+using GroupBy.Design.DTO.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;

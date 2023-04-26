@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.Group;
+using GroupBy.Design.DTO.Group;
 
 namespace GroupBy.Application.Validators.Group
 {

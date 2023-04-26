@@ -1,8 +1,8 @@
-﻿using GroupBy.Design.TO.InventoryBook;
-using GroupBy.Design.TO.Project;
-using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.InventoryBook;
+using GroupBy.Design.DTO.Project;
+using GroupBy.Design.DTO.Volunteer;
 
-namespace GroupBy.Design.TO.Group
+namespace GroupBy.Design.DTO.Group
 {
     public class GroupDTO
     {

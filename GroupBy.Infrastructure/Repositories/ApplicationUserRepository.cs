@@ -44,5 +44,10 @@ namespace GroupBy.Data.Repositories
         {
             return u => entity.GetType().GetProperty("Id").GetValue(entity).Equals(u.Id);
         }
+
+        public override Task<ApplicationUser> UpdateAsync(ApplicationUser domain)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

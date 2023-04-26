@@ -1,7 +1,7 @@
-﻿using GroupBy.Design.TO.Group;
-using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.Group;
+using GroupBy.Design.DTO.Volunteer;
 
-namespace GroupBy.Design.TO.Project
+namespace GroupBy.Design.DTO.Project
 {
     public class ProjectDTO
     {

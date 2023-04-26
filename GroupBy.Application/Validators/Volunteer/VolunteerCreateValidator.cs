@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.Volunteer;
+using GroupBy.Design.DTO.Volunteer;
 using System;
 using System.Linq;
 

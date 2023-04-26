@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.FinancialOutcomeRecord;
+using GroupBy.Design.DTO.FinancialOutcomeRecord;
 
 namespace GroupBy.Application.Validators.FinancialOutcomeRecord
 {

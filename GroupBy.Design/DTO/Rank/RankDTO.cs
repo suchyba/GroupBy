@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Rank
+﻿namespace GroupBy.Design.DTO.Rank
 {
     public class RankDTO
     {

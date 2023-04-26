@@ -4,7 +4,7 @@ using GroupBy.Data.DbContexts;
 using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.FinancialOutcomeRecord;
+using GroupBy.Design.DTO.FinancialOutcomeRecord;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System.Linq;

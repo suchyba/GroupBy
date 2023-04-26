@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.InventoryBookRecord;
+﻿using GroupBy.Design.DTO.InventoryBookRecord;
 
 namespace GroupBy.Design.Services
 {

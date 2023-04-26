@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.RegistrationCode
+﻿namespace GroupBy.Design.DTO.RegistrationCode
 {
     public class RegistrationCodeUpdateDTO
     {
