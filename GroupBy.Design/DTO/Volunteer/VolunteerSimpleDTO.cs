@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Volunteer
+﻿namespace GroupBy.Design.DTO.Volunteer
 {
     public class VolunteerSimpleDTO
     {

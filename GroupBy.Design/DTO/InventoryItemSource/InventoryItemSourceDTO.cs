@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.InventoryItemSource
+﻿namespace GroupBy.Design.DTO.InventoryItemSource
 {
     public class InventoryItemSourceDTO
     {

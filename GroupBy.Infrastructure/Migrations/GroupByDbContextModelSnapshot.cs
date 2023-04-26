@@ -17,7 +17,7 @@ namespace GroupBy.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -563,14 +563,9 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -582,11 +577,14 @@ namespace GroupBy.Data.Migrations
                     b.Property<DateTime>("Expires")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ReasonRevoked")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReplacedByTokenId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("ReplacedByTokenId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Revoked")
                         .HasColumnType("datetime2");
@@ -600,7 +598,7 @@ namespace GroupBy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("ReplacedByTokenId");
 
@@ -1273,13 +1271,15 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("GroupBy.Domain.Entities.ApplicationUser", null)
+                    b.HasOne("GroupBy.Domain.Entities.ApplicationUser", "Owner")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("OwnerId");
 
                     b.HasOne("GroupBy.Domain.Entities.RefreshToken", "ReplacedByToken")
                         .WithMany()
                         .HasForeignKey("ReplacedByTokenId");
+
+                    b.Navigation("Owner");
 
                     b.Navigation("ReplacedByToken");
                 });

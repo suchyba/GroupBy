@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.Group;
+﻿using GroupBy.Design.DTO.Group;
 
-namespace GroupBy.Design.TO.AccountingBook
+namespace GroupBy.Design.DTO.AccountingBook
 {
     public class AccountingBookDTO
     {

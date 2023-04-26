@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.FinancialOutcomeRecord
+﻿namespace GroupBy.Design.DTO.FinancialOutcomeRecord
 {
     public class FinancialOutcomeRecordUpdateDTO
     {

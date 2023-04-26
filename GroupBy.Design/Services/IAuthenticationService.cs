@@ -1,7 +1,5 @@
-﻿using GroupBy.Application.DTO.Authentication;
-using GroupBy.Domain.Entities;
+﻿using GroupBy.Design.DTO.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace GroupBy.Design.Services
 {

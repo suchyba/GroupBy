@@ -1,5 +1,5 @@
 ﻿using GroupBy.Design.Services;
-using GroupBy.Design.TO.RegistrationCode;
+using GroupBy.Design.DTO.RegistrationCode;
 using GroupBy.Design.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

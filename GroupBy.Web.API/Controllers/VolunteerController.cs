@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using GroupBy.Design.Exceptions;
-using GroupBy.Design.TO.Volunteer;
-using GroupBy.Design.TO.Group;
+using GroupBy.Design.DTO.Volunteer;
+using GroupBy.Design.DTO.Group;
 using System;
 
 namespace GroupBy.Web.API.Controllers

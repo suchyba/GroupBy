@@ -6,7 +6,7 @@ namespace GroupBy.Domain.Entities
     public class RefreshToken
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public string Token { get; set; }
         [Required]

@@ -1,8 +1,8 @@
-﻿using GroupBy.Design.TO.Group;
-using GroupBy.Design.TO.Rank;
-using GroupBy.Design.TO.Volunteer;
+﻿using GroupBy.Design.DTO.Group;
+using GroupBy.Design.DTO.Rank;
+using GroupBy.Design.DTO.Volunteer;
 
-namespace GroupBy.Design.TO.RegistrationCode
+namespace GroupBy.Design.DTO.RegistrationCode
 {
     public class RegistrationCodeFullDTO
     {

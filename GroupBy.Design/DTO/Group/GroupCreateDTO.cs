@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Group
+﻿namespace GroupBy.Design.DTO.Group
 {
     public class GroupCreateDTO
     {

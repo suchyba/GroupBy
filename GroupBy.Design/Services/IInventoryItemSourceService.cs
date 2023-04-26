@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.InventoryItemSource;
+﻿using GroupBy.Design.DTO.InventoryItemSource;
 
 namespace GroupBy.Design.Services
 {

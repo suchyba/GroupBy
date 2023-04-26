@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.Rank;
+﻿using GroupBy.Design.DTO.Rank;
 
 namespace GroupBy.Design.Services
 {

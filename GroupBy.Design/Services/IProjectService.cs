@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.AccountingDocument;
-using GroupBy.Design.TO.FinancialRecord;
-using GroupBy.Design.TO.Project;
+﻿using GroupBy.Design.DTO.AccountingDocument;
+using GroupBy.Design.DTO.FinancialRecord;
+using GroupBy.Design.DTO.Project;
 
 namespace GroupBy.Design.Services
 {

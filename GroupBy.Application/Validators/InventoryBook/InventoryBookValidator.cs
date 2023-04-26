@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using GroupBy.Design.TO.InventoryBook;
+using GroupBy.Design.DTO.InventoryBook;
 using System;
 using System.Collections.Generic;
 using System.Linq;

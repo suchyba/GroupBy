@@ -1,6 +1,6 @@
-﻿using GroupBy.Design.TO.Group;
+﻿using GroupBy.Design.DTO.Group;
 
-namespace GroupBy.Design.TO.InventoryBook
+namespace GroupBy.Design.DTO.InventoryBook
 {
     public  class InventoryBookDTO
     {

@@ -1,7 +1,7 @@
-﻿using GroupBy.Design.TO.Group;
-using GroupBy.Design.TO.Project;
+﻿using GroupBy.Design.DTO.Group;
+using GroupBy.Design.DTO.Project;
 
-namespace GroupBy.Design.TO.Document
+namespace GroupBy.Design.DTO.Document
 {
     public class DocumentDTO
     {

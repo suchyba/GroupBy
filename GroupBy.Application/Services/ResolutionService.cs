@@ -4,7 +4,7 @@ using GroupBy.Data.DbContexts;
 using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.Resolution;
+using GroupBy.Design.DTO.Resolution;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System.Threading.Tasks;

@@ -1,6 +1,6 @@
 ﻿using GroupBy.Design.Services;
 using GroupBy.Design.Exceptions;
-using GroupBy.Design.TO.Rank;
+using GroupBy.Design.DTO.Rank;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

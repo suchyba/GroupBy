@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Application.DTO.Authentication
+﻿namespace GroupBy.Design.DTO.Authentication
 {
     public class RevokeTokenDTO
     {

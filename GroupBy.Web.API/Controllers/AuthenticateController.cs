@@ -1,5 +1,5 @@
 ﻿using GroupBy.Design.Services;
-using GroupBy.Design.TO.Authentication;
+using GroupBy.Design.DTO.Authentication;
 using GroupBy.Design.Exceptions;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -54,7 +54,7 @@ namespace GroupBy.Web.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("register", Name = "RegisterNewUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> RegisterAsync([FromBody] RegisterDTO model)
@@ -120,7 +120,7 @@ namespace GroupBy.Web.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> RefreshTokenAsync()
+        public async Task<ActionResult<AuthenticationResponseDTO>> RefreshTokenAsync()
         {
             AuthenticationResponseDTO response;
             var refreshToken = Request.Cookies["refreshToken"];

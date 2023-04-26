@@ -1,8 +1,8 @@
-﻿using GroupBy.Design.TO.AccountingBook;
-using GroupBy.Design.TO.AccountingDocument;
-using GroupBy.Design.TO.Project;
+﻿using GroupBy.Design.DTO.AccountingBook;
+using GroupBy.Design.DTO.AccountingDocument;
+using GroupBy.Design.DTO.Project;
 
-namespace GroupBy.Design.TO.FinancialIncomeRecord
+namespace GroupBy.Design.DTO.FinancialIncomeRecord
 {
     public class FinancialIncomeRecordDTO
     {

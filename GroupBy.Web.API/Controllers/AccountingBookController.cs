@@ -1,7 +1,7 @@
 ﻿using GroupBy.Design.Exceptions;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.AccountingBook;
-using GroupBy.Design.TO.FinancialRecord;
+using GroupBy.Design.DTO.AccountingBook;
+using GroupBy.Design.DTO.FinancialRecord;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

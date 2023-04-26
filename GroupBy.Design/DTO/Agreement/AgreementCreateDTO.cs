@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Agreement
+﻿namespace GroupBy.Design.DTO.Agreement
 {
     public class AgreementCreateDTO
     {

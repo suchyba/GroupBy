@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Resolution
+﻿namespace GroupBy.Design.DTO.Resolution
 {
     public class ResolutionDTO
     {

@@ -1,4 +1,4 @@
-﻿namespace GroupBy.Design.TO.Authentication
+﻿namespace GroupBy.Design.DTO.Authentication
 {
     public class LoginDTO
     {

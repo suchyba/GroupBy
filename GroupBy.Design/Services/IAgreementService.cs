@@ -1,4 +1,4 @@
-﻿using GroupBy.Design.TO.Agreement;
+﻿using GroupBy.Design.DTO.Agreement;
 
 namespace GroupBy.Design.Services
 {

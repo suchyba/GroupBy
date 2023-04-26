@@ -1,19 +1,16 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using GroupBy.Data.DbContexts;
+using GroupBy.Design.DTO.Authentication;
 using GroupBy.Design.Exceptions;
 using GroupBy.Design.Repositories;
 using GroupBy.Design.Services;
-using GroupBy.Design.TO.Authentication;
 using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -123,49 +120,60 @@ namespace GroupBy.Application.Services
                     throw new BadRequestException($"You have to verify your email address");
             }
 
-            JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
-            RefreshToken refreshToken = await GenerateRefreshToken(ipAddress);
-
-            await applicationUserRepository.AddRefreshTokenAsync(user.Email, refreshToken);
-
-            await applicationUserRepository.RemoveOldRefreshTokens(user.Email, int.Parse(configuration["JWT:RefreshTokenTTLInDays"]));
-
-            return new AuthenticationResponseDTO()
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                Email = loginDTO.Email,
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                VolunteerId = user.VolunteerId,
-                RefreshToken = refreshToken.Token
-            };
+                JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
+                RefreshToken refreshToken = await GenerateRefreshToken(ipAddress);
+
+                user = await applicationUserRepository.GetAsync(user, includes: "RefreshTokens");
+                user.RefreshTokens.Add(refreshToken);
+
+                user.RefreshTokens.RemoveAll(t => !t.IsActive && t.Created.AddDays(int.Parse(configuration["JWT:RefreshTokenTTLInDays"])) <= DateTime.UtcNow);
+
+                await uow.Commit();
+                return new AuthenticationResponseDTO()
+                {
+                    Email = loginDTO.Email,
+                    Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                    VolunteerId = user.VolunteerId,
+                    RefreshToken = refreshToken.Token
+                };
+            }
         }
 
         public async Task<AuthenticationResponseDTO> RefreshToken(string token, string ipAddress)
         {
-            var refreshToken = await refreshTokenRepository.GetByTokenAsync(token);
-
-            if (refreshToken.IsRevoked)
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                await revokeDescendantRefreshTokens(refreshToken, ipAddress, $"Attempted reuse of revoked ancestor token: {token}");
+                var refreshToken = await refreshTokenRepository.GetByTokenAsync(token);
+                refreshToken = await refreshTokenRepository.GetAsync(refreshToken, includes: "Owner.RefreshTokens");
+
+                if (refreshToken.IsRevoked)
+                {
+                    await revokeDescendantRefreshTokens(refreshToken, ipAddress, $"Attempted reuse of revoked ancestor token: {token}");
+                }
+
+                if (!refreshToken.IsActive)
+                    throw new BadRequestException($"Refresh token {refreshToken.Token} is not active");
+
+                var newRefreshToken = await rotateRefreshToken(refreshToken, ipAddress);
+
+                newRefreshToken.Owner = refreshToken.Owner;
+
+                await refreshTokenRepository.CreateAsync(newRefreshToken);
+                refreshToken.Owner.RefreshTokens.RemoveAll(t => !t.IsActive && t.Created.AddDays(int.Parse(configuration["JWT:RefreshTokenTTLInDays"])) <= DateTime.UtcNow);
+
+                var jwtToken = await GenerateToken(refreshToken.Owner);
+
+                await uow.Commit();
+                return new AuthenticationResponseDTO()
+                {
+                    Email = refreshToken.Owner.Email,
+                    Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                    VolunteerId = refreshToken.Owner.VolunteerId,
+                    RefreshToken = newRefreshToken.Token
+                };
             }
-
-            if (!refreshToken.IsActive)
-                throw new BadRequestException($"Refresh token {refreshToken.Token} is not active");
-
-            var newRefreshToken = await rotateRefreshToken(refreshToken, ipAddress);
-
-            await applicationUserRepository.AddRefreshTokenAsync(refreshToken.Owner.Email, newRefreshToken);
-
-            await applicationUserRepository.RemoveOldRefreshTokens(refreshToken.Owner.Email, int.Parse(configuration["JWT:RefreshTokenTTLInDays"]));
-
-            var jwtToken = await GenerateToken(refreshToken.Owner);
-
-            return new AuthenticationResponseDTO()
-            {
-                Email = refreshToken.Owner.Email,
-                Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                VolunteerId = refreshToken.Owner.VolunteerId,
-                RefreshToken = newRefreshToken.Token
-            };
         }
 
         private async Task<RefreshToken> rotateRefreshToken(RefreshToken refreshToken, string ipAddress)
@@ -227,7 +235,7 @@ namespace GroupBy.Application.Services
                         Code = registerDTO.RegistrationCode
                     },
                     includeLocal: false,
-                    includes: new string[] {"TargetRank", "TargetGroup" });
+                    includes: new string[] { "TargetRank", "TargetGroup" });
 
                 applicationUser.RelatedVolunteer.Rank = await rankRepository.GetAsync(registrationCode.TargetRank);
                 applicationUser.RelatedVolunteer.Confirmed = true;
@@ -261,12 +269,16 @@ namespace GroupBy.Application.Services
 
         public async Task RevokeToken(string token, string ipAddress)
         {
-            var refreshToken = await refreshTokenRepository.GetByTokenAsync(token);
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                var refreshToken = await refreshTokenRepository.GetByTokenAsync(token);
 
-            if (!refreshToken.IsActive)
-                throw new BadRequestException($"Refresh token {token} is not active");
+                if (!refreshToken.IsActive)
+                    throw new BadRequestException($"Refresh token {token} is not active");
 
-            await revokeRefreshToken(token, ipAddress, "Revoked without replacement");
+                await revokeRefreshToken(token, ipAddress, "Revoked without replacement");
+                await uow.Commit();
+            }
         }
 
         private async Task<JwtSecurityToken> GenerateToken(ApplicationUser user)
@@ -302,8 +314,16 @@ namespace GroupBy.Application.Services
             while (token == null)
             {
                 token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
-                var refreshToken = await refreshTokenRepository.GetAsync(new RefreshToken { Token = token });
-                if (refreshToken == null)
+                RefreshToken refreshToken = null;
+                try
+                {
+                    refreshToken = await refreshTokenRepository.GetAsync(new RefreshToken { Token = token }, asTracking: false);
+                }
+                catch (NotFoundException)
+                {
+                    refreshToken = null;
+                }
+                if (refreshToken != null)
                     token = null;
             }
 

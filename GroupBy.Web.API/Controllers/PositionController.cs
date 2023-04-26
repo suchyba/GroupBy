@@ -1,6 +1,6 @@
 ﻿using GroupBy.Design.Services;
 using GroupBy.Design.Exceptions;
-using GroupBy.Design.TO.Position;
+using GroupBy.Design.DTO.Position;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
