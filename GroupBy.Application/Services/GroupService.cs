@@ -38,7 +38,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<GroupDTO>(await repository.GetAsync(mapper.Map<Group>(model).Id, includes: new string[] { "Owner", "AccountingBooks", "ParentGroup", "ChildGroups", "Members", "ProjectsRealisedInGroup" }));
+                return mapper.Map<GroupDTO>(await repository.GetAsync(new { Id = mapper.Map<Group>(model).Id }, includes: new string[] { "Owner", "AccountingBooks", "ParentGroup", "ChildGroups", "Members", "ProjectsRealisedInGroup" }));
             }
         }
 
@@ -49,7 +49,7 @@ namespace GroupBy.Application.Services
                 entity.Owner = await volunteerRepository.GetAsync(entity.Owner);
 
                 if (entity.ParentGroup != null)
-                    entity.ParentGroup = await repository.GetAsync(entity.ParentGroup.Id);
+                    entity.ParentGroup = await repository.GetAsync(new { Id = entity.ParentGroup.Id });
 
                 Group createdGroup = await repository.CreateAsync(entity);
 
@@ -64,7 +64,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                entity.Owner = await volunteerRepository.GetAsync(entity.Owner.Id);
+                entity.Owner = await volunteerRepository.GetAsync(new { Id = entity.Owner.Id });
 
                 var updatedGroup = await repository.UpdateAsync(entity);
                 await uow.Commit();
@@ -95,7 +95,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await repository.GetAsync(groupId, includeLocal: false, includes: "AccountingBooks")).AccountingBooks);
+                return mapper.Map<IEnumerable<AccountingBookSimpleDTO>>((await repository.GetAsync(new { Id = groupId }, includeLocal: false, includes: "AccountingBooks")).AccountingBooks);
             }
         }
 
@@ -143,7 +143,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                var volunteer = await volunteerRepository.GetAsync(volunteerId);
+                var volunteer = await volunteerRepository.GetAsync(new { Id = volunteerId });
                 if (!await (repository as IGroupRepository).IsMember(groupId, volunteer))
                     throw new BadRequestException("Volunteer is not a member of the group");
 
