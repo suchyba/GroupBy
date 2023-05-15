@@ -29,7 +29,7 @@ namespace GroupBy.Web.API.Controllers
         }
         [HttpGet(Name = "GetAllGroups")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetAllAsync(bool includeLocal = false)
+        public async Task<ActionResult<IEnumerable<GroupSimpleDTO>>> GetAllAsync()
         {
             return Ok(await groupService.GetAllAsync());
         }
