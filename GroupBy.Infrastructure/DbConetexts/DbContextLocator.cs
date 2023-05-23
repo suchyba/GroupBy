@@ -6,9 +6,9 @@ namespace GroupBy.Data.DbConetexts
 {
     public class DbContextLocator : IDbContextLocator<GroupByDbContext>
     {
-        private static GroupByDbContext dbContext;
+        private GroupByDbContext dbContext;
 
-        private static readonly object lockObject = new object();
+        private readonly object lockObject = new object();
 
         public GroupByDbContext GetDbContext() => dbContext;
 
