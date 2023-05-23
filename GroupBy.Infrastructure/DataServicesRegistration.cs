@@ -23,8 +23,8 @@ namespace GroupBy.Data
             {
                 return new DbContextFactory(configuration.GetConnectionString("GroupByLocalConnectionString"));
             });
-            services.AddSingleton<IDbContextLocator<GroupByDbContext>, DbContextLocator>();
-            services.AddSingleton<IUnitOfWorkFactory<GroupByDbContext>, UnitOfWorkFactory>();
+            services.AddScoped<IDbContextLocator<GroupByDbContext>, DbContextLocator>();
+            services.AddScoped<IUnitOfWorkFactory<GroupByDbContext>, UnitOfWorkFactory>();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IAccountingBookRepository, AccountingBookRepository>();

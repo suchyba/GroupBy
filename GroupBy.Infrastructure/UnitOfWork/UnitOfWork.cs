@@ -12,9 +12,9 @@ namespace GroupBy.Data.UnitOfWork
     {
         private static readonly object lockObject = new object();
 
-        private static Stack<UnitOfWork> unitOfWorks = new Stack<UnitOfWork>();
+        private Stack<UnitOfWork> unitOfWorks = new Stack<UnitOfWork>();
 
-        public static Stack<UnitOfWork> UnitOfWorks
+        public Stack<UnitOfWork> UnitOfWorks
         {
             get
             {
