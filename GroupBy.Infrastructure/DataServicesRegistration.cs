@@ -25,6 +25,7 @@ namespace GroupBy.Data
             });
             services.AddScoped<IDbContextLocator<GroupByDbContext>, DbContextLocator>();
             services.AddScoped<IUnitOfWorkFactory<GroupByDbContext>, UnitOfWorkFactory>();
+            services.AddScoped<IUnitOfWorkLocator<UnitOfWork.UnitOfWork>, UnitOfWorkLocator>();
 
             services.AddScoped<IGroupRepository, GroupRepository>();
             services.AddScoped<IAccountingBookRepository, AccountingBookRepository>();
