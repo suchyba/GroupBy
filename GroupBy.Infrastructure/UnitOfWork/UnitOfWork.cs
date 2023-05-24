@@ -12,22 +12,17 @@ namespace GroupBy.Data.UnitOfWork
     {
         private static readonly object lockObject = new object();
 
-        private Stack<UnitOfWork> unitOfWorks = new Stack<UnitOfWork>();
-
         public Stack<UnitOfWork> UnitOfWorks
         {
             get
             {
-                if (unitOfWorks == null)
-                {
-                    unitOfWorks = new Stack<UnitOfWork>();
-                }
-                return unitOfWorks;
+                return unitOfWorkLocator.UnitOfWorks;
             }
         }
 
         private readonly IDbContextLocator<GroupByDbContext> dbContextLocator;
         private readonly IDbContextFactory<GroupByDbContext> dbContextFactory;
+        private readonly IUnitOfWorkLocator<UnitOfWork> unitOfWorkLocator;
 
         public bool IsDisposed { get; private set; } = false;
 
@@ -50,10 +45,14 @@ namespace GroupBy.Data.UnitOfWork
             get => dbContext.Database.CurrentTransaction;
         }
 
-        public UnitOfWork(IDbContextLocator<GroupByDbContext> dbContextLocator, IDbContextFactory<GroupByDbContext> dbContextFactory)
+        public UnitOfWork(
+            IDbContextLocator<GroupByDbContext> dbContextLocator,
+            IDbContextFactory<GroupByDbContext> dbContextFactory,
+            IUnitOfWorkLocator<UnitOfWork> unitOfWorkLocator)
         {
             this.dbContextLocator = dbContextLocator;
             this.dbContextFactory = dbContextFactory;
+            this.unitOfWorkLocator = unitOfWorkLocator;
 
             lock (lockObject)
             {
@@ -109,7 +108,7 @@ namespace GroupBy.Data.UnitOfWork
 
         public void RollbackTransaction()
         {
-            if(IsRoot && transaction != null)
+            if (IsRoot && transaction != null)
                 transaction.Rollback();
         }
 
