@@ -147,7 +147,7 @@ namespace GroupBy.Application.Services
                 if (!await (repository as IGroupRepository).IsMember(groupId, volunteer))
                     throw new BadRequestException("Volunteer is not a member of the group");
 
-                var group = await repository.GetAsync(groupId, includeLocal: false, includes: "Owner");
+                var group = await repository.GetAsync(new { Id = groupId }, includeLocal: false, includes: "Owner");
                 if (group.Owner == volunteer)
                     throw new BadRequestException("Volunteer cannot be an owner of the group");
 
