@@ -91,6 +91,10 @@ namespace GroupBy.Web.API.Controllers
             {
                 return NotFound(new { Id = e.Key, e.Message });
             }
+            catch (BadRequestException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
         [HttpPut("edit", Name = "UpdateInventoryBook")]
         [ProducesResponseType(StatusCodes.Status200OK)]
