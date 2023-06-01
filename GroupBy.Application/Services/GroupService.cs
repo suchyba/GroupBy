@@ -34,7 +34,7 @@ namespace GroupBy.Application.Services
             this.volunteerRepository = volunteerRepository;
         }
 
-        public virtual async Task<IEnumerable<GroupSimpleDTO>> GetAllAsync(bool includeLocal = false)
+        public override async Task<IEnumerable<GroupSimpleDTO>> GetAllAsync(bool includeLocal = false)
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {

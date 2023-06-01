@@ -104,10 +104,15 @@ namespace GroupBy.Application.Services
 
         public async Task<AuthenticationResponseDTO> LoginUserAsync(LoginDTO loginDTO, string ipAddress)
         {
-            var user = await userManager.FindByEmailAsync(loginDTO.Email);
-
-            if (user == null)
+            ApplicationUser user = null;
+            try
+            {
+                user = await userManager.FindByEmailAsync(loginDTO.Email);
+            }
+            catch (NotFoundException)
+            {
                 throw new BadRequestException($"User {loginDTO.Email} not found");
+            }
 
             var result = await signInManager.PasswordSignInAsync(user, loginDTO.Password, false, false);
 
