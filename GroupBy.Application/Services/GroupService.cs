@@ -34,6 +34,14 @@ namespace GroupBy.Application.Services
             this.volunteerRepository = volunteerRepository;
         }
 
+        public virtual async Task<IEnumerable<GroupSimpleDTO>> GetAllAsync(bool includeLocal = false)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<GroupSimpleDTO>>(await repository.GetAllAsync(includes: "InventoryBook"));
+            }
+        }
+
         public override async Task<GroupDTO> GetAsync(GroupSimpleDTO model)
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
