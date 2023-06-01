@@ -38,7 +38,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<GroupDTO>(await repository.GetAsync(new { Id = mapper.Map<Group>(model).Id }, includes: new string[] { "Owner", "AccountingBooks", "ParentGroup", "ChildGroups", "Members", "ProjectsRealisedInGroup" }));
+                return mapper.Map<GroupDTO>(await repository.GetAsync(new { Id = mapper.Map<Group>(model).Id }, includes: new string[] { "Owner", "AccountingBooks", "ParentGroup", "ChildGroups", "Members", "ProjectsRealisedInGroup", "InventoryBook" }));
             }
         }
 
