@@ -87,9 +87,10 @@ namespace GroupBy.Web.API
             app.UseRouting();
 
             app.UseCors(options => options
-                .AllowAnyOrigin()
+                .WithOrigins("https://localhost:4200")
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseAuthentication();
             app.UseAuthorization();
