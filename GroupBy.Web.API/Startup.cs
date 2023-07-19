@@ -86,8 +86,10 @@ namespace GroupBy.Web.API
 
             app.UseRouting();
 
+            var origins = configuration.GetValue<string>("CORS:AllowedOrigins").Split(";");
+
             app.UseCors(options => options
-                .WithOrigins("https://localhost:4200")
+                .WithOrigins(origins)
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
