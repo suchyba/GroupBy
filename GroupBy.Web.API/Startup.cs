@@ -86,10 +86,13 @@ namespace GroupBy.Web.API
 
             app.UseRouting();
 
+            var origins = configuration.GetValue<string>("CORS:AllowedOrigins").Split(";");
+
             app.UseCors(options => options
-                .AllowAnyOrigin()
+                .WithOrigins(origins)
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             app.UseAuthentication();
             app.UseAuthorization();
