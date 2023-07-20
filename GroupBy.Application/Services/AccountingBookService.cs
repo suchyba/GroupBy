@@ -57,5 +57,16 @@ namespace GroupBy.Application.Services
                 return mapper.Map<IEnumerable<FinancialRecordSimpleDTO>>(await (repository as IAccountingBookRepository).GetFinancialRecordsAsync(mapper.Map<AccountingBook>(domain)));
             }
         }
+
+        protected override async Task<AccountingBook> UpdateOperationAsync(AccountingBook entity)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                AccountingBook updatedObject = await repository.UpdateAsync(entity);
+                updatedObject = await repository.GetAsync(new { Id = updatedObject.Id }, includes: "Records");
+                await uow.Commit();
+                return updatedObject;
+            }
+        }
     }
 }
