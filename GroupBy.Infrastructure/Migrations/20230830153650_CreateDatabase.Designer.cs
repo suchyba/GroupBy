@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupBy.Data.Migrations
 {
     [DbContext(typeof(GroupByDbContext))]
-    [Migration("20230425162622_CreateDatabase")]
+    [Migration("20230830153650_CreateDatabase")]
     partial class CreateDatabase
     {
         /// <inheritdoc />
@@ -353,6 +353,12 @@ namespace GroupBy.Data.Migrations
 
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<Guid>("SourceId")
                         .HasColumnType("uniqueidentifier");

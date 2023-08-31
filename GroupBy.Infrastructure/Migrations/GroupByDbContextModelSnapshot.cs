@@ -351,6 +351,12 @@ namespace GroupBy.Data.Migrations
                     b.Property<Guid>("ItemId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
                     b.Property<Guid>("SourceId")
                         .HasColumnType("uniqueidentifier");
 
