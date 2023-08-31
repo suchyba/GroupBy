@@ -19,7 +19,12 @@ namespace GroupBy.Data.Repositories
 
         public async Task<IEnumerable<InventoryBookRecord>> GetInventoryItemHistoryAsync(Guid itemId, bool includeLocal = false)
         {
-            InventoryItem item = await GetAsync(new { Id = itemId }, includeLocal, includes: "History");
+            InventoryItem item = await GetAsync(new { Id = itemId }, includeLocal,
+                includes: new string[] {
+                    "History.Document",
+                    "History.Source",
+                    "History.Book"
+                });
 
             return item.History;
         }

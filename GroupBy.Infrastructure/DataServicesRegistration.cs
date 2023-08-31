@@ -18,7 +18,7 @@ namespace GroupBy.Data
         {
             // Only for generating database model
             /*services.AddDbContext<DbContext, GroupByDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("GroupByLocalConnectionString")));*/
+                options.UseSqlServer(configuration.GetConnectionString("groupbylocalconnectionstring")));*/
             services.AddSingleton<Design.DbContext.IDbContextFactory<GroupByDbContext>, DbContextFactory>(options =>
             {
                 return new DbContextFactory(configuration.GetConnectionString("GroupByLocalConnectionString"));

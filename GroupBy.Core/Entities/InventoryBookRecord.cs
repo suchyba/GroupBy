@@ -12,6 +12,11 @@ namespace GroupBy.Domain.Entities
         [Key]
         public Guid Id { get; set; }
         /// <summary>
+        /// Helps to order records
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int OrderId { get; set; }
+        /// <summary>
         /// Related item <seealso cref="InventoryItem"/>
         /// </summary>
         [Required]

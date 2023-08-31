@@ -8,6 +8,7 @@ namespace GroupBy.Design.DTO.InventoryBookRecord
     public class InventoryBookRecordDTO
     {
         public Guid Id { get; set; }
+        public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public DocumentSimpleDTO Document { get; set; }
         public bool Income { get; set; }
