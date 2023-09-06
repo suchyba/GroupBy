@@ -104,7 +104,7 @@ namespace GroupBy.Web.API.Controllers
         [HttpGet("{id}/history", Name = "GetInventoryItemHistory")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<InventoryBookRecordSimpleDTO>>> GetHistoryAsync(Guid id)
+        public async Task<ActionResult<IEnumerable<InventoryBookRecordListDTO>>> GetHistoryAsync(Guid id)
         {
             try
             {

@@ -26,11 +26,11 @@ namespace GroupBy.Application.Services
 
         }
 
-        public async Task<IEnumerable<InventoryBookRecordSimpleDTO>> GetInventoryItemHistoryAsync(Guid inventoryItemId)
+        public async Task<IEnumerable<InventoryBookRecordListDTO>> GetInventoryItemHistoryAsync(Guid inventoryItemId)
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<IEnumerable<InventoryBookRecordSimpleDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemHistoryAsync(inventoryItemId));
+                return mapper.Map<IEnumerable<InventoryBookRecordListDTO>>(await (repository as IInventoryItemRepository).GetInventoryItemHistoryAsync(inventoryItemId));
             }
         }
 
