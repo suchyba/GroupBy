@@ -41,8 +41,10 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<RegistrationCode> CreateOperationAsync(RegistrationCode entity)
+        protected override async Task<RegistrationCode> CreateOperationAsync(RegistrationCodeCreateDTO model)
         {
+            var entity = mapper.Map<RegistrationCode>(model);
+
             string code = entity.GetHashCode().ToString("X6");
 
             entity.Code = code;

@@ -4,6 +4,7 @@ using GroupBy.Design.Repositories;
 using GroupBy.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -14,6 +15,21 @@ namespace GroupBy.Data.Repositories
         public InventoryBookRepository(IDbContextLocator<GroupByDbContext> dBcontextLocator) : base(dBcontextLocator)
         {
 
+        }
+
+        public async Task<IEnumerable<InventoryItemTransfer>> GetIncomingInventoryItemTransfersAsync(InventoryBook book, bool notConfirmedOnly = true, bool includeLocal = false)
+        {
+            var transfers = (await GetAsync(book, includeLocal, includes: new string[]
+            {
+                "IncomingInventoryItemTransfers.OutcomeInventoryBookRecord",
+                "IncomingInventoryItemTransfers.IncomeInventoryBookRecord",
+                "IncomingInventoryItemTransfers.SourceInventoryBook"
+            })).IncomingInventoryItemTransfers;
+
+            if (notConfirmedOnly)
+                transfers = transfers.Where(t => t.ConfirmedByReceiver == false);
+
+            return transfers;
         }
 
         public async Task<IEnumerable<InventoryBookRecord>> GetInventoryBookRecordsAsync(InventoryBook book, bool includeLocal = false)

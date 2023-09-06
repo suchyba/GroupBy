@@ -31,8 +31,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Rank> CreateOperationAsync(Rank entity)
+        protected override async Task<Rank> CreateOperationAsync(RankCreateDTO model)
         {
+            var entity = mapper.Map<Rank>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 if (entity.HigherRank != null)

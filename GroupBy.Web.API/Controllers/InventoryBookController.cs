@@ -1,13 +1,13 @@
-﻿using GroupBy.Design.Services;
-using GroupBy.Design.DTO.InventoryBook;
+﻿using GroupBy.Design.DTO.InventoryBook;
 using GroupBy.Design.DTO.InventoryBookRecord;
 using GroupBy.Design.DTO.InventoryItem;
+using GroupBy.Design.DTO.InventoryItemTransfer;
 using GroupBy.Design.Exceptions;
+using GroupBy.Design.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Mime;
 using System.Threading.Tasks;
 
@@ -137,6 +137,21 @@ namespace GroupBy.Web.API.Controllers
             catch (DeleteNotPermittedException e)
             {
                 return Conflict(e.Message);
+            }
+        }
+
+        [HttpGet("{id}/incomingTransfers", Name = "GetIncomingInventoryItemTransfers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<InventoryItemTransferSimpleDTO>>> GetIncomingInventoryItemTransfers(Guid id, [FromQuery] bool notConfirmedOnly)
+        {
+            try
+            {
+                return Ok(await inventoryBookService.GetIncomingInventoryItemTransfersAsync(new InventoryBookSimpleDTO { Id = id }, notConfirmedOnly: notConfirmedOnly));
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(new { Id = e.Key, e.Message });
             }
         }
     }

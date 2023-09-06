@@ -804,6 +804,46 @@ namespace GroupBy.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "InventoryItemTransfers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OutcomeInventoryBookRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IncomeInventoryBookRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ConfirmationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SourceInventoryBookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DestinationInventoryBookId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItemTransfers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventoryItemTransfers_InventoryBookRecords_IncomeInventoryBookRecordId",
+                        column: x => x.IncomeInventoryBookRecordId,
+                        principalTable: "InventoryBookRecords",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_InventoryItemTransfers_InventoryBookRecords_OutcomeInventoryBookRecordId",
+                        column: x => x.OutcomeInventoryBookRecordId,
+                        principalTable: "InventoryBookRecords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryItemTransfers_InventoryBooks_DestinationInventoryBookId",
+                        column: x => x.DestinationInventoryBookId,
+                        principalTable: "InventoryBooks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_InventoryItemTransfers_InventoryBooks_SourceInventoryBookId",
+                        column: x => x.SourceInventoryBookId,
+                        principalTable: "InventoryBooks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AccountingBooks_RelatedGroupId",
                 table: "AccountingBooks",
@@ -924,6 +964,26 @@ namespace GroupBy.Data.Migrations
                 table: "InventoryBooks",
                 column: "GroupId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemTransfers_DestinationInventoryBookId",
+                table: "InventoryItemTransfers",
+                column: "DestinationInventoryBookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemTransfers_IncomeInventoryBookRecordId",
+                table: "InventoryItemTransfers",
+                column: "IncomeInventoryBookRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemTransfers_OutcomeInventoryBookRecordId",
+                table: "InventoryItemTransfers",
+                column: "OutcomeInventoryBookRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemTransfers_SourceInventoryBookId",
+                table: "InventoryItemTransfers",
+                column: "SourceInventoryBookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InvitationToGroups_InvitedId",
@@ -1084,7 +1144,7 @@ namespace GroupBy.Data.Migrations
                 name: "GroupVolunteer");
 
             migrationBuilder.DropTable(
-                name: "InventoryBookRecords");
+                name: "InventoryItemTransfers");
 
             migrationBuilder.DropTable(
                 name: "InvitationToGroups");
@@ -1117,13 +1177,7 @@ namespace GroupBy.Data.Migrations
                 name: "AccountingBooks");
 
             migrationBuilder.DropTable(
-                name: "InventoryBooks");
-
-            migrationBuilder.DropTable(
-                name: "InventoryItemSources");
-
-            migrationBuilder.DropTable(
-                name: "InventoryItems");
+                name: "InventoryBookRecords");
 
             migrationBuilder.DropTable(
                 name: "Positions");
@@ -1136,6 +1190,15 @@ namespace GroupBy.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Elements");
+
+            migrationBuilder.DropTable(
+                name: "InventoryBooks");
+
+            migrationBuilder.DropTable(
+                name: "InventoryItemSources");
+
+            migrationBuilder.DropTable(
+                name: "InventoryItems");
 
             migrationBuilder.DropTable(
                 name: "Projects");

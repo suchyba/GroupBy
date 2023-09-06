@@ -50,8 +50,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Group> CreateOperationAsync(Group entity)
+        protected override async Task<Group> CreateOperationAsync(GroupCreateDTO model)
         {
+            var entity = mapper.Map<Group>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 entity.Owner = await volunteerRepository.GetAsync(entity.Owner);

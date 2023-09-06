@@ -36,7 +36,7 @@ namespace GroupBy.Application.Services
         public async Task<FullDTO> CreateAsync(CreateDTO model)
         {
             await ValidateCreateAsync(model);
-            return mapper.Map<FullDTO>(await CreateOperationAsync(mapper.Map<Domain>(model)));
+            return mapper.Map<FullDTO>(await CreateOperationAsync(model));
         }
 
         protected virtual async Task ValidateCreateAsync(CreateDTO model)
@@ -46,11 +46,11 @@ namespace GroupBy.Application.Services
                 throw new Design.Exceptions.ValidationException(validationResult);
         }
 
-        protected virtual async Task<Domain> CreateOperationAsync(Domain entity)
+        protected virtual async Task<Domain> CreateOperationAsync(CreateDTO model)
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                Domain createdObject = await repository.CreateAsync(mapper.Map<Domain>(entity));
+                Domain createdObject = await repository.CreateAsync(mapper.Map<Domain>(model));
                 await uow.Commit();
 
                 return createdObject;

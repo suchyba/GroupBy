@@ -41,6 +41,8 @@ using GroupBy.Application.Validators.RegistrationCode;
 using GroupBy.Application.Validators.Authentication;
 using GroupBy.Design.DTO.Authentication;
 using GroupBy.Application.Model.Mail;
+using GroupBy.Design.DTO.InventoryItemTransfer;
+using GroupBy.Application.Validators.InventoryItemTransfer;
 
 namespace GroupBy.Application
 {
@@ -69,6 +71,7 @@ namespace GroupBy.Application
             services.AddScoped<IFinancialOutcomeRecordService, FinancialOutcomeRecordService>();
             services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
             services.AddScoped<IRegistrationCodeService, RegistrationCodeService>();
+            services.AddScoped<IInventoryItemTransferService, InventoryItemTransferService>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEmailService, EmailService>();
@@ -138,6 +141,10 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<RegistrationCodeUpdateDTO>, RegistrationCodeUpdateValidator>();
 
             services.AddScoped<IValidator<RegisterDTO>, RegisterValidator>();
+
+            services.AddScoped<IValidator<InventoryItemTransferCreateDTO>, InventoryItemTransferCreateValidator>();
+            services.AddScoped<IValidator<InventoryItemTransferConfirmDTO>, InventoryItemTransferConfirmValidator>();
+            services.AddScoped<IValidator<InventoryItemTransferUpdateDTO>, InventoryItemTransferUpdateValidator>();
         }
     }
 }

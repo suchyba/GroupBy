@@ -55,8 +55,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<FinancialOutcomeRecord> CreateOperationAsync(FinancialOutcomeRecord entity)
+        protected override async Task<FinancialOutcomeRecord> CreateOperationAsync(FinancialOutcomeRecordCreateDTO model)
         {
+            var entity = mapper.Map<FinancialOutcomeRecord>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 entity.Book = await accountingBookRepository.GetAsync(entity.Book, false, includes: "RelatedGroup");

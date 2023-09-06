@@ -12,6 +12,7 @@ using GroupBy.Design.DTO.InventoryBook;
 using GroupBy.Design.DTO.InventoryBookRecord;
 using GroupBy.Design.DTO.InventoryItem;
 using GroupBy.Design.DTO.InventoryItemSource;
+using GroupBy.Design.DTO.InventoryItemTransfer;
 using GroupBy.Design.DTO.Position;
 using GroupBy.Design.DTO.Project;
 using GroupBy.Design.DTO.Rank;
@@ -223,6 +224,17 @@ namespace GroupBy.Application.Profiles
                         PhoneNumber = src.RelatedVolunteerPhoneNumber
                     }));
             CreateMap<ApplicationUser, UserDTO>();
+
+            CreateMap<InventoryItemTransfer, InventoryItemTransferSimpleDTO>().ReverseMap();
+            CreateMap<InventoryItemTransfer, InventoryItemTransferDTO>();
+            CreateMap<InventoryItemTransferCreateDTO, InventoryItemTransfer>()
+                .ForMember(dest => dest.DestinationInventoryBook, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.DestinationInventoryBookId }))
+                .ForMember(dest => dest.SourceInventoryBook, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.SourceInventoryBookId }));
+            CreateMap<InventoryItemTransferUpdateDTO, InventoryItemTransfer>()
+                .ForMember(dest => dest.DestinationInventoryBook, opt => opt.MapFrom(
+                    src => new InventoryBook { Id = src.DestinationInventoryBookId }));
         }
     }
 }

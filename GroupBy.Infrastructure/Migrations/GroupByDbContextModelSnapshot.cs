@@ -406,6 +406,43 @@ namespace GroupBy.Data.Migrations
                     b.ToTable("InventoryItemSources");
                 });
 
+            modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItemTransfer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DestinationInventoryBookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("IncomeInventoryBookRecordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OutcomeInventoryBookRecordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SourceInventoryBookId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinationInventoryBookId");
+
+                    b.HasIndex("IncomeInventoryBookRecordId");
+
+                    b.HasIndex("OutcomeInventoryBookRecordId");
+
+                    b.HasIndex("SourceInventoryBookId");
+
+                    b.ToTable("InventoryItemTransfers");
+                });
+
             modelBuilder.Entity("GroupBy.Domain.Entities.InvitationToGroup", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1166,6 +1203,39 @@ namespace GroupBy.Data.Migrations
                     b.Navigation("Source");
                 });
 
+            modelBuilder.Entity("GroupBy.Domain.Entities.InventoryItemTransfer", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.InventoryBook", "DestinationInventoryBook")
+                        .WithMany("IncomingInventoryItemTransfers")
+                        .HasForeignKey("DestinationInventoryBookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.InventoryBookRecord", "IncomeInventoryBookRecord")
+                        .WithMany()
+                        .HasForeignKey("IncomeInventoryBookRecordId");
+
+                    b.HasOne("GroupBy.Domain.Entities.InventoryBookRecord", "OutcomeInventoryBookRecord")
+                        .WithMany()
+                        .HasForeignKey("OutcomeInventoryBookRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.InventoryBook", "SourceInventoryBook")
+                        .WithMany("OutgoingInventoryItemTransfers")
+                        .HasForeignKey("SourceInventoryBookId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DestinationInventoryBook");
+
+                    b.Navigation("IncomeInventoryBookRecord");
+
+                    b.Navigation("OutcomeInventoryBookRecord");
+
+                    b.Navigation("SourceInventoryBook");
+                });
+
             modelBuilder.Entity("GroupBy.Domain.Entities.InvitationToGroup", b =>
                 {
                     b.HasOne("GroupBy.Domain.Entities.Volunteer", "Invited")
@@ -1462,6 +1532,10 @@ namespace GroupBy.Data.Migrations
 
             modelBuilder.Entity("GroupBy.Domain.Entities.InventoryBook", b =>
                 {
+                    b.Navigation("IncomingInventoryItemTransfers");
+
+                    b.Navigation("OutgoingInventoryItemTransfers");
+
                     b.Navigation("Records");
                 });
 

@@ -47,6 +47,7 @@ namespace GroupBy.Data
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<IInventoryItemTransferRepository, InventoryItemTransferRepository>();
 
             services.AddScoped<IUserRoleRepository<Guid>, UserRoleRepository>();
             services.AddScoped<IUserClaimRepository<Guid>, UserClaimRepository>();

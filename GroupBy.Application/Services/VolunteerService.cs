@@ -39,8 +39,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Volunteer> CreateOperationAsync(Volunteer entity)
+        protected override async Task<Volunteer> CreateOperationAsync(VolunteerCreateDTO model)
         {
+            var entity = mapper.Map<Volunteer>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 if (entity.Rank != null)

@@ -32,8 +32,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Position> CreateOperationAsync(Position entity)
+        protected override async Task<Position> CreateOperationAsync(PositionCreateDTO model)
         {
+            var entity = mapper.Map<Position>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 if (entity.HigherPosition != null)

@@ -25,6 +25,19 @@ namespace GroupBy.Domain.Entities
         /// Groups which is owner of the items in this book
         /// </summary>
         [Required, ForeignKey("GroupId")]
+        /// <summary>
+        /// Group which is owner of the items in this book
+        /// </summary>
         public virtual Group RelatedGroup { get; set; }
+        [InverseProperty("DestinationInventoryBook")]
+        /// <summary>
+        /// Incoming item transfers to this book
+        /// </summary>
+        public virtual IEnumerable<InventoryItemTransfer> IncomingInventoryItemTransfers { get; set; }
+        [InverseProperty("SourceInventoryBook")]
+        /// <summary>
+        /// Outgoing item transfers from this book
+        /// </summary>
+        public virtual IEnumerable<InventoryItemTransfer> OutgoingInventoryItemTransfers { get; set; }
     }
 }

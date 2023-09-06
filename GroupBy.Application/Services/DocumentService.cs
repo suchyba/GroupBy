@@ -48,8 +48,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Document> CreateOperationAsync(Document entity)
+        protected override async Task<Document> CreateOperationAsync(DocumentCreateDTO model)
         {
+            var entity = mapper.Map<Document>(model);
             // TODO add checking if the file pointed by FilePath exists
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
