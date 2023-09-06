@@ -34,6 +34,7 @@ namespace GroupBy.Data.DbContexts
         public DbSet<Document> Documents { get; set; }
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<ApplicationUser> Identities { get; set; }
+        public DbSet<InventoryItemTransfer> InventoryItemTransfers { get; set; }
 
         public GroupByDbContext(DbContextOptions<GroupByDbContext> options) : base(options)
         {
@@ -51,6 +52,16 @@ namespace GroupBy.Data.DbContexts
             modelBuilder.Entity<Group>()
                 .HasOne(g => g.Owner)
                 .WithMany(v => v.OwnedGroups)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InventoryItemTransfer>()
+                .HasOne(t => t.SourceInventoryBook)
+                .WithMany(b => b.OutgoingInventoryItemTransfers)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InventoryItemTransfer>()
+                .HasOne(t => t.DestinationInventoryBook)
+                .WithMany(b => b.IncomingInventoryItemTransfers)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);

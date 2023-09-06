@@ -29,8 +29,10 @@ namespace GroupBy.Application.Services
             this.projectRepository = projectRepository;
         }
 
-        protected override async Task<AccountingDocument> CreateOperationAsync(AccountingDocument entity)
+        protected override async Task<AccountingDocument> CreateOperationAsync(AccountingDocumentCreateDTO model)
         {
+            var entity = mapper.Map<AccountingDocument>(model);
+
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 var tempGroups = new List<Group>();

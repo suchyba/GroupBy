@@ -49,8 +49,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<InventoryBookRecord> CreateOperationAsync(InventoryBookRecord entity)
+        protected override async Task<InventoryBookRecord> CreateOperationAsync(InventoryBookRecordCreateDTO model)
         {
+            var entity = mapper.Map<InventoryBookRecord>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 entity.Book = await inventoryBookRepository.GetAsync(entity.Book, includes: "Records.Item");

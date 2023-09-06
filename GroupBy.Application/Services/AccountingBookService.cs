@@ -36,8 +36,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<AccountingBook> CreateOperationAsync(AccountingBook domain)
+        protected override async Task<AccountingBook> CreateOperationAsync(AccountingBookCreateDTO model)
         {
+            var domain = mapper.Map<AccountingBook>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 domain.RelatedGroup = await groupRepository.GetAsync(domain.RelatedGroup);

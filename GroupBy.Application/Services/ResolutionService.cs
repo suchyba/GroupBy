@@ -38,8 +38,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<Resolution> CreateOperationAsync(Resolution entity)
+        protected override async Task<Resolution> CreateOperationAsync(ResolutionCreateDTO model)
         {
+            var entity = mapper.Map<Resolution>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 entity.Group = await groupRepository.GetAsync(entity.Group);

@@ -11,6 +11,7 @@ using GroupBy.Design.UnitOfWork;
 using GroupBy.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GroupBy.Design.DTO.InventoryItemTransfer;
 
 namespace GroupBy.Application.Services
 {
@@ -37,8 +38,9 @@ namespace GroupBy.Application.Services
             }
         }
 
-        protected override async Task<InventoryBook> CreateOperationAsync(InventoryBook entity)
+        protected override async Task<InventoryBook> CreateOperationAsync(InventoryBookCreateDTO model)
         {
+            var entity = mapper.Map<InventoryBook>(model);
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 entity.RelatedGroup = await groupRepository.GetAsync(entity.RelatedGroup, includes: "InventoryBook");
@@ -80,6 +82,14 @@ namespace GroupBy.Application.Services
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
                 return mapper.Map<IEnumerable<InventoryItemSimpleDTO>>(await (repository as IInventoryBookRepository).GetInventoryItemsAsync(mapper.Map<InventoryBook>(inventoryBookDTO)));
+            }
+        }
+
+        public async Task<IEnumerable<InventoryItemTransferSimpleDTO>> GetIncomingInventoryItemTransfersAsync(InventoryBookSimpleDTO inventoryBookDTO, bool notConfirmedOnly = true)
+        {
+            using (var uow = unitOfWorkFactory.CreateUnitOfWork())
+            {
+                return mapper.Map<IEnumerable<InventoryItemTransferSimpleDTO>>(await (repository as IInventoryBookRepository).GetIncomingInventoryItemTransfersAsync(mapper.Map<InventoryBook>(inventoryBookDTO), notConfirmedOnly));
             }
         }
     }
