@@ -20,6 +20,8 @@ jobs:
     name: Build, test, pack
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Build, test, pack
         uses: ./.github/workflows/build-pack.yml
         with:
@@ -35,6 +37,8 @@ jobs:
       packages: write
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Docker build
         uses: ./.gtihub/workflows/build-docker.yml
         with:
@@ -48,6 +52,8 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Create OpenAPI documentation
         uses: ./.github/workflows/create-api-doc.yml
         with:
