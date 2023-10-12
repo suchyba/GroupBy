@@ -1,7 +1,7 @@
 name: Create DEV release package
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 env:
   # Use docker.io for Docker Hub if empty
