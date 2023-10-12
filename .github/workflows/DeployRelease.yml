@@ -19,34 +19,23 @@ env:
 jobs:
   build:
     name: Build, test, pack
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build, test, pack
-        uses: ./.github/workflows/build-pack.yml
-        with:
-          APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
-          ONLY_BUILD: false
+    uses: ./.github/workflows/build-pack.yml
+    with:
+      APPLICATION_NAME: GroupBy.Web.API
+      ONLY_BUILD: false
 
   build-release:
     name: Build release docker image
     needs: build
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Docker build
-        uses: ./.gtihub/workflows/build-docker.yml
-        with:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          DEV_RELEASE: false
-          APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+      DEV_RELEASE: false
+      APPLICATION_NAME: GroupBy.Web.API
 
   create-api-doc:
     name: Create OpenAPI documentation
