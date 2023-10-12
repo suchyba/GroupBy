@@ -18,50 +18,35 @@ env:
 jobs:
   build:
     name: Build, test, pack
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build, test, pack
-        uses: ./.github/workflows/build-pack.yml
-        with:
-          APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
-          ONLY_BUILD: false
+    uses: ./.github/workflows/build-pack.yml
+    with:
+      APPLICATION_NAME: GroupBy.Web.API
+      ONLY_BUILD: false
 
   build-release:
     name: Build release docker image
     needs: build
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Docker build
-        uses: ./.gtihub/workflows/build-docker.yml
-        with:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          DEV_RELEASE: true
-          APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+      DEV_RELEASE: true
+      APPLICATION_NAME: GroupBy.Web.API
 
   create-api-doc:
     name: Create OpenAPI documentation
     needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Create OpenAPI documentation
-        uses: ./.github/workflows/create-api-doc.yml
-        with:
-          SWASHBUCKLE_DOTNET_CORE_VERSION: ${{ env.SWASHBUCKLE_DOTNET_CORE_VERSION }}
-          SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: ${{ env.SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION }}
-          API_IMPORT_SPECIFICATION_PATH: ${{ env.API_IMPORT_SPECIFICATION_PATH }}
-          API_IMPORT_DLL: ${{ env.API_IMPORT_DLL }}
-          API_IMPORT_VERSION: ${{ env.API_IMPORT_VERSION }}
+    uses: ./.github/workflows/create-api-doc.yml
+    with:
+      SWASHBUCKLE_DOTNET_CORE_VERSION: 7.0.x
+      SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.5.0
+      API_IMPORT_SPECIFICATION_PATH: swagger.json
+      API_IMPORT_DLL: GroupBy.Web.API/bin/Release/net7.0/publish/GroupBy.Web.API.dll
+      API_IMPORT_VERSION: groupbydoc
+
   generate-changelog:
     name: Generate changelog
     needs: [build-release, create-api-doc]
