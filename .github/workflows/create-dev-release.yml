@@ -1,9 +1,8 @@
-name: Create release
+name: Create DEV release package
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_call:
+
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
@@ -41,7 +40,7 @@ jobs:
         with:
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
-          DEV_RELEASE: false
+          DEV_RELEASE: true
           APPLICATION_NAME: ${{ env.APPLICATION_NAME }}
 
   create-api-doc:
@@ -57,11 +56,10 @@ jobs:
           API_IMPORT_SPECIFICATION_PATH: ${{ env.API_IMPORT_SPECIFICATION_PATH }}
           API_IMPORT_DLL: ${{ env.API_IMPORT_DLL }}
           API_IMPORT_VERSION: ${{ env.API_IMPORT_VERSION }}
-
-  release-project:
-    name: Create release
-    runs-on: ubuntu-latest
+  generate-changelog:
+    name: Generate changelog
     needs: [build-release, create-api-doc]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -76,19 +74,3 @@ jobs:
         with:
           name: Changelog
           path: CHANGELOG.md
-      - name: Download artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.APPLICATION_NAME }}
-      - name: Download OpenAPI doc
-        uses: actions/download-artifact@v3
-        with:
-          name: OpenAPIDoc
-      - name: Create release
-        uses: softprops/action-gh-release@v1
-        with:
-          generate_release_notes: true
-          files: |
-            ${{ env.APPLICATION_NAME }}.tar.gz
-            CHANGELOG.md
-            ${{ env.API_IMPORT_SPECIFICATION_PATH }}
