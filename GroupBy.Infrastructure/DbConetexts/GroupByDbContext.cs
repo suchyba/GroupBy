@@ -35,6 +35,8 @@ namespace GroupBy.Data.DbContexts
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<ApplicationUser> Identities { get; set; }
         public DbSet<InventoryItemTransfer> InventoryItemTransfers { get; set; }
+        public DbSet<AccountingBookTemplate> AccountingBookTemplates { get; set; }
+        public DbSet<FinancialCategory> FinancialCategories { get; set; }
 
         public GroupByDbContext(DbContextOptions<GroupByDbContext> options) : base(options)
         {

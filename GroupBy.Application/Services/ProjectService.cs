@@ -98,7 +98,7 @@ namespace GroupBy.Application.Services
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<IEnumerable<FinancialRecordSimpleDTO>>((await repository.GetAsync(mapper.Map<Project>(project), includes: "RelatedFinnancialRecords")).RelatedFinnancialRecords);
+                return mapper.Map<IEnumerable<FinancialRecordSimpleDTO>>((await repository.GetAsync(mapper.Map<Project>(project), includes: "RelatedFinnancialRecords.Values")).RelatedFinnancialRecords);
             }
         }
     }

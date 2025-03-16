@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using GroupBy.Design.DTO.AccountingBook;
+using GroupBy.Design.DTO.AccountingBookTemplate;
 using GroupBy.Design.DTO.AccountingDocument;
 using GroupBy.Design.DTO.Agreement;
 using GroupBy.Design.DTO.Authentication;
 using GroupBy.Design.DTO.Document;
+using GroupBy.Design.DTO.FinancialCategory;
+using GroupBy.Design.DTO.FinancialCategoryValue;
 using GroupBy.Design.DTO.FinancialIncomeRecord;
 using GroupBy.Design.DTO.FinancialOutcomeRecord;
 using GroupBy.Design.DTO.FinancialRecord;
@@ -161,19 +164,11 @@ namespace GroupBy.Application.Profiles
                     src => new Volunteer { Id = src.LegislatorId }));
             CreateMap<ResolutionUpdateDTO, Resolution>();
 
-            CreateMap<FinancialIncomeRecord, FinancialRecordSimpleDTO>()
-                .ForMember(dest => dest.OtherIncome, opt => opt.MapFrom(
-                    src => src.Other));
-            CreateMap<FinancialOutcomeRecord, FinancialRecordSimpleDTO>()
-                .ForMember(dest => dest.OtherOutcome, opt => opt.MapFrom(
-                    src => src.Other));
+            CreateMap<FinancialIncomeRecord, FinancialRecordSimpleDTO>();
+            CreateMap<FinancialOutcomeRecord, FinancialRecordSimpleDTO>();
 
-            CreateMap<FinancialIncomeRecord, FinancialRecordDTO>()
-                .ForMember(dest => dest.OtherIncome, opt => opt.MapFrom(
-                    src => src.Other));
-            CreateMap<FinancialOutcomeRecord, FinancialRecordDTO>()
-                .ForMember(dest => dest.OtherOutcome, opt => opt.MapFrom(
-                    src => src.Other));
+            CreateMap<FinancialIncomeRecord, FinancialRecordDTO>();
+            CreateMap<FinancialOutcomeRecord, FinancialRecordDTO>();
 
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordSimpleDTO>().ReverseMap();
             CreateMap<FinancialOutcomeRecord, FinancialOutcomeRecordDTO>();
@@ -235,6 +230,26 @@ namespace GroupBy.Application.Profiles
             CreateMap<InventoryItemTransferUpdateDTO, InventoryItemTransfer>()
                 .ForMember(dest => dest.DestinationInventoryBook, opt => opt.MapFrom(
                     src => new InventoryBook { Id = src.DestinationInventoryBookId }));
+
+            CreateMap<FinancialCategory, FinancialCategoryDTO>().ReverseMap();
+            CreateMap<FinancialCategoryCreateDTO, FinancialCategory>();
+
+            CreateMap<AccountingBookTemplate, AccountingBookTemplateSimpleDTO>().ReverseMap();
+            CreateMap<AccountingBookTemplate, AccountingBookTemplateDTO>();
+            CreateMap<AccountingBookTemplateCreateDTO, AccountingBookTemplate>()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(
+                    src => src.Categories.Select(cId => new FinancialCategory { Id = cId })));
+            CreateMap<AccountingBookTemplateUpdateDTO, AccountingBookTemplate>()
+                .ForMember(dest => dest.Categories, opt => opt.MapFrom(
+                    src => src.Categories.Select(cId => new FinancialCategory { Id = cId })));
+
+            CreateMap<FinancialCategoryValue, FinancialCategoryValueSimpleDTO>().ReverseMap();
+            CreateMap<FinancialCategoryValueCreateDTO, FinancialCategoryValue>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(
+                    src => new FinancialCategory { Id = src.CategoryId }));
+            CreateMap<FinancialCategoryValueUpdateDTO, FinancialCategoryValue>()
+                .ForMember(dest => dest.Category, opt => opt.MapFrom(
+                    src => new FinancialCategory { Id = src.CategoryId }));
         }
     }
 }

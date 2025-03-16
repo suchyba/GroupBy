@@ -37,6 +37,11 @@ namespace GroupBy.Domain.Entities
         [Required]
         public virtual Group RelatedGroup { get; set; }
         /// <summary>
+        /// TODO
+        /// </summary>
+        [Required]
+        public IEnumerable<FinancialCategory> Categories { get; set; }
+        /// <summary>
         /// Balance.
         /// </summary>
         /// <returns>Sum of values.</returns>

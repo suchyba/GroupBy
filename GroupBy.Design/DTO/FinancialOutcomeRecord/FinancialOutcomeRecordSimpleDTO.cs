@@ -1,19 +1,13 @@
-﻿namespace GroupBy.Design.DTO.FinancialOutcomeRecord
+﻿using GroupBy.Design.DTO.FinancialCategoryValue;
+
+namespace GroupBy.Design.DTO.FinancialOutcomeRecord
 {
     public class FinancialOutcomeRecordSimpleDTO
     {
-        public Guid Id { get; set; }
-        public decimal? Inventory { get; set; }
-        public decimal? Material { get; set; }
-        public decimal? Service { get; set; }
-        public decimal? Transport { get; set; }
-        public decimal? Insurance { get; set; }
-        public decimal? Accommodation { get; set; }
-        public decimal? Salary { get; set; }
-        public decimal? Food { get; set; }
-        public decimal? Other { get; set; }
+        public Guid Id { get; set; }        
         public decimal Total { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
+        public IEnumerable<FinancialCategoryValueSimpleDTO> Values { get; set; }
     }
 }

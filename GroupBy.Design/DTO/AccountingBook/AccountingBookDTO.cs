@@ -1,4 +1,5 @@
-﻿using GroupBy.Design.DTO.Group;
+﻿using GroupBy.Design.DTO.FinancialCategory;
+using GroupBy.Design.DTO.Group;
 
 namespace GroupBy.Design.DTO.AccountingBook
 {
@@ -11,5 +12,6 @@ namespace GroupBy.Design.DTO.AccountingBook
         public bool Locked { get; set; }
         public GroupSimpleDTO RelatedGroup { get; set; }
         public decimal Balance { get; set; }
+        public IEnumerable<FinancialCategoryDTO> Categories { get; set; }
     }
 }

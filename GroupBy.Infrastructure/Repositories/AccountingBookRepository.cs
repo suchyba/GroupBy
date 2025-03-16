@@ -27,7 +27,7 @@ namespace GroupBy.Data.Repositories
 
         public async Task<IEnumerable<FinancialRecord>> GetFinancialRecordsAsync(AccountingBook domain, bool includeLocal = false)
         {
-            return (await GetAsync(domain, includeLocal: includeLocal, includes: new string[] { "Records.RelatedDocument", "Records.RelatedProject" })).Records;
+            return (await GetAsync(domain, includeLocal: includeLocal, includes: new string[] { "Records.RelatedDocument", "Records.RelatedProject", "Records.Values.Category" })).Records;
         }
 
         protected override Expression<Func<AccountingBook, bool>> CompareKeys(object entity)

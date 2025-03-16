@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GroupBy.Domain.Entities
@@ -39,5 +40,10 @@ namespace GroupBy.Domain.Entities
         /// </summary>
         [Required]
         public virtual AccountingDocument RelatedDocument { get; set; }
+        /// <summary>
+        /// TODO
+        /// </summary>
+        [Required]
+        public virtual IEnumerable<FinancialCategoryValue> Values { get; set; }
     }
 }

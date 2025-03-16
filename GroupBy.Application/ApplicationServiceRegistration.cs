@@ -43,6 +43,10 @@ using GroupBy.Design.DTO.Authentication;
 using GroupBy.Application.Model.Mail;
 using GroupBy.Design.DTO.InventoryItemTransfer;
 using GroupBy.Application.Validators.InventoryItemTransfer;
+using GroupBy.Design.DTO.FinancialCategory;
+using GroupBy.Application.Validators.FinancialCategory;
+using GroupBy.Design.DTO.AccountingBookTemplate;
+using GroupBy.Application.Validators.AccountingBookTemplate;
 
 namespace GroupBy.Application
 {
@@ -72,6 +76,8 @@ namespace GroupBy.Application
             services.AddScoped<IFinancialIncomeRecordService, FinancialIncomeRecordService>();
             services.AddScoped<IRegistrationCodeService, RegistrationCodeService>();
             services.AddScoped<IInventoryItemTransferService, InventoryItemTransferService>();
+            services.AddScoped<IFinancialCategoryService, FinancialCategoryService>();
+            services.AddScoped<IAccountingBookTemplateService, AccountingBookTemplateService>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IEmailService, EmailService>();
@@ -145,6 +151,11 @@ namespace GroupBy.Application
             services.AddScoped<IValidator<InventoryItemTransferCreateDTO>, InventoryItemTransferCreateValidator>();
             services.AddScoped<IValidator<InventoryItemTransferConfirmDTO>, InventoryItemTransferConfirmValidator>();
             services.AddScoped<IValidator<InventoryItemTransferUpdateDTO>, InventoryItemTransferUpdateValidator>();
+
+            services.AddScoped<IValidator<FinancialCategoryCreateDTO>, FinancialCategoryCreateValidator>();
+
+            services.AddScoped<IValidator<AccountingBookTemplateCreateDTO>, AccountingBookTemplateCreateValidator>();
+            services.AddScoped<IValidator<AccountingBookTemplateUpdateDTO>, AccountingBookTemplateUpdateValidator>();
         }
     }
 }
