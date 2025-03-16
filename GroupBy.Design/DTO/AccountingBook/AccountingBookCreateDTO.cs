@@ -7,5 +7,6 @@
         public string Name { get; set; }
         public bool Locked { get; set; }
         public Guid RelatedGroupId { get; set; }
+        public Guid AccountingBookTemplateId { get; set; }
     }
 }

@@ -17,10 +17,40 @@ namespace GroupBy.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("AccountingBookFinancialCategory", b =>
+                {
+                    b.Property<Guid>("AccountingBooksId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AccountingBooksId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("AccountingBookFinancialCategory");
+                });
+
+            modelBuilder.Entity("AccountingBookTemplateFinancialCategory", b =>
+                {
+                    b.Property<Guid>("AccountingBookTemplatesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AccountingBookTemplatesId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("AccountingBookTemplateFinancialCategory");
+                });
 
             modelBuilder.Entity("AgreementVolunteer", b =>
                 {
@@ -80,6 +110,24 @@ namespace GroupBy.Data.Migrations
                     b.HasIndex("RelatedGroupId");
 
                     b.ToTable("AccountingBooks");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.AccountingBookTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountingBookTemplates");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Agreement", b =>
@@ -176,7 +224,8 @@ namespace GroupBy.Data.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -191,9 +240,51 @@ namespace GroupBy.Data.Migrations
 
                     b.ToTable("Elements");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Element");
+                    b.HasDiscriminator().HasValue("Element");
 
                     b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Income")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FinancialCategories");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialCategoryValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FinancialRecordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("FinancialRecordId");
+
+                    b.ToTable("FinancialCategoryValue");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
@@ -213,7 +304,8 @@ namespace GroupBy.Data.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(34)
+                        .HasColumnType("nvarchar(34)");
 
                     b.Property<Guid>("RelatedDocumentId")
                         .HasColumnType("uniqueidentifier");
@@ -231,7 +323,7 @@ namespace GroupBy.Data.Migrations
 
                     b.ToTable("FinancialRecords");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("FinancialRecord");
+                    b.HasDiscriminator().HasValue("FinancialRecord");
 
                     b.UseTphMappingStrategy();
                 });
@@ -973,63 +1065,12 @@ namespace GroupBy.Data.Migrations
                 {
                     b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
 
-                    b.Property<decimal?>("Dotation")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("EarningAction")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("MembershipFee")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("OnePercent")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Other")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("ProgramFee")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.ToTable("FinancialRecords", t =>
-                        {
-                            t.Property("Other")
-                                .HasColumnName("FinancialIncomeRecord_Other");
-                        });
-
                     b.HasDiscriminator().HasValue("FinancialIncomeRecord");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialOutcomeRecord", b =>
                 {
                     b.HasBaseType("GroupBy.Domain.Entities.FinancialRecord");
-
-                    b.Property<decimal?>("Accommodation")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Food")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Insurance")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Inventory")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Material")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Other")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Salary")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Service")
-                        .HasColumnType("decimal(10, 2)");
-
-                    b.Property<decimal?>("Transport")
-                        .HasColumnType("decimal(10, 2)");
 
                     b.HasDiscriminator().HasValue("FinancialOutcomeRecord");
                 });
@@ -1039,6 +1080,36 @@ namespace GroupBy.Data.Migrations
                     b.HasBaseType("GroupBy.Domain.Entities.Document");
 
                     b.HasDiscriminator().HasValue("AccountingDocument");
+                });
+
+            modelBuilder.Entity("AccountingBookFinancialCategory", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.AccountingBook", null)
+                        .WithMany()
+                        .HasForeignKey("AccountingBooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.FinancialCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AccountingBookTemplateFinancialCategory", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.AccountingBookTemplate", null)
+                        .WithMany()
+                        .HasForeignKey("AccountingBookTemplatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.FinancialCategory", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AgreementVolunteer", b =>
@@ -1100,6 +1171,21 @@ namespace GroupBy.Data.Migrations
                         .HasForeignKey("RelatedProjectId");
 
                     b.Navigation("RelatedProject");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialCategoryValue", b =>
+                {
+                    b.HasOne("GroupBy.Domain.Entities.FinancialCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupBy.Domain.Entities.FinancialRecord", null)
+                        .WithMany("Values")
+                        .HasForeignKey("FinancialRecordId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
@@ -1517,6 +1603,11 @@ namespace GroupBy.Data.Migrations
             modelBuilder.Entity("GroupBy.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("GroupBy.Domain.Entities.FinancialRecord", b =>
+                {
+                    b.Navigation("Values");
                 });
 
             modelBuilder.Entity("GroupBy.Domain.Entities.Group", b =>

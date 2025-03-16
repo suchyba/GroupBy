@@ -34,6 +34,9 @@ namespace GroupBy.Application.Validators.AccountingBook
 
             RuleFor(a => a.RelatedGroupId)
                 .NotEmpty().WithMessage("{PropertyName} is required.");
+
+            RuleFor(a => a.AccountingBookTemplateId)
+                .NotEmpty().WithMessage("{PropertyName} is required.");
         }
         private async Task<bool> IdUnique(AccountingBookCreateDTO book, CancellationToken token)
         {

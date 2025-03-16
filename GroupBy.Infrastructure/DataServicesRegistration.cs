@@ -17,8 +17,8 @@ namespace GroupBy.Data
         public static IServiceCollection AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Only for generating database model
-            /*services.AddDbContext<DbContext, GroupByDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("groupbylocalconnectionstring")));*/
+            //services.AddDbContext<DbContext, GroupByDbContext>(options =>
+            //    options.UseSqlServer(configuration.GetConnectionString("groupbylocalconnectionstring")));
             services.AddSingleton<Design.DbContext.IDbContextFactory<GroupByDbContext>, DbContextFactory>(options =>
             {
                 return new DbContextFactory(configuration.GetConnectionString("GroupByLocalConnectionString"));
@@ -48,6 +48,9 @@ namespace GroupBy.Data
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IInventoryItemTransferRepository, InventoryItemTransferRepository>();
+            services.AddScoped<IAccountingBookTemplateRepository, AccountingBookTemplateRepository>();
+            services.AddScoped<IFinancialCategoryRepository, FinancialCategoryRepository>();
+            services.AddScoped<IFinancialCategoryValueRepository, FinancialCategoryValueRepository>();
 
             services.AddScoped<IUserRoleRepository<Guid>, UserRoleRepository>();
             services.AddScoped<IUserClaimRepository<Guid>, UserClaimRepository>();

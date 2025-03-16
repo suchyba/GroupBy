@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Linq;
 
 namespace GroupBy.Domain.Entities
 {
@@ -8,42 +8,12 @@ namespace GroupBy.Domain.Entities
     public class FinancialIncomeRecord : FinancialRecord
     {
         /// <summary>
-        /// Membership fee
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? MembershipFee { get; set; }
-        /// <summary>
-        /// Program fee (for example for project <seealso cref="Project"/>)
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? ProgramFee { get; set; }
-        /// <summary>
-        /// Dotation
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? Dotation { get; set; }
-        /// <summary>
-        /// Money from earning action
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? EarningAction { get; set; }
-        /// <summary>
-        /// Money from one procent
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? OnePercent { get; set; }
-        /// <summary>
-        /// Other money source
-        /// </summary>
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? Other { get; set; }
-        /// <summary>
         /// Sum of all variables
         /// </summary>
         /// <returns></returns>
         public override decimal GetTotal()
         {
-            return (MembershipFee ?? 0) + (ProgramFee ?? 0) + (Dotation ?? 0) + (EarningAction ?? 0) + (OnePercent ?? 0) + (Other ?? 0);
+            return Values.Where(c => c.Category.Income).Sum(v => v.Value);
         }
     }
 }

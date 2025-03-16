@@ -15,10 +15,12 @@ namespace GroupBy.Application.Services
     public class AccountingBookService : AsyncService<AccountingBook, AccountingBookSimpleDTO, AccountingBookDTO, AccountingBookCreateDTO, AccountingBookSimpleDTO>, IAccountingBookService
     {
         private readonly IGroupRepository groupRepository;
+        private readonly IAccountingBookTemplateRepository accountingBookTemplateRepository;
 
         public AccountingBookService(
             IAccountingBookRepository accountingBookRepository,
             IGroupRepository groupRepository,
+            IAccountingBookTemplateRepository accountingBookTemplateRepository,
             IMapper mapper,
             IValidator<AccountingBookSimpleDTO> updateValidator,
             IValidator<AccountingBookCreateDTO> createValidator,
@@ -26,13 +28,14 @@ namespace GroupBy.Application.Services
             : base(accountingBookRepository, mapper, updateValidator, createValidator, unitOfWorkFactory)
         {
             this.groupRepository = groupRepository;
+            this.accountingBookTemplateRepository = accountingBookTemplateRepository;
         }
 
         public override async Task<AccountingBookDTO> GetAsync(AccountingBookSimpleDTO model)
         {
             using (var uow = unitOfWorkFactory.CreateUnitOfWork())
             {
-                return mapper.Map<AccountingBookDTO>(await repository.GetAsync(mapper.Map<AccountingBook>(model), includes: new string[] { "Records", "RelatedGroup" }));
+                return mapper.Map<AccountingBookDTO>(await repository.GetAsync(mapper.Map<AccountingBook>(model), includes: new string[] { "Records.Values", "RelatedGroup", "Categories" }));
             }
         }
 
@@ -44,6 +47,11 @@ namespace GroupBy.Application.Services
                 domain.RelatedGroup = await groupRepository.GetAsync(domain.RelatedGroup);
 
                 domain.Records = new List<FinancialRecord>();
+
+                var accountingBookTemplate = await accountingBookTemplateRepository.GetAsync(new { Id = model.AccountingBookTemplateId }, includes: "Categories");
+
+                domain.Categories = accountingBookTemplate.Categories;
+
                 var createdBook = await repository.CreateAsync(domain);
 
                 await uow.Commit();
