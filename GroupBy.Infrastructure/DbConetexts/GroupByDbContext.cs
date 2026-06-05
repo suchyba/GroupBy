@@ -66,6 +66,11 @@ namespace GroupBy.Data.DbContexts
                 .WithMany(b => b.IncomingInventoryItemTransfers)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<InventoryBookRecord>()
+                .HasOne(r => r.Book)
+                .WithMany(b => b.Records)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
     }
