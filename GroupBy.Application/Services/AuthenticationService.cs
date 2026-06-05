@@ -213,7 +213,7 @@ namespace GroupBy.Application.Services
             await refreshTokenRepository.UpdateAsync(refreshToken);
         }
 
-        public async Task RegisterUserAsync(RegisterDTO registerDTO, IUrlHelper urlHelper)
+        public async Task RegisterUserAsync(RegisterDTO registerDTO)
         {
             var validationResult = await registerValidator.ValidateAsync(registerDTO);
             if (!validationResult.IsValid)

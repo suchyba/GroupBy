@@ -6,11 +6,11 @@ on:
       SWASHBUCKLE_DOTNET_CORE_VERSION:
         required: true
         type: string
-        default: 7.0.x
+        default: 10.0.x
       SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION:
         required: true
         type: string
-        default: 6.5.0
+        default: 10.1.2
       API_IMPORT_SPECIFICATION_PATH:
         required: true
         type: string
@@ -18,7 +18,7 @@ on:
       API_IMPORT_DLL:
         required: true
         type: string
-        default: GroupBy.Web.API/bin/Release/net7.0/publish/GroupBy.Web.API.dll
+        default: GroupBy.Web.API/bin/Release/net10.0/publish/GroupBy.Web.API.dll
       API_IMPORT_VERSION:
         required: true
         type: string
@@ -29,13 +29,13 @@ jobs:
     name: Create OpenAPI documentation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 10.0.x
       - name: Setup SwashBuckle .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ inputs.SWASHBUCKLE_DOTNET_CORE_VERSION }}
       - name: Restore dependencies
@@ -50,7 +50,7 @@ jobs:
       - name: Generate Open API Specification Document
         run: swagger tofile --output "${{ inputs.API_IMPORT_SPECIFICATION_PATH }}" "${{ inputs.API_IMPORT_DLL }}" "${{ inputs.API_IMPORT_VERSION }}"
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: OpenAPIDoc
           path: ${{ inputs.API_IMPORT_SPECIFICATION_PATH }}

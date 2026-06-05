@@ -9,10 +9,10 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   APPLICATION_NAME: GroupBy.Web.API
-  SWASHBUCKLE_DOTNET_CORE_VERSION: 7.0.x
-  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.5.0
+  SWASHBUCKLE_DOTNET_CORE_VERSION: 10.0.x
+  SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 10.1.2
   API_IMPORT_SPECIFICATION_PATH: swagger.json
-  API_IMPORT_DLL: GroupBy.Web.API/bin/Release/net7.0/publish/GroupBy.Web.API.dll
+  API_IMPORT_DLL: GroupBy.Web.API/bin/Release/net10.0/publish/GroupBy.Web.API.dll
   API_IMPORT_VERSION: groupbydoc
 
 jobs:
@@ -41,10 +41,10 @@ jobs:
     needs: build
     uses: ./.github/workflows/create-api-doc.yml
     with:
-      SWASHBUCKLE_DOTNET_CORE_VERSION: 7.0.x
-      SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 6.5.0
+      SWASHBUCKLE_DOTNET_CORE_VERSION: 10.0.x
+      SWASHBUCLE_ASPNET_CORE_CLI_PACKAGE_VERSION: 10.1.2
       API_IMPORT_SPECIFICATION_PATH: swagger.json
-      API_IMPORT_DLL: GroupBy.Web.API/bin/Release/net7.0/publish/GroupBy.Web.API.dll
+      API_IMPORT_DLL: GroupBy.Web.API/bin/Release/net10.0/publish/GroupBy.Web.API.dll
       API_IMPORT_VERSION: groupbydoc
 
   generate-changelog:
@@ -56,12 +56,12 @@ jobs:
         uses: actions/checkout@v3
       - name: Genereate changelog
         id: changelog
-        uses: heinrichreimer/action-github-changelog-generator@v2.3
+        uses: heinrichreimer/action-github-changelog-generator@v2.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           output: CHANGELOG.md
       - name: Upload changelog
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v7
         with:
           name: Changelog
           path: CHANGELOG.md
