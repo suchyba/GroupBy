@@ -61,7 +61,7 @@ namespace GroupBy.Web.API.Controllers
         {
             try
             {
-                await authenticationService.RegisterUserAsync(model, Url);
+                await authenticationService.RegisterUserAsync(model);
                 return NoContent();
             }
             catch (BadRequestException e)
